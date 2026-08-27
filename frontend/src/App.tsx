@@ -1,36 +1,82 @@
 import { useEffect, useState } from 'react'
-
-type User = {
-  id: number
-  username: string
-  created_at: string
-}
+import AuthForm from './components/AuthForm'
+import Profile from './components/Profile'
+import { getProfile } from './api'
+import type { UserProfile } from './api'
 
 function App() {
-  const [users, setUsers] = useState<User[]>([])
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem('access_token')
+  )
+
+  const [profile, setProfile] = useState<UserProfile | null>(null)
+
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadUsers() {
-      const response = await window.fetch('http://localhost:8000/users')
-      const data = await response.json()
+    async function loadExistingSession() {
+      if (!token) {
+        setLoading(false)
+        return
+      }
 
-      setUsers(data)
+      try {
+        const data = await getProfile(token)
+        setProfile(data)
+      } catch {
+        localStorage.removeItem('access_token')
+        setToken(null)
+        setProfile(null)
+      } finally {
+        setLoading(false)
+      }
     }
 
-    loadUsers()
-  }, [])
+    loadExistingSession()
+  }, [token])
+
+  function handleLogin(accessToken: string) {
+    setToken(accessToken)
+  }
+
+  function handleLogout() {
+    localStorage.removeItem('access_token')
+    setToken(null)
+    setProfile(null)
+  }
+
+  if (loading) {
+    return (
+      <main className="app">
+        <div className="loading-card">
+          <h1>CampusPass</h1>
+          <p>Loading your campus...</p>
+        </div>
+      </main>
+    )
+  }
 
   return (
-    <main>
-      <h1>Project Campus</h1>
+    <main className="app">
+      <div className="app-container">
+        <header className="app-header">
+          <h1>CampusPass</h1>
+          <p>Your campus. Your character. Your community.</p>
+        </header>
 
-      <h2>Users</h2>
+      {!profile && (
+        <AuthForm onLogin={handleLogin} />
+      )}
 
-      <ul>
-        {users.map((user) => (
-          <li key={user.id}>{user.username}</li>
-        ))}
-      </ul>
+      {profile && token && (
+        <Profile 
+          profile={profile}
+          token={token}
+          onLogout={handleLogout}
+          onProfileUpdate={setProfile}
+        />
+      )}
+      </div>
     </main>
   )
 }
