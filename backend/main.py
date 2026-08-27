@@ -86,8 +86,9 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 
 @app.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
+    username = request.username.strip()
     user = db.execute(
-        select(User).where(User.username == request.username)
+        select(User).where(User.username == username)
     ).scalar_one_or_none()
 
     if user is None:

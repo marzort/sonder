@@ -1,12 +1,49 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 
 class RegisterRequest(BaseModel):
     username: str
     password: str
 
+    @field_validator('username')
+    @classmethod
+    def validate_username(cls, value: str) -> str:
+        value = value.strip()
+
+        if not value:
+            raise ValueError('Username cannot be blank')
+
+        if ' ' in value:
+            raise ValueError('Username cannot contain spaces')
+        return value
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError('Password cannot be blank')
+        return value
+
 class LoginRequest(BaseModel):
     username: str
     password: str
+
+    @classmethod
+    def validate_username(cls, value: str) -> str:
+        value = value.strip()
+
+        if not value:
+            raise ValueError('Username cannot be blank')
+
+        if ' ' in value:
+            raise ValueError('Username cannot contain spaces')
+        return value
+
+    @field_validator('password')
+    @classmethod
+    def validate_password(cls, value: str) -> str:
+        if not value.strip():
+            raise ValueError('Password cannot be blank')
+        return value
 
 class AvatarUpdateRequest(BaseModel):
     hair: int
