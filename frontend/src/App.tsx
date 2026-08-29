@@ -3,7 +3,6 @@ import AuthForm from './components/AuthForm'
 import Profile from './components/Profile'
 import { getProfile } from './api'
 import type { UserProfile } from './api'
-import AvatarCustomizer from './components/AvatarCustomizer'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -61,8 +60,6 @@ function App() {
     <main className="app">
       <div className="app-container">
         <header className="app-header">
-          <h1>DiceBear Test</h1>
-          <AvatarCustomizer />
           <h1>CampusPass</h1>
           <p>Your campus. Your character. Your community.</p>
         </header>
