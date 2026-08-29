@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import Avatar from './Avatar'
 
 import {
@@ -21,16 +20,41 @@ import type {
     ClothesColor
 } from '../avatarOptions'
 
-export default function AvatarCustomizer() {
-    const [eyes, setEyes] = useState<EyeVariant>('default')
-    const [mouth, setMouth] = useState<MouthVariant>('default')
-    const [top, setTop] = useState<TopVariant>('bigHair')
-    const [clothes, setClothes] = useState<ClothesVariant>('hoodie')
+interface AvatarCustomizerProps {
+    eyes: EyeVariant
+    mouth: MouthVariant
+    top: TopVariant
+    clothes: ClothesVariant
+    skinColor: SkinColor
+    hairColor: HairColor
+    clothesColor: ClothesColor
 
-    const [skinColor, setSkinColor] = useState<SkinColor>('614335')
-    const [hairColor, setHairColor] = useState<HairColor>('a55728')
-    const [clothesColor, setClothesColor] = useState<ClothesColor>('65c9ff')
+    onEyesChange: (value: EyeVariant) => void
+    onMouthChange: (value: MouthVariant) => void
+    onTopChange: (value: TopVariant) => void
+    onClothesChange: (value: ClothesVariant) => void
+    onSkinColorChange: (value: SkinColor) => void
+    onHairColorChange: (value: HairColor) => void
+    onClothesColorChange: (value: ClothesColor) => void
+}
 
+export default function AvatarCustomizer({
+    eyes,
+    mouth,
+    top,
+    clothes,
+    skinColor,
+    hairColor,
+    clothesColor,
+    onEyesChange,
+    onMouthChange,
+    onTopChange,
+    onClothesChange,
+    onSkinColorChange,
+    onHairColorChange,
+    onClothesColorChange
+} : AvatarCustomizerProps) {
+    
     return (
         <div>
             <h2>Customize Your Avatar</h2>
@@ -51,7 +75,7 @@ export default function AvatarCustomizer() {
                 {SKIN_COLOR_OPTIONS.map((color) => (
                     <button
                         key={color}
-                        onClick={() => setSkinColor(color)}
+                        onClick={() => onSkinColorChange(color)}
                         className={`color-button ${
                             skinColor === color ? 'selected' : ''
                         }`}
@@ -67,7 +91,7 @@ export default function AvatarCustomizer() {
                 {EYE_OPTIONS.map((eye) => (
                     <button
                         key={eye.value}
-                        onClick={() => setEyes(eye.value)}
+                        onClick={() => onEyesChange(eye.value)}
                         className={eyes === eye.value ? 'selected' : ''}
                     >
                         {eye.label}
@@ -81,7 +105,7 @@ export default function AvatarCustomizer() {
                 {MOUTH_OPTIONS.map((mouthOption) => (
                     <button
                         key={mouthOption.value}
-                        onClick={() => setMouth(mouthOption.value)}
+                        onClick={() => onMouthChange(mouthOption.value)}
                         className={mouth === mouthOption.value ? 'selected' : ''}
                     >
                         {mouthOption.label}
@@ -95,7 +119,7 @@ export default function AvatarCustomizer() {
                 {TOP_OPTIONS.map((topOption) => (
                     <button
                         key={topOption.value}
-                        onClick={() => setTop(topOption.value)}
+                        onClick={() => onTopChange(topOption.value)}
                         className={top === topOption.value ? 'selected' : ''}
                     >
                         {topOption.label}
@@ -107,7 +131,7 @@ export default function AvatarCustomizer() {
                 {HAIR_COLOR_OPTIONS.map((color) => (
                     <button
                         key={color}
-                        onClick={() => setHairColor(color)}
+                        onClick={() => onHairColorChange(color)}
                         className={`color-button ${
                             hairColor === color ? 'selected' : ''
                         }`}
@@ -123,7 +147,7 @@ export default function AvatarCustomizer() {
                 {CLOTHES_OPTIONS.map((clothesOption) => (
                     <button
                         key={clothesOption.value}
-                        onClick={() => setClothes(clothesOption.value)}
+                        onClick={() => onClothesChange(clothesOption.value)}
                         className={clothes === clothesOption.value ? 'selected' : ''}
                     >
                         {clothesOption.label}
@@ -135,7 +159,7 @@ export default function AvatarCustomizer() {
                 {CLOTHES_COLOR_OPTIONS.map((color) => (
                     <button
                         key={color}
-                        onClick={() => setClothesColor(color)}
+                        onClick={() => onClothesColorChange(color)}
                         className={`color-button ${
                             clothesColor === color ? 'selected' : ''
                         }`}

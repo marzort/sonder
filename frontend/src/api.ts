@@ -1,10 +1,23 @@
+import type {
+    EyeVariant,
+    MouthVariant,
+    TopVariant,
+    ClothesVariant,
+    SkinColor,
+    HairColor,
+    ClothesColor
+} from './avatarOptions'
+
 const API_URL = 'http://localhost:8000'
 
 export type Avatar = {
-    hair: number
-    shirt: number
-    hat: number
-    skin_color: number
+    eyes: EyeVariant
+    mouth: MouthVariant
+    hair: TopVariant
+    clothes: ClothesVariant
+    skin_color: SkinColor
+    hair_color: HairColor
+    clothes_color: ClothesColor
 }
 
 export type UserProfile = {

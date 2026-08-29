@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { updateAvatar } from '../api'
-import type { Avatar, UserProfile } from '../api'
+import type { UserProfile } from '../api'
 import AvatarCustomizer from './AvatarCustomizer'
 
 interface ProfileProps {
@@ -17,19 +17,6 @@ function Profile({
     onProfileUpdate
 }: ProfileProps) {
     const [message, setMessage] = useState('')
-
-    function updateAvatarField(
-        field: keyof Avatar,
-        value: number
-    ) {
-        onProfileUpdate({
-            ...profile,
-            avatar: {
-                ...profile.avatar,
-                [field]: value
-            }
-        })
-    }
 
     async function handleAvatarUpdate() {
         setMessage('')
@@ -74,80 +61,86 @@ function Profile({
             <div className="profile-content">
                 <div className="avatar-preview">
                     <h3>Your Avatar</h3>
-                    <AvatarCustomizer />
+                    <AvatarCustomizer 
+                        eyes={profile.avatar.eyes}
+                        mouth={profile.avatar.mouth}
+                        top={profile.avatar.hair}
+                        clothes={profile.avatar.clothes}
+                        skinColor={profile.avatar.skin_color}
+                        hairColor={profile.avatar.hair_color}
+                        clothesColor={profile.avatar.clothes_color}
+
+                        onEyesChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    eyes: value
+                                }
+                            })
+                        }
+
+                        onMouthChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    mouth: value
+                                }
+                            })
+                        }
+
+                        onTopChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    hair: value
+                                }
+                            })
+                        }
+
+                        onClothesChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    clothes: value
+                                }
+                            })
+                        }
+
+                        onSkinColorChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    skin_color: value
+                                }
+                            })
+                        }
+
+                        onHairColorChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    hair_color: value
+                                }
+                            })
+                        }
+
+                        onClothesColorChange={(value) =>
+                            onProfileUpdate({
+                                ...profile,
+                                avatar: {
+                                    ...profile.avatar,
+                                    clothes_color: value
+                                }
+                            })
+                        }
+                    />
                 </div>
-
-                <div className="avatar-editor">
-                    <h3>Customize Avatar</h3>
-
-                    <div className="avatar-field">
-                        <label htmlFor="hair">Hair</label>
-
-                        <input 
-                            id="hair"
-                            type="number"
-                            min="1"
-                            value={profile.avatar.hair}
-                            onChange={(event) =>
-                                updateAvatarField(
-                                    'hair',
-                                    Number(event.target.value)
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div className="avatar-field">
-                        <label htmlFor="shirt">Shirt</label>
-
-                        <input 
-                            id="shirt"
-                            type="number"
-                            min="1"
-                            value={profile.avatar.shirt}
-                            onChange={(event) =>
-                                updateAvatarField(
-                                    'shirt',
-                                    Number(event.target.value)
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div className="avatar-field">
-                        <label htmlFor="hat">Hat</label>
-
-                        <input 
-                            id="hat"
-                            type="number"
-                            min="1"
-                            value={profile.avatar.hat}
-                            onChange={(event) =>
-                                updateAvatarField(
-                                    'hat',
-                                    Number(event.target.value)
-                                )
-                            }
-                        />
-                    </div>
-
-                    <div className="avatar-field">
-                        <label htmlFor="skin-color">Skin Color</label>
-
-                        <input 
-                            id="skin-color"
-                            type="number"
-                            min="1"
-                            value={profile.avatar.skin_color}
-                            onChange={(event) =>
-                                updateAvatarField(
-                                    'skin_color',
-                                    Number(event.target.value)
-                                )
-                            }
-                        />
-                    </div>
-
                     <button 
                         className="primary-button save-button"
                         onClick={handleAvatarUpdate}
@@ -160,7 +153,6 @@ function Profile({
                             {message}
                         </p>
                     )}
-                </div>
             </div>
         </section>
     )
