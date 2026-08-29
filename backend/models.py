@@ -22,7 +22,11 @@ class Avatar(Base):
     __tablename__ = "avatars"
 
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), primary_key=True)
-    hair: Mapped[int] = mapped_column()
-    shirt: Mapped[int] = mapped_column()
-    hat: Mapped[int] = mapped_column()
-    skin_color: Mapped[int] = mapped_column()
+    eyes: Mapped[str] = mapped_column(String(50))
+    mouth: Mapped[str] = mapped_column(String(50))
+    hair: Mapped[str] = mapped_column(String(50))
+    clothes: Mapped[str] = mapped_column(String(50))
+
+    skin_color: Mapped[str] = mapped_column(String(6))
+    hair_color: Mapped[str] = mapped_column(String(6))
+    clothes_color: Mapped[str] = mapped_column(String(6))

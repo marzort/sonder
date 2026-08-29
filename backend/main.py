@@ -67,10 +67,13 @@ def register(request: RegisterRequest, db: Session = Depends(get_db)):
 
         avatar = Avatar(
             user_id = user.id,
-            hair = 1,
-            shirt = 1,
-            hat = 1,
-            skin_color = 1
+            eyes = "default",
+            mouth = "default",
+            hair = "bigHair",
+            clothes = "hoodie",
+            skin_color = "614335",
+            hair_color = "a55728",
+            clothes_color = "65c9ff"
         )
 
         db.add(avatar)
@@ -116,10 +119,13 @@ def profile(
         "username": current_user.username,
         "created_at": current_user.created_at,
         "avatar": {
+            "eyes": current_user.avatar.eyes,
+            "mouth": current_user.avatar.mouth,
             "hair": current_user.avatar.hair,
-            "shirt": current_user.avatar.shirt,
-            "hat": current_user.avatar.hat,
-            "skin_color": current_user.avatar.skin_color
+            "clothes": current_user.avatar.clothes,
+            "skin_color": current_user.avatar.skin_color,
+            "hair_color": current_user.avatar.hair_color,
+            "clothes_color": current_user.avatar.clothes_color
         }
     }
 
@@ -139,16 +145,22 @@ def update_avatar(
             detail="Avatar not found"
         )
 
+    avatar.eyes = request.eyes
+    avatar.mouth = request.mouth
     avatar.hair = request.hair
-    avatar.shirt = request.shirt
-    avatar.hat = request.hat
+    avatar.clothes = request.clothes
     avatar.skin_color = request.skin_color
+    avatar.hair_color = request.hair_color
+    avatar.clothes_color = request.clothes_color
 
     db.commit()
 
     return {
+        "eyes": avatar.eyes,
+        "mouth": avatar.mouth,
         "hair": avatar.hair,
-        "shirt": avatar.shirt,
-        "hat": avatar.hat,
-        "skin_color": avatar.skin_color
+        "clothes": avatar.clothes,
+        "skin_color": avatar.skin_color,
+        "hair_color": avatar.hair_color,
+        "clothes_color": avatar.clothes_color
     }

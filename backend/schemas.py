@@ -46,7 +46,10 @@ class LoginRequest(BaseModel):
         return value
 
 class AvatarUpdateRequest(BaseModel):
-    hair: int
-    shirt: int
-    hat: int
-    skin_color: int
+    eyes: str
+    mouth: str
+    hair: str
+    clothes: str
+    skin_color: str
+    hair_color: str
+    clothes_color: str
