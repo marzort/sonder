@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { updateAvatar } from '../api'
 import type { Avatar, UserProfile } from '../api'
+import AvatarCustomizer from './AvatarCustomizer'
 
 interface ProfileProps {
     profile: UserProfile
@@ -73,12 +74,7 @@ function Profile({
             <div className="profile-content">
                 <div className="avatar-preview">
                     <h3>Your Avatar</h3>
-
-                    <div className="avatar-circle">
-                        <span>🧑</span>
-                    </div>
-
-                    <p>Avatar #{profile.id}</p>
+                    <AvatarCustomizer />
                 </div>
 
                 <div className="avatar-editor">
