@@ -52,10 +52,13 @@ export default function Avatar ({
     })
 
     return (
-        <div 
-            dangerouslySetInnerHTML={{
-                __html: avatar.toString()
-            }}
-        />
+        <div className="avatar-image" >
+            <div
+                dangerouslySetInnerHTML={{
+                    __html: avatar.toString()
+                }}
+            />
+        </div>
+            
     )
 }

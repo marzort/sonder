@@ -56,7 +56,7 @@ export default function AvatarCustomizer({
 } : AvatarCustomizerProps) {
     
     return (
-        <div>
+        <div className="avatar-customizer">
             <h2>Customize Your Avatar</h2>
 
             <Avatar 
@@ -68,10 +68,11 @@ export default function AvatarCustomizer({
                 hairColor={hairColor}
                 clothesColor={clothesColor}
             />
-            
-            <h3>Skin</h3>
 
-            <div className="color-options">
+            <div className="customizer-section">
+                <h3>Skin</h3>
+
+                <div className="color-options">
                 {SKIN_COLOR_OPTIONS.map((color) => (
                     <button
                         key={color}
@@ -83,90 +84,99 @@ export default function AvatarCustomizer({
                         aria-label={`Skin color ${color}`}
                     />
                 ))}
+                </div>
+            </div>
+            
+            <div className="customizer-section">
+                <h3>Eyes</h3>
+
+                <div className="avatar-options">
+                    {EYE_OPTIONS.map((eye) => (
+                        <button
+                            key={eye.value}
+                            onClick={() => onEyesChange(eye.value)}
+                            className={eyes === eye.value ? 'selected' : ''}
+                        >
+                            {eye.label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <h3>Eyes</h3>
+            <div className="customizer-section">
+                <h3>Mouth</h3>
 
-            <div className="avatar-options">
-                {EYE_OPTIONS.map((eye) => (
-                    <button
-                        key={eye.value}
-                        onClick={() => onEyesChange(eye.value)}
-                        className={eyes === eye.value ? 'selected' : ''}
-                    >
-                        {eye.label}
-                    </button>
-                ))}
+                <div className="avatar-options">
+                    {MOUTH_OPTIONS.map((mouthOption) => (
+                        <button
+                            key={mouthOption.value}
+                            onClick={() => onMouthChange(mouthOption.value)}
+                            className={mouth === mouthOption.value ? 'selected' : ''}
+                        >
+                            {mouthOption.label}
+                        </button>
+                    ))}
+                </div>
             </div>
 
-            <h3>Mouth</h3>
+            <div className="customizer-section">
+                <h3>Hair</h3>
 
-            <div className="avatar-options">
-                {MOUTH_OPTIONS.map((mouthOption) => (
-                    <button
-                        key={mouthOption.value}
-                        onClick={() => onMouthChange(mouthOption.value)}
-                        className={mouth === mouthOption.value ? 'selected' : ''}
-                    >
-                        {mouthOption.label}
-                    </button>
-                ))}
+                <div className="avatar-options">
+                    {TOP_OPTIONS.map((topOption) => (
+                        <button
+                            key={topOption.value}
+                            onClick={() => onTopChange(topOption.value)}
+                            className={top === topOption.value ? 'selected' : ''}
+                        >
+                            {topOption.label}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="color-options">
+                    {HAIR_COLOR_OPTIONS.map((color) => (
+                        <button
+                            key={color}
+                            onClick={() => onHairColorChange(color)}
+                            className={`color-button ${
+                                hairColor === color ? 'selected' : ''
+                            }`}
+                            style={{ backgroundColor: `#${color}` }}
+                            aria-label={`Hair color ${color}`}
+                        />
+                    ))}
+                </div>
             </div>
 
-            <h3>Hair</h3>
+            <div className="customizer-section">
+                <h3>Clothes</h3>
 
-            <div className="avatar-options">
-                {TOP_OPTIONS.map((topOption) => (
-                    <button
-                        key={topOption.value}
-                        onClick={() => onTopChange(topOption.value)}
-                        className={top === topOption.value ? 'selected' : ''}
-                    >
-                        {topOption.label}
-                    </button>
-                ))}
-            </div>
+                <div className="avatar-options">
+                    {CLOTHES_OPTIONS.map((clothesOption) => (
+                        <button
+                            key={clothesOption.value}
+                            onClick={() => onClothesChange(clothesOption.value)}
+                            className={clothes === clothesOption.value ? 'selected' : ''}
+                        >
+                            {clothesOption.label}
+                        </button>
+                    ))}
+                </div>
 
-            <div className="color-options">
-                {HAIR_COLOR_OPTIONS.map((color) => (
-                    <button
-                        key={color}
-                        onClick={() => onHairColorChange(color)}
-                        className={`color-button ${
-                            hairColor === color ? 'selected' : ''
-                        }`}
-                        style={{ backgroundColor: `#${color}` }}
-                        aria-label={`Hair color ${color}`}
-                    />
-                ))}
-            </div>
-
-            <h3>Clothes</h3>
-
-            <div className="avatar-options">
-                {CLOTHES_OPTIONS.map((clothesOption) => (
-                    <button
-                        key={clothesOption.value}
-                        onClick={() => onClothesChange(clothesOption.value)}
-                        className={clothes === clothesOption.value ? 'selected' : ''}
-                    >
-                        {clothesOption.label}
-                    </button>
-                ))}
-            </div>
-
-            <div className="color-options">
-                {CLOTHES_COLOR_OPTIONS.map((color) => (
-                    <button
-                        key={color}
-                        onClick={() => onClothesColorChange(color)}
-                        className={`color-button ${
-                            clothesColor === color ? 'selected' : ''
-                        }`}
-                        style={{ backgroundColor: `#${color}` }}
-                        aria-label={`Clothes color ${color}`}
-                    />
-                ))}
+                <div className="color-options">
+                    {CLOTHES_COLOR_OPTIONS.map((color) => (
+                        <button
+                            key={color}
+                            onClick={() => onClothesColorChange(color)}
+                            className={`color-button ${
+                                clothesColor === color ? 'selected' : ''
+                            }`}
+                            style={{ backgroundColor: `#${color}` }}
+                            aria-label={`Clothes color ${color}`}
+                        />
+                    ))}
+                </div>
             </div>
 
         </div>

@@ -60,7 +60,6 @@ function Profile({
 
             <div className="profile-content">
                 <div className="avatar-preview">
-                    <h3>Your Avatar</h3>
                     <AvatarCustomizer 
                         eyes={profile.avatar.eyes}
                         mouth={profile.avatar.mouth}
