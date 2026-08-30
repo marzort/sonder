@@ -187,16 +187,31 @@ button {
 
 .profile-content {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 32px;
+  align-items: start;
+}
+
+.profile-controls {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
 }
 
 .avatar-customizer {
   width: 100%;
+  min-width: 0;
+}
+
+.avatar-customizer > h2 {
+  margin-top: 0;
+  margin-bottom: 24px;
+  color: #111827;
 }
 
 .customizer-section {
   margin-bottom: 24px;
+  min-width: 0;
 }
 
 .customizer-section h3 {
@@ -206,7 +221,39 @@ button {
   font-size: 1rem;
 }
 
+.options-scroll {
+  width: 100%;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 4px;
+  padding-left: 4px;
+
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.options-scroll .avatar-options,
+.options-scroll .color-options {
+  width: max-content;
+  min-width: max-content;
+  flex-wrap: nowrap;
+}
+
+.options-scroll .avatar-options button {
+  flex: 0 0 auto;
+}
+
+.options-scroll .color-options {
+  justify-content: flex-start;
+}
+
+.options-scroll .color-button {
+  flex: 0 0 auto;
+}
+
 .avatar-preview {
+  width: 100%;
   background: linear-gradient(180deg, #eef2ff 0%, #f9fafb 100%);
   border: 1px solid #e0e7ff;
   border-radius: 16px;
@@ -246,25 +293,18 @@ button {
   height: 90%;
 }
 
-.avatar-circle {
-  width: 180px;
-  height: 180px;
-  margin: 24px auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #e0e7ff;
-  border-radius: 50%;
-  font-size: 6rem;
-}
-
 .avatar-field {
   margin-bottom: 16px;
 }
 
-.save-button {
+.save-section {
   width: 100%;
   margin-top: 8px;
+}
+
+.save-button {
+  width: 100%;
+  margin-top: 0;
 }
 
 .message {
@@ -282,6 +322,7 @@ button {
   border: 2px solid #d1d5db;
   border-radius: 50%;
   cursor: pointer;
+  flex: 0 0 auto;
   transition: 
     transform 0.15s ease, 
     border-color 0.15s ease,
@@ -321,6 +362,7 @@ button {
   border-radius: 8px;
   padding: 9px 13px;
   font-weight: 500;
+  white-space: nowrap;
   transition: 
     background-color 0.15s ease,
     border-color 0.15s ease,
@@ -354,11 +396,20 @@ color-button:focus-visible {
 
   .profile-content {
     grid-template-columns: 1fr;
+    gap: 24px;
   }
 
   .profile-header {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .avatar-preview {
+    order: 1;
+  }
+
+  .profile-controls {
+    order: 2;
   }
 
   .auth-buttons {

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { updateAvatar } from '../api'
 import type { UserProfile } from '../api'
+import Avatar from './Avatar'
 import AvatarCustomizer from './AvatarCustomizer'
 
 interface ProfileProps {
@@ -60,6 +61,19 @@ function Profile({
 
             <div className="profile-content">
                 <div className="avatar-preview">
+                    
+                    <Avatar 
+                        eyes={profile.avatar.eyes}
+                        mouth={profile.avatar.mouth}
+                        top={profile.avatar.hair}
+                        clothes={profile.avatar.clothes}
+                        skinColor={profile.avatar.skin_color}
+                        hairColor={profile.avatar.hair_color}
+                        clothesColor={profile.avatar.clothes_color}
+                    />
+                </div>
+
+                <div className="profile-controls">
                     <AvatarCustomizer 
                         eyes={profile.avatar.eyes}
                         mouth={profile.avatar.mouth}
@@ -139,19 +153,22 @@ function Profile({
                             })
                         }
                     />
-                </div>
-                    <button 
-                        className="primary-button save-button"
-                        onClick={handleAvatarUpdate}
-                    >
-                        Save Avatar
-                    </button>
 
-                    {message && (
-                        <p className="message">
-                            {message}
-                        </p>
-                    )}
+                    <div className="save-section">
+                        <button 
+                            className="primary-button save-button"
+                            onClick={handleAvatarUpdate}
+                        >
+                            Save Avatar
+                        </button>
+
+                        {message && (
+                            <p className="message">
+                                {message}
+                            </p>
+                        )}
+                    </div>
+                </div>
             </div>
         </section>
     )
