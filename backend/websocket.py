@@ -1,6 +1,6 @@
 import json
 from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect
-from auth import verify_access_token
+from auth import verify_access_token, active_sessions
 
 DIRECTION_DELTAS = {
     "up": (0, -10),
@@ -11,60 +11,103 @@ DIRECTION_DELTAS = {
 
 router = APIRouter()
 
-active_players = {}
-active_connections = {}
+class ConnectionManager:
 
-async def broadcast(message):
-    for connection in active_connections.values():
-        await connection.send_text(message)
+    def __init__(self):
+        self.active_connections = {}
+        self.active_players = {}
+
+    async def connect(self, user_id, websocket):
+        if user_id in self.active_connections:
+            await websocket.close(
+                code=status.WS_1008_POLICY_VIOLATION,
+                reason="User already connected"
+            )
+            return False
+
+        await websocket.accept()
+
+        self.active_connections[user_id] = websocket
+
+        self.active_players[user_id] = {
+            "x": 100 + (len(self.active_players) * 50),
+            "y": 100
+        }
+
+        return True
+
+    async def disconnect(self, user_id, session_id=None, close_socket=False):
+        websocket = self.active_connections.pop(user_id, None)
+
+        self.active_players.pop(user_id, None)
+
+        if session_id is None or active_sessions.get(user_id) == session_id:
+            active_sessions.pop(user_id, None)
+
+        if close_socket and websocket is not None:
+            await websocket.close(
+                code=1000,
+                reason="Logged out"
+            )
+
+        await self.broadcast(
+            json.dumps({
+                "type": "player_left",
+                "user_id": user_id
+            })
+        )
+
+    async def broadcast(self, message):
+        for connection in self.active_connections.values():
+            await connection.send_text(message)
+
+manager = ConnectionManager()
 
 @router.websocket("/ws")
 async def websocket_endpoint(
     websocket: WebSocket,
     token: str = Query(...)
 ):
+
     try:
         payload = verify_access_token(token)
         user_id = int(payload["sub"])
-    except (Exception, KeyError, ValueError):
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return
-
-    if user_id in active_connections:
+        session_id = payload["session_id"]
+    except (KeyError, ValueError):
         await websocket.close(
             code=status.WS_1008_POLICY_VIOLATION,
-            reason="User already has an active connection"
+            reason="Invalid token"
         )
         return
 
-    await websocket.accept()
+    if active_sessions.get(user_id) != session_id:
+        await websocket.close(
+            code=status.WS_1008_POLICY_VIOLATION,
+            reason="Session is no longer active"
+        )
+        return
 
-    active_connections[user_id] = websocket
+    connected = await manager.connect(user_id, websocket)
 
-    active_players[user_id] = {
-        "x": 100 + (len(active_players) * 50),
-        "y": 100
-    }
+    if not connected:
+        return
 
     await websocket.send_text(
         json.dumps({
             "type": "welcome",
             "user_id": user_id,
-            "players": active_players
+            "players": manager.active_players
         })
     )
 
-    await broadcast(
+    await manager.broadcast(
         json.dumps({
             "type": "player_joined",
             "user_id": user_id,
-            "x": active_players[user_id]["x"],
-            "y": active_players[user_id]["y"]
+            "x": manager.active_players[user_id]["x"],
+            "y": manager.active_players[user_id]["y"]
         })
     )
-
-    print("Authenticated user:", user_id)
-    print("Active players:", active_players)
 
     try:
         while True:
@@ -80,7 +123,7 @@ async def websocket_endpoint(
                 if direction not in DIRECTION_DELTAS:
                     continue
 
-                player = active_players[user_id]
+                player = manager.active_players[user_id]
 
                 dx, dy = DIRECTION_DELTAS[direction]
 
@@ -96,14 +139,7 @@ async def websocket_endpoint(
                 player["x"] = new_x
                 player["y"] = new_y
 
-                print(
-                    "Player moved:",
-                    user_id,
-                    player["x"],
-                    player["y"]
-                )
-
-                await broadcast(
+                await manager.broadcast(
                     json.dumps({
                         "type": "player_moved",
                         "user_id": user_id,
@@ -113,17 +149,9 @@ async def websocket_endpoint(
                 )
 
     except WebSocketDisconnect:
-        active_players.pop(user_id, None)
-        active_connections.pop(user_id, None)
-
-        print("User disconnected:", user_id)
-        print("Active players:", active_players)
-
-        await broadcast(
-            json.dumps({
-                "type": "player_left",
-                "user_id": user_id
-            })
+        await manager.disconnect(
+            user_id,
+            session_id=session_id
         )
 
                 

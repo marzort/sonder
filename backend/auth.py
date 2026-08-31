@@ -8,6 +8,7 @@ from database import get_db
 from models import User
 import jwt
 import os
+import uuid
 
 load_dotenv()
 JWT_SECRET = os.getenv("JWT_SECRET")
@@ -16,6 +17,8 @@ security = HTTPBearer()
 
 password_hash = PasswordHash.recommended()
 
+active_sessions = {}
+
 def hash_password(user_password):
     return password_hash.hash(user_password)
 
@@ -23,9 +26,14 @@ def verify_password(user_password, hashed_password):
     return password_hash.verify(user_password, hashed_password)
 
 def create_access_token(user_id):
+    session_id = str(uuid.uuid4())
+
     payload = {
-        "sub": str(user_id)
+        "sub": str(user_id),
+        "session_id": session_id
     }
+
+    active_sessions[user_id] = session_id
 
     return jwt.encode(
         payload,
@@ -54,7 +62,20 @@ def get_current_user(
     token = credentials.credentials
     payload = verify_access_token(token)
 
-    user_id = int(payload["sub"])
+    try:
+        user_id = int(payload["sub"])
+        session_id = payload["session_id"]
+    except (KeyError, ValueError):
+        raise HTTPException(
+            status_code=401,
+            detail="Invalid token"
+        )
+
+    if active_sessions.get(user_id) != session_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Session is no longer active"
+        )
 
     user = db.execute(
         select(User).where(User.id == user_id)
