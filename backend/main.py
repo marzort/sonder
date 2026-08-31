@@ -16,16 +16,12 @@ from database import engine, get_db
 from models import Base, User, Avatar
 from schemas import RegisterRequest, LoginRequest, AvatarUpdateRequest
 from auth import hash_password, verify_password, create_access_token, verify_access_token, get_current_user
+from websocket import router as websocket_router
 
 app = FastAPI()
 security = HTTPBearer()
 
-active_players = {}
-active_connections = {}
-
-async def broadcast(message):
-    for connection in active_connections.values():
-        await connection.send_text(message)
+app.include_router(websocket_router)
 
 Base.metadata.create_all(engine)
 
@@ -179,109 +175,4 @@ def update_avatar(
         "skin_color": avatar.skin_color,
         "hair_color": avatar.hair_color,
         "clothes_color": avatar.clothes_color
-    }
-
-@app.websocket("/ws")
-async def websocket_endpoint(
-    websocket: WebSocket,
-    token: str = Query(...)
-):
-    try:
-        payload = verify_access_token(token)
-        user_id = int(payload["sub"])
-    except (HTTPException, KeyError, ValueError):
-        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return
-
-    await websocket.accept()
-
-    active_connections[user_id] = websocket
-
-    active_players[user_id] = {
-        "x": 100 + (len(active_players) * 50),
-        "y": 100
-    }
-
-    await websocket.send_text(
-        json.dumps({
-            "type": "welcome",
-            "user_id": user_id,
-            "players": active_players
-        })
-    )
-
-    await broadcast(
-        json.dumps({
-            "type": "player_joined",
-            "user_id": user_id,
-            "x": active_players[user_id]["x"],
-            "y": active_players[user_id]["y"]
-        })
-    )
-
-    print("Authenticated user:", user_id)
-    print("Active players:", active_players)
-
-    try:
-        while True:
-            message = await websocket.receive_text()
-
-            data = json.loads(message)
-
-            print("Received:", data)
-
-            if data["type"] == "move":
-                direction = data["direction"]
-
-                player = active_players[user_id]
-                new_x = player["x"]
-                new_y = player["y"]
-
-                if direction == "up":
-                    new_y -= 10
-
-                elif direction == "down":
-                    new_y += 10
-
-                elif direction == "left":
-                    new_x -= 10
-
-                elif direction == "right":
-                    new_x += 10
-
-                else:
-                    continue
-
-                if new_x < 0 or new_x > 570:
-                    continue
-
-                if new_y < 0 or new_y > 370:
-                    continue
-
-                player["x"] = new_x
-                player["y"] = new_y
-
-                print("Player moved:", user_id, player["x"], player["y"])
-
-                await broadcast(
-                    json.dumps({
-                        "type": "player_moved",
-                        "user_id": user_id,
-                        "x": player["x"],
-                        "y": player["y"]
-                    })
-                )
-
-    except WebSocketDisconnect:
-        active_players.pop(user_id, None)
-        active_connections.pop(user_id, None)
-
-        print("User disconnected:", user_id)
-        print("Active players:", active_players)
-
-        await broadcast(
-            json.dumps({
-                "type": "player_left",
-                "user_id": user_id
-            })
-        )
+    } 
