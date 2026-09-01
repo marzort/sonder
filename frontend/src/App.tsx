@@ -3,6 +3,7 @@ import AuthForm from './components/AuthForm'
 import Profile from './components/Profile'
 import { getProfile } from './api'
 import type { UserProfile } from './api'
+import Campus from './components/Campus'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -16,6 +17,8 @@ function App() {
   const [players, setPlayers] = useState<
     Record<number, { x: number, y: number }>
   >({})
+
+  const [screen, setScreen] = useState<'profile' | 'campus'>('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
 
@@ -156,6 +159,14 @@ function App() {
     setProfile(null)
   }
 
+  function handleCampusLaunch() {
+    setScreen('campus')
+  }
+
+  function handleCampusBack() {
+    setScreen('profile')
+  }
+
   if (loading) {
     return (
       <main className="app">
@@ -174,44 +185,28 @@ function App() {
           <h1>CampusPass</h1>
           <p>Your campus. Your character. Your community.</p>
 
-          <div
-            style={{
-              position: 'relative',
-              width: '600px',
-              height: '400px',
-              border: '2px solid #333',
-              overflow: 'hidden'
-            }}
-          >
-            {Object.entries(players).map(([userId, player]) => (
-              <div
-                key={userId}
-                style={{
-                  position: 'absolute',
-                  left: player.x,
-                  top: player.y,
-                  width: '30px',
-                  height: '30px',
-                  backgroundColor:
-                    Number(userId) === profile?.id ? 'blue' : 'red',
-                  borderRadius: '50%'
-              }}
-            />
-            ))}
-            
-          </div>
+          
         </header>
 
       {!profile && (
         <AuthForm onLogin={handleLogin} />
       )}
 
-      {profile && token && (
+      {profile && token && screen === 'profile' && (
         <Profile 
           profile={profile}
           token={token}
           onLogout={handleLogout}
           onProfileUpdate={setProfile}
+          onCampusLaunch={handleCampusLaunch}
+        />
+      )}
+
+      {profile && token && screen === 'campus' && (
+        <Campus
+          profile={profile}
+          players={players}
+          onBack={handleCampusBack}
         />
       )}
       </div>
