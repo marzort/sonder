@@ -175,4 +175,4 @@ def update_avatar(
         "skin_color": avatar.skin_color,
         "hair_color": avatar.hair_color,
         "clothes_color": avatar.clothes_color
-    } 
+    }
