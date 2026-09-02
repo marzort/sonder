@@ -1,4 +1,7 @@
 import type { UserProfile } from '../api'
+import { buildings } from '../data/buildings'
+
+
 
 interface CampusProps {
     profile: UserProfile
@@ -30,12 +33,42 @@ function Campus({
             <div
             style={{
               position: 'relative',
-              width: '600px',
-              height: '400px',
+              width: '900px',
+              height: '600px',
               border: '2px solid #333',
-              overflow: 'hidden'
+              overflow: 'auto'
             }}
           >
+
+            {buildings.map((building) => (
+              <div
+                key={building.id}
+                style={{
+                  position: 'absolute',
+                  left: building.x,
+                  top: building.y,
+                  width: building.width,
+                  height: building.height,
+                  backgroundColor: building.color ?? '#888',
+                  border: '2px solid #444',
+                  boxSizing: 'border-box'
+                }}
+                >
+                  <span
+                    style={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      height: '100%',
+                      fontSize: '12px',
+                      fontWeight: 'bold'
+                    }}
+                    >
+                      {building.name}
+                    </span>
+                </div>
+            ))}
+
             {Object.entries(players).map(([userId, player]) => (
               <div
                 key={userId}
