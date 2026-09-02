@@ -3,10 +3,6 @@ from fastapi import (
     FastAPI, 
     Depends, 
     HTTPException, 
-    WebSocket, 
-    Query, 
-    status,
-    WebSocketDisconnect
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -15,8 +11,14 @@ from sqlalchemy.orm import Session
 from database import engine, get_db
 from models import Base, User, Avatar
 from schemas import RegisterRequest, LoginRequest, AvatarUpdateRequest
-from auth import hash_password, verify_password, create_access_token, verify_access_token, get_current_user
-from websocket import router as websocket_router
+from auth import (
+    hash_password, 
+    verify_password, 
+    create_access_token, 
+    get_current_user,
+    active_sessions
+)
+from websocket import router as websocket_router, manager
 
 app = FastAPI()
 security = HTTPBearer()
@@ -118,6 +120,12 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
             detail="Invalid username or password"
         )
 
+    if user.id in active_sessions:
+        raise HTTPException(
+            status_code=409,
+            detail="User is already logged in"
+        )
+
     token = create_access_token(user.id)
 
     return {"access_token": token}
@@ -176,3 +184,16 @@ def update_avatar(
         "hair_color": avatar.hair_color,
         "clothes_color": avatar.clothes_color
     }
+
+@app.post("/logout")
+async def logout(
+    current_user: User = Depends(get_current_user)
+):
+    user_id = current_user.id
+
+    active_sessions.pop(user_id, None)
+
+    await manager.disconnect(
+        user_id,
+        close_socket=True
+    )
