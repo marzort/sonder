@@ -1,5 +1,6 @@
 import type { UserProfile } from '../api'
 import { buildings } from '../data/buildings'
+import { useEffect, useRef, useState } from 'react'
 
 interface CampusProps {
     profile: UserProfile
@@ -14,6 +15,37 @@ function Campus({
     onBack,
     onMove
 }: CampusProps) {
+  const viewportRef = useRef<HTMLDivElement>(null)
+
+  const [viewportSize, setViewportSize] = useState({
+    width: 900,
+    height: 600
+  })
+
+  useEffect(() => {
+    const element = viewportRef.current
+
+    if (!element) {
+      return
+    }
+
+    function updateViewportSize() {
+      setViewportSize({
+        width: element.clientWidth,
+        height: element.clientHeight
+      })
+    }
+
+    updateViewportSize()
+
+    const observer = new ResizeObserver(updateViewportSize)
+    observer.observe(element)
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [])
+
   const currentPlayer = players[profile.id]
 
   function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -46,9 +78,6 @@ function Campus({
   const WORLD_WIDTH = 2400
   const WORLD_HEIGHT = 1600
 
-  const VIEWPORT_WIDTH = 900
-  const VIEWPORT_HEIGHT = 600
-
   const PLAYER_SIZE = 30
 
   const playerX = currentPlayer?.x ?? WORLD_WIDTH / 2
@@ -56,18 +85,18 @@ function Campus({
 
   const cameraX = Math.max(
     Math.min(
-      VIEWPORT_WIDTH / 2 - (playerX + PLAYER_SIZE / 2),
+      viewportSize.width / 2 - (playerX + PLAYER_SIZE / 2),
       0
     ),
-    VIEWPORT_WIDTH - WORLD_WIDTH
+    viewportSize.width - WORLD_WIDTH
   )
 
   const cameraY = Math.max(
     Math.min(
-      VIEWPORT_HEIGHT / 2 - (playerY + PLAYER_SIZE / 2),
+      viewportSize.height / 2 - (playerY + PLAYER_SIZE / 2),
       0
     ),
-    VIEWPORT_HEIGHT - WORLD_HEIGHT
+    viewportSize.height - WORLD_HEIGHT
   )
 
 
@@ -88,6 +117,7 @@ function Campus({
             </div>
 
             <div
+              ref={viewportRef}
               tabIndex={0}
               onKeyDown={handleKeyDown}
               style={{
