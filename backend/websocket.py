@@ -98,8 +98,6 @@ async def websocket_endpoint(
         )
         return
 
-    await websocket.accept()
-
     connected = await manager.connect(user_id, websocket)
 
     if not connected:
