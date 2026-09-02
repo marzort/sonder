@@ -106,48 +106,18 @@ function App() {
     }
   }, [token])
 
-  useEffect(() => {
-    function handleKeyDown(event: KeyboardEvent) {
-      let direction: string | null = null
-      
-      if (event.key === 'ArrowUp') {
-        direction = 'up'
-      }
-
-      if (event.key === 'ArrowDown') {
-        direction = 'down'
-      }
-
-      if (event.key === 'ArrowLeft') {
-        direction = 'left'
-      }
-
-      if (event.key === 'ArrowRight') {
-        direction = 'right'
-      }
-
-      if (direction === null) {
-        return
-      }
-
-      event.preventDefault()
-
-      if (socketRef.current?.readyState === WebSocket.OPEN) {
-        socketRef.current.send(
-          JSON.stringify({
-            type: 'move',
-            direction: direction
-          })
-        )
-      }
+  function handleMove(
+    direction: 'up' | 'down' | 'left' | 'right'
+  ) {
+    if (socketRef.current?.readyState === WebSocket.OPEN) {
+      socketRef.current.send(
+        JSON.stringify({
+          type: 'move',
+          direction
+        })
+      )
     }
-
-    window.addEventListener('keydown', handleKeyDown)
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown)
-    }
-  }, [])
+  }
 
   function handleLogin(accessToken: string) {
     setToken(accessToken)
@@ -207,6 +177,7 @@ function App() {
           profile={profile}
           players={players}
           onBack={handleCampusBack}
+          onMove={handleMove}
         />
       )}
       </div>
