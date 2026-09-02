@@ -36,6 +36,7 @@ function App() {
         localStorage.removeItem('access_token')
         setToken(null)
         setProfile(null)
+        setPlayers({})
       } finally {
         setLoading(false)
       }
@@ -101,8 +102,17 @@ function App() {
       console.error('WebSocket error:', error)
     }
 
+    socket.onclose = (event) => {
+      console.log(
+        'WebSocket closed:',
+        event.code,
+        event.reason
+      )
+    }
+
     return () => {
       socket.close()
+      socketRef.current = null
     }
   }, [token])
 
@@ -123,10 +133,24 @@ function App() {
     setToken(accessToken)
   }
 
-  function handleLogout() {
-    localStorage.removeItem('access_token')
-    setToken(null)
-    setProfile(null)
+  async function handleLogout() {
+    const token = localStorage.getItem('access_token')
+
+    try {
+      await fetch('http://localhost:8000/logout', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    } catch (error) {
+      console.error('Logout request failed:', error)
+    } finally {
+      localStorage.removeItem('access_token')
+      setToken(null)
+      setProfile(null)
+      setPlayers({})
+    }
   }
 
   function handleCampusLaunch() {
