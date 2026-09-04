@@ -9,7 +9,7 @@ from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from database import engine, get_db
-from models import Base, User, Avatar
+from models import Base, User, Avatar, Meeting
 from schemas import RegisterRequest, LoginRequest, AvatarUpdateRequest
 from auth import (
     hash_password, 
