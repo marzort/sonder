@@ -81,6 +81,7 @@ async def websocket_endpoint(
     websocket: WebSocket,
     token: str = Query(...)
 ):
+
     try:
         payload = verify_access_token(token)
         user_id = int(payload["sub"])
