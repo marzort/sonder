@@ -9,6 +9,11 @@ DIRECTION_DELTAS = {
     "right": (10, 0)
 }
 
+WORLD_WIDTH = 2400
+WORLD_HEIGHT = 1600
+
+PLAYER_SIZE = 30
+
 router = APIRouter()
 
 class ConnectionManager:
@@ -29,9 +34,16 @@ class ConnectionManager:
 
         self.active_connections[user_id] = websocket
 
+        spawn_x = 200 + (len(self.active_players) * 50)
+        spawn_y = 200
+        
+
+        spawn_x = min(spawn_x, WORLD_WIDTH - PLAYER_SIZE)
+        spawn_y = min(spawn_y, WORLD_HEIGHT - PLAYER_SIZE)
+
         self.active_players[user_id] = {
-            "x": 100 + (len(self.active_players) * 50),
-            "y": 100
+            "x": spawn_x,
+            "y": spawn_y
         }
 
         return True
@@ -109,6 +121,9 @@ async def websocket_endpoint(
         })
     )
 
+    print("Authenticated user:", user_id)
+    print("Active players:", manager.active_players)
+
     try:
         while True:
             message = await websocket.receive_text()
@@ -130,14 +145,25 @@ async def websocket_endpoint(
                 new_x = player["x"] + dx
                 new_y = player["y"] + dy
 
-                if new_x < 0 or new_x > 570:
-                    continue
+                new_x = max(
+                    0,
+                    min(new_x, WORLD_WIDTH - PLAYER_SIZE)
+                )
 
-                if new_y < 0 or new_y > 370:
-                    continue
+                new_y = max(
+                    0,
+                    min(new_y, WORLD_HEIGHT - PLAYER_SIZE)
+                )
 
                 player["x"] = new_x
                 player["y"] = new_y
+
+                print(
+                    "Player moved:",
+                    user_id,
+                    player["x"],
+                    player["y"]
+                )
 
                 await manager.broadcast(
                     json.dumps({
@@ -152,6 +178,13 @@ async def websocket_endpoint(
         await manager.disconnect(
             user_id,
             session_id=session_id
+        )
+
+        await manager.broadcast(
+            json.dumps({
+                "type": "player_left",
+                "user_id": user_id
+            })
         )
 
                 
