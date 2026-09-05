@@ -9,13 +9,15 @@ interface ProfileProps {
     token: string
     onLogout: () => void
     onProfileUpdate: (profile: UserProfile) => void
+    onCampusLaunch: () => void
 }
 
 function Profile({
     profile,
     token,
     onLogout,
-    onProfileUpdate
+    onProfileUpdate,
+    onCampusLaunch
 }: ProfileProps) {
     const [message, setMessage] = useState('')
 
@@ -167,6 +169,15 @@ function Profile({
                                 {message}
                             </p>
                         )}
+                    </div>
+
+                    <div className="launch-campus-section">
+                        <button
+                            className="primary-button launch-campus-button"
+                            onClick = {onCampusLaunch}
+                        >
+                            Go To Campus
+                        </button>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,8 @@
 import json
 from fastapi import (
     FastAPI, 
-    Depends, 
-    HTTPException
+    Depends,
+    HTTPException, 
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
@@ -13,8 +13,8 @@ from models import Base, User, Avatar
 from schemas import RegisterRequest, LoginRequest, AvatarUpdateRequest
 from auth import (
     hash_password, 
-    verify_password, 
-    create_access_token,  
+    verify_password,
+    create_access_token, 
     get_current_user,
     active_sessions
 )
@@ -199,3 +199,4 @@ async def logout(
     )
 
     return {"message": "Logged out"}
+    
