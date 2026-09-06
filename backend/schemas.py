@@ -1,4 +1,4 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, Field
 
 class RegisterRequest(BaseModel):
     username: str
@@ -53,3 +53,11 @@ class AvatarUpdateRequest(BaseModel):
     skin_color: str
     hair_color: str
     clothes_color: str
+
+class LocationUpdate(BaseModel):
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    accuracy: float | None = Field(
+        default=None,
+        ge=0
+    )

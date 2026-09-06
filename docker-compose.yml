@@ -1,11 +1,11 @@
 services:
   postgres:
-    image: postgres:17
+    image: postgis/postgis:17-3.5
     container_name: project-campus-db
     environment:
-      POSTGRES_USER: campus
-      POSTGRES_PASSWORD: campus
-      POSTGRES_DB: campus
+      POSTGRES_USER: ${POSTGRES_USERNAME}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     ports:
       - "5432:5432"
     volumes:

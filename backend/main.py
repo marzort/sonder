@@ -12,6 +12,7 @@ from routers.logout import router as logout_router
 from routers.avatar import router as avatar_router
 from routers.users import router as users_router
 from routers.profile import router as profile_router
+from routers.location import router as location_router
 
 app = FastAPI()
 security = HTTPBearer()
@@ -24,6 +25,7 @@ app.include_router(logout_router)
 app.include_router(avatar_router)
 app.include_router(users_router)
 app.include_router(profile_router)
+app.include_router(location_router)
 
 Base.metadata.create_all(engine)
 
