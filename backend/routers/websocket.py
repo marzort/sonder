@@ -1,6 +1,7 @@
 import json
 from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect
 from auth import verify_access_token, active_sessions
+from data.buildings import buildings
 
 DIRECTION_DELTAS = {
     "up": (0, -10),
@@ -155,8 +156,21 @@ async def websocket_endpoint(
                     min(new_y, WORLD_HEIGHT - PLAYER_SIZE)
                 )
 
-                player["x"] = new_x
-                player["y"] = new_y
+                collision = False
+
+                for building in buildings:
+                    if (
+                        new_x < building["x"] + building["width"]
+                        and new_x + PLAYER_SIZE > building["x"]
+                        and new_y < building["y"] + building["height"]
+                        and new_y + PLAYER_SIZE > building["y"]
+                    ):
+                        collision = True
+                        break
+
+                if collision == False:
+                    player["x"] = new_x
+                    player["y"] = new_y
 
                 print(
                     "Player moved:",
