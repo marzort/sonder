@@ -4,6 +4,7 @@ import Profile from './components/Profile'
 import { getProfile } from './api'
 import type { UserProfile } from './api'
 import Campus from './components/Campus'
+import skyBackground from './assets/sky_background.png'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -173,11 +174,18 @@ function App() {
   }
 
   return (
-    <main className="app">
+    <main 
+      className={`app ${!profile ? 'auth-background' : `${screen}-background`}`}
+      style={
+        !profile
+          ? { backgroundImage: `url(${skyBackground})` }
+          : undefined
+      }
+    >
       <div className="app-container">
         <header className="app-header">
-          <h1>CampusPass</h1>
-          <p>Your campus. Your character. Your community.</p>
+          <h1>Sonder</h1>
+          <p>Connect with the world around you.</p>
 
           
         </header>

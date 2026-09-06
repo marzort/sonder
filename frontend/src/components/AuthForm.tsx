@@ -67,10 +67,10 @@ function AuthForm({ onLogin }: AuthFormProps) {
 
     return (
         <section className="auth-card">
-            <h2>Welcome to CampusPass</h2>
+            <h2>Welcome to Sonder!</h2>
 
             <p className="card-description">
-                Sign in to enter campus, or create a new account.
+                Sign in to enter, or create a new account.
             </p>
 
             <div className="form-group">
