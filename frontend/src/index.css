@@ -68,6 +68,12 @@ button {
   color: #6b7280;
 }
 
+.auth-background {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .loading-card,
 .auth-card,
 .profile-card {
