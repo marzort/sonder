@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from models import User, Meeting
-from schemas import LocationUpdate
+from schemas import LocationUpdate, LocationSharingUpdate
 from sqlalchemy import select, func, text
 from sqlalchemy.orm import Session
 from geoalchemy2.elements import WKTElement
@@ -191,3 +191,23 @@ def get_nearby_users(
         }
         for user in nearby_users
     ]
+
+@router.post("/location/sharing")
+def set_location_sharing(
+    update: LocationSharingUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    current_user.location_sharing_enabled = update.enabled
+
+    if not update.enabled:
+        current_user.current_location = None
+        current_user.location_accuracy = None
+        current_user.location_updated_at = None
+
+    db.commit()
+
+    return {
+        "location_sharing_enabled":
+            current_user.location_sharing_enabled
+    }

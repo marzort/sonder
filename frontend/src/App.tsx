@@ -5,6 +5,7 @@ import { getProfile } from './api'
 import type { UserProfile } from './api'
 import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
+import LocationTest from './components/LocationTest'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -19,7 +20,7 @@ function App() {
     Record<number, { x: number, y: number }>
   >({})
 
-  const [screen, setScreen] = useState<'profile' | 'campus'>('profile')
+  const [screen, setScreen] = useState<'profile' | 'campus' | 'explore'>('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
 
@@ -162,6 +163,10 @@ function App() {
     setScreen('profile')
   }
 
+  function handleExplore() {
+    setScreen('explore')
+  }
+
   if (loading) {
     return (
       <main className="app">
@@ -186,8 +191,6 @@ function App() {
         <header className="app-header">
           <h1>Sonder</h1>
           <p>Connect with the world around you.</p>
-
-          
         </header>
 
       {!profile && (
@@ -201,6 +204,7 @@ function App() {
           onLogout={handleLogout}
           onProfileUpdate={setProfile}
           onCampusLaunch={handleCampusLaunch}
+          onExplore={handleExplore}
         />
       )}
 
@@ -211,6 +215,10 @@ function App() {
           onBack={handleCampusBack}
           onMove={handleMove}
         />
+      )}
+
+      {profile && token && screen === 'explore' && (
+        <LocationTest/>
       )}
       </div>
     </main>
