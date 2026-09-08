@@ -20,6 +20,8 @@ function App() {
     Record<number, { x: number, y: number }>
   >({})
 
+  const [meetingCount, setMeetingCount] = useState(0)
+
   const [screen, setScreen] = useState<'profile' | 'campus' | 'explore'>('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -69,6 +71,7 @@ function App() {
 
       if (data.type === 'welcome') {
         setPlayers(data.players)
+        setMeetingCount(data.unviewed_meeting_count)
       }
 
       if (data.type === 'player_moved') {
@@ -97,6 +100,10 @@ function App() {
           delete updated[data.user_id]
           return updated
         })
+      }
+
+      if (data.type === 'meeting_count_updated') {
+        setMeetingCount(data.count)
       }
     }
 
@@ -218,7 +225,10 @@ function App() {
       )}
 
       {profile && token && screen === 'explore' && (
-        <LocationTest/>
+        <LocationTest
+          token={token}
+          meetingCount={meetingCount}
+        />
       )}
       </div>
     </main>

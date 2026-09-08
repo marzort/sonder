@@ -1,7 +1,11 @@
 import json
-from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect
+from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect, Depends
 from auth import verify_access_token, active_sessions
 from data.buildings import buildings
+from models import MeetingUser
+from database import get_db
+from sqlalchemy import select, func
+from sqlalchemy.orm import Session
 
 DIRECTION_DELTAS = {
     "up": (0, -10),
@@ -49,6 +53,15 @@ class ConnectionManager:
 
         return True
 
+    # for location/meeting
+    async def send_to_user(self, user_id, message):
+        websocket = self.active_connections.get(user_id)
+
+        if websocket is not None:
+            await websocket.send_text(
+                json.dumps(message)
+            )
+
     async def disconnect(self, user_id, session_id=None, close_socket=False):
         websocket = self.active_connections.pop(user_id, None)
 
@@ -79,7 +92,8 @@ manager = ConnectionManager()
 @router.websocket("/ws")
 async def websocket_endpoint(
     websocket: WebSocket,
-    token: str = Query(...)
+    token: str = Query(...),
+    db: Session = Depends(get_db)
 ):
 
     try:
@@ -100,6 +114,15 @@ async def websocket_endpoint(
         )
         return
 
+    unviewed_count = db.scalar(
+        select(func.count())
+        .select_from(MeetingUser)
+        .where(
+            MeetingUser.user_id == user_id,
+            MeetingUser.viewed.is_(False)
+        )
+    )
+
     connected = await manager.connect(user_id, websocket)
 
     if not connected:
@@ -109,7 +132,8 @@ async def websocket_endpoint(
         json.dumps({
             "type": "welcome",
             "user_id": user_id,
-            "players": manager.active_players
+            "players": manager.active_players,
+            "unviewed_meeting_count": unviewed_count
         })
     )
 
