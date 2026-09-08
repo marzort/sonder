@@ -1,17 +1,19 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models import User, Meeting
-from schemas import LocationUpdate
+from models import User, Meeting, MeetingUser
+from schemas import LocationUpdate, LocationSharingUpdate
 from sqlalchemy import select, func, text
 from sqlalchemy.orm import Session
 from geoalchemy2.elements import WKTElement
 from database import get_db
 from auth import get_current_user
 from datetime import datetime, timezone
+from .websocket import manager
 
 NEARBY_DISTANCE_METERS = 50
 
 router = APIRouter()
 
+# meetings should only occur once between two users
 def check_for_meetings(
         current_user: User,
         db: Session
@@ -43,18 +45,21 @@ def check_for_meetings(
 
     nearby_users = result.fetchall()
 
+    new_meeting_user_ids = []
+
     for nearby_user in nearby_users:
         user_a_id = min(current_user.id, nearby_user.id)
         user_b_id = max(current_user.id, nearby_user.id)
 
+        # check to see if already in meeting
         existing_meeting = db.execute(
             select(Meeting).where(
                 Meeting.user_a_id == user_a_id,
-                Meeting.user_b_id == user_b_id,
-                Meeting.ended_at.is_(None),
+                Meeting.user_b_id == user_b_id
             )
         ).scalar_one_or_none()
 
+        # if no existing meeting, add meeting to database
         if existing_meeting is None:
             meeting = Meeting(
                 user_a_id=user_a_id,
@@ -63,57 +68,61 @@ def check_for_meetings(
                 started_at=datetime.now(timezone.utc)
             )
 
+            meeting.users = [
+                MeetingUser(user_id=user_a_id),
+                MeetingUser(user_id=user_b_id)
+            ]
+
             db.add(meeting)
+
+            new_meeting_user_ids.extend([
+                user_a_id,
+                user_b_id
+            ])
 
             print(f"{current_user.username} is near {nearby_user.username}")
 
-    active_meetings = db.execute(
-        select(Meeting).where(
-            Meeting.ended_at.is_(None),
-            (
-                (Meeting.user_a_id == current_user.id)
-                | (Meeting.user_b_id == current_user.id)
-            ),
+    return new_meeting_user_ids
+
+
+def render_meeting(
+        user_a: User, 
+        user_b: User,
+        db: Session
+):
+    # get relevant info
+    query = text(""" 
+        SELECT greeting, gift
+        FROM users
+        WHERE id = :user_id
+    """)
+
+    user_a_result = db.execute(
+        query,
+        {
+            "user_id": user_a
+        } 
+    )
+
+    user_b_result = db.execute(
+        query,
+        {
+            "user_id": user_b
+        }
+    )
+
+def get_unviewed_meeting_count(db: Session, user_id: int):
+    return db.scalar(
+        select(func.count())
+        .select_from(MeetingUser)
+        .where(
+            MeetingUser.user_id == user_id,
+            MeetingUser.viewed.is_(False),
         )
-    ).scalars().all()
-
-    for meeting in active_meetings:
-        if meeting.user_a_id == current_user.id:
-            other_user_id = meeting.user_b_id
-        else:
-            other_user_id = meeting.user_a_id
-
-        nearby_query = text(""" 
-            SELECT ST_DWithin(
-                current_location,
-                (
-                    SELECT current_location
-                    FROM users
-                    WHERE id = :current_user_id
-                ),
-                :distance
-            )
-            FROM users
-            WHERE id = :other_user_id
-                AND current_location IS NOT NULL
-        """)
-
-        result = db.execute(
-            nearby_query,
-            {
-                "current_user_id": current_user.id,
-                "other_user_id": other_user_id,
-                "distance": NEARBY_DISTANCE_METERS
-            },
-        )
-
-        is_nearby = result.scalar()
-
-        if not is_nearby:
-            meeting.ended_at = datetime.now(timezone.utc)
+    )
 
 @router.post("/location")
-def update_location(
+async def update_location(
     location: LocationUpdate,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -132,9 +141,20 @@ def update_location(
     current_user.location_accuracy = location.accuracy
     current_user.location_updated_at = datetime.now(timezone.utc)
 
-    check_for_meetings(current_user, db)
+    new_meeting_user_ids = check_for_meetings(current_user, db)
 
     db.commit()
+
+    for user_id in new_meeting_user_ids:
+        count = get_unviewed_meeting_count(db, user_id)
+
+        await manager.send_to_user(
+            user_id,
+            {
+                "type": "meeting_count_updated",
+                "count": count
+            }
+        )
 
     return {
         "message": "Location updated successfully."
@@ -191,3 +211,23 @@ def get_nearby_users(
         }
         for user in nearby_users
     ]
+
+@router.post("/location/sharing")
+def set_location_sharing(
+    update: LocationSharingUpdate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    current_user.location_sharing_enabled = update.enabled
+
+    if not update.enabled:
+        current_user.current_location = None
+        current_user.location_accuracy = None
+        current_user.location_updated_at = None
+
+    db.commit()
+
+    return {
+        "location_sharing_enabled":
+            current_user.location_sharing_enabled
+    }

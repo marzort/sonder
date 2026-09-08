@@ -114,3 +114,59 @@ export async function updateAvatar(
 
     return data
 }
+
+export interface LocationUpdate {
+    latitude: number
+    longitude: number
+    accuracy: number | null
+}
+
+export async function sendLocation(
+    accessToken: string,
+    location: LocationUpdate
+) {
+    const response = await fetch(`${API_URL}/location`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(location)
+    })
+
+    if (!response.ok) {
+        const errorBody = await response.text()
+
+        throw new Error(
+            `Failed to update location: ${response.status} ${errorBody}`
+        )
+    }
+
+    return response.json()
+}
+
+export async function setLocationSharing(
+    enabled: boolean,
+    token: string
+) {
+    const response = await fetch(`${API_URL}/location/sharing`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({
+            enabled
+        })
+    })
+
+    if (!response.ok) {
+        const errorBody = await response.text()
+
+        throw new Error(
+            `Failed to update location sharing: ${response.status} ${errorBody}`
+        )
+    }
+
+    return response.json()
+}
