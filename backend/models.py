@@ -6,6 +6,7 @@ from sqlalchemy import (
     DateTime, 
     ForeignKey,
     CheckConstraint,
+    UniqueConstraint,
     Float,
     func
 )
@@ -39,6 +40,11 @@ class User(Base):
 
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     avatar = relationship("Avatar", uselist=False)
+
+    meeting_users: Mapped[list["MeetingUser"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
 
     location_sharing_enabled: Mapped[bool] = mapped_column(
         Boolean,
@@ -82,17 +88,16 @@ class Meeting(Base):
     __tablename__ = "meetings"
 
     id: Mapped[int] = mapped_column(
-        primary_key=True,
-        autoincrement=True
+        primary_key=True
     )
 
     user_a_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False
     )
 
     user_b_id: Mapped[int] = mapped_column(
-        ForeignKey("users.id"),
+        ForeignKey("users.id", ondelete="CASCADE"),
         nullable=False
     )
 
@@ -109,14 +114,39 @@ class Meeting(Base):
         nullable=False
     )
 
-    ended_at: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True),
-        nullable=True
+    __table_args__ = (
+        CheckConstraint("user_a_id < user_b_id"),
+        UniqueConstraint("user_a_id", "user_b_id")
     )
 
-    __table_args__ = (
-        CheckConstraint(
-            "user_a_id < user_b_id",
-            name="meeting_user_order"
-        ),
+    users: Mapped[list["MeetingUser"]] = relationship(
+        back_populates="meeting",
+        cascade="all, delete-orphan"
+    )
+
+class MeetingUser(Base):
+    __tablename__ = "meeting_users"
+
+    meeting_id: Mapped[int] = mapped_column(
+        ForeignKey("meetings.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    viewed: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    meeting: Mapped["Meeting"] = relationship(
+        back_populates="users"
+    )
+
+    user: Mapped["User"] = relationship(
+        back_populates="meeting_users"
     )

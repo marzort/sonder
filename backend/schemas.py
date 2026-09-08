@@ -61,3 +61,6 @@ class LocationUpdate(BaseModel):
         default=None,
         ge=0
     )
+
+class LocationSharingUpdate(BaseModel):
+    enabled: bool

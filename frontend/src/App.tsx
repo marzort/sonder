@@ -5,6 +5,7 @@ import { getProfile } from './api'
 import type { UserProfile } from './api'
 import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
+import LocationTest from './components/LocationTest'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -19,7 +20,9 @@ function App() {
     Record<number, { x: number, y: number }>
   >({})
 
-  const [screen, setScreen] = useState<'profile' | 'campus'>('profile')
+  const [meetingCount, setMeetingCount] = useState(0)
+
+  const [screen, setScreen] = useState<'profile' | 'campus' | 'explore'>('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
 
@@ -68,6 +71,7 @@ function App() {
 
       if (data.type === 'welcome') {
         setPlayers(data.players)
+        setMeetingCount(data.unviewed_meeting_count)
       }
 
       if (data.type === 'player_moved') {
@@ -96,6 +100,10 @@ function App() {
           delete updated[data.user_id]
           return updated
         })
+      }
+
+      if (data.type === 'meeting_count_updated') {
+        setMeetingCount(data.count)
       }
     }
 
@@ -162,6 +170,10 @@ function App() {
     setScreen('profile')
   }
 
+  function handleExplore() {
+    setScreen('explore')
+  }
+
   if (loading) {
     return (
       <main className="app">
@@ -186,8 +198,6 @@ function App() {
         <header className="app-header">
           <h1>Sonder</h1>
           <p>Connect with the world around you.</p>
-
-          
         </header>
 
       {!profile && (
@@ -201,6 +211,7 @@ function App() {
           onLogout={handleLogout}
           onProfileUpdate={setProfile}
           onCampusLaunch={handleCampusLaunch}
+          onExplore={handleExplore}
         />
       )}
 
@@ -210,6 +221,13 @@ function App() {
           players={players}
           onBack={handleCampusBack}
           onMove={handleMove}
+        />
+      )}
+
+      {profile && token && screen === 'explore' && (
+        <LocationTest
+          token={token}
+          meetingCount={meetingCount}
         />
       )}
       </div>
