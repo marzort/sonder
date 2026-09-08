@@ -68,10 +68,10 @@ export function useLocation(enabled: boolean) {
                         }
                     }
                 }
-            } catch {
+            } catch (err) {
                 console.error(
                     "Permissions API failed:",
-                    error
+                    err
                 )
                 // if browser does not support querying geolocation permission
                 // use geolocation api itself
@@ -169,7 +169,7 @@ export function useLocation(enabled: boolean) {
                 permissionStatus.onchange = null
             }
         }
-    }, [enabled, isSupported, error])
+    }, [enabled, isSupported])
 
     return {
         location,

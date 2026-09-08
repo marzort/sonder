@@ -1,8 +1,42 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useLocation } from "../hooks/useLocation"
+import { sendLocation, setLocationSharing } from "../api"
 
-export default function LocationTest() {
+interface LocationTestProps {
+    meetingCount: number
+    token: string
+}
+
+// this should eventually become the explore/meetings page
+export default function LocationTest({
+    meetingCount,
+    token
+} : LocationTestProps) {
     const [enabled, setEnabled] = useState(false)
+    const [updatingSharing, setUpdatingSharing] = useState(false)
+
+    async function handleToggleLocation() {
+        if (!token) {
+            console.error("No authentication token found")
+            return
+        }
+
+        const newEnabled = !enabled
+
+        try {
+            setUpdatingSharing(true)
+
+            await setLocationSharing(newEnabled, token)
+
+            setEnabled(newEnabled)
+        } catch (error) {
+            console.error(
+                "Failed to update location sharing:", error
+            )
+        } finally {
+            setUpdatingSharing(false)
+        }
+    }
 
     const {
         location,
@@ -10,11 +44,30 @@ export default function LocationTest() {
         permission,
     } = useLocation(enabled)
 
+    useEffect(() => {
+
+        if (!enabled || !location) {
+            console.log("Not sending location")
+            return
+        }
+
+        sendLocation(token, location)
+        .then((result) => {
+            console.log("Location successfully saved:", result)
+        })
+        .catch((error) => {
+            console.error("Failed to save location:", error)
+        })
+    }, [location, enabled, token])
+
     return (
         <div>
             <h1>Location Test</h1>
 
-            <button onClick={() => setEnabled((current) => !current)}>
+            <button
+                onClick={handleToggleLocation}
+                disabled={updatingSharing}
+            >
                 {enabled ? "Disable Location" : "Enable Location"}
             </button>
 
@@ -51,6 +104,21 @@ export default function LocationTest() {
             ) : (
                 <p>No error.</p>
             )}
+
+            <div>
+                <button
+                    className="primary-button"
+                    // onClick should send user to view the meetings
+                >
+                    Meetings
+
+                    {meetingCount > 0 && (
+                        <span className="meeting-count">
+                            {meetingCount}
+                        </span>
+                    )}
+                </button>
+            </div>
         </div>
     )
 }
