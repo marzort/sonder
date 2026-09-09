@@ -6,6 +6,7 @@ import type { UserProfile } from './api'
 import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
 import LocationTest from './components/LocationTest'
+import Meetings from './components/Meetings'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -22,7 +23,9 @@ function App() {
 
   const [meetingCount, setMeetingCount] = useState(0)
 
-  const [screen, setScreen] = useState<'profile' | 'campus' | 'explore'>('profile')
+  const [screen, setScreen] = useState<
+    'profile' | 'campus' | 'explore' | 'meetings'
+  >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
 
@@ -174,6 +177,14 @@ function App() {
     setScreen('explore')
   }
 
+  function handleMeetings() {
+    setScreen('meetings')
+  }
+
+  function handleMeetingsBack() {
+    setScreen('explore')
+  }
+
   if (loading) {
     return (
       <main className="app">
@@ -228,6 +239,16 @@ function App() {
         <LocationTest
           token={token}
           meetingCount={meetingCount}
+          onMeetings={handleMeetings}
+        />
+      )}
+
+      {profile && token && screen === 'meetings' && (
+        <Meetings
+          profile={profile}
+          token={token}
+          onBack={handleMeetingsBack}
+          onMeetingCountChange={setMeetingCount}
         />
       )}
       </div>
