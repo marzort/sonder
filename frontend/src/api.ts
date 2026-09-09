@@ -25,6 +25,19 @@ export type UserProfile = {
     username: string
     created_at: string
     avatar: Avatar
+    greeting: string
+}
+
+export type Meeting = {
+    id: number
+    started_at: string
+    viewed: boolean
+    other_user: {
+        id: number
+        username: string
+        greeting: string
+        avatar: Avatar
+    }
 }
 
 export async function registerUser(
@@ -169,4 +182,49 @@ export async function setLocationSharing(
     }
 
     return response.json()
+}
+
+export async function getMeetings(
+    accessToken: string
+): Promise<Meeting[]> {
+    const response = await fetch(`${API_URL}/meetings`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not load meetings'
+        )
+    }
+
+    return data
+}
+
+export async function markMeetingViewed(
+    accessToken: string,
+    meetingId: number
+) {
+    const response = await fetch(
+        `${API_URL}/meetings/${meetingId}/viewed`,
+        {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not mark meeting as viewed'
+        )
+    }
+
+    return data
 }

@@ -71,6 +71,11 @@ class User(Base):
         nullable=True
     )
 
+    greeting: Mapped[str] = mapped_column(
+        String(250),
+        default = "Hello"
+    )
+
 class Avatar(Base):
     __tablename__ = "avatars"
 
@@ -112,6 +117,14 @@ class Meeting(Base):
     started_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         nullable=False
+    )
+
+    user_a: Mapped["User"] = relationship(
+        foreign_keys=[user_a_id]
+    )
+
+    user_b: Mapped["User"] = relationship(
+        foreign_keys=[user_b_id]
     )
 
     __table_args__ = (
