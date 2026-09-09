@@ -5,12 +5,14 @@ import { sendLocation, setLocationSharing } from "../api"
 interface LocationTestProps {
     meetingCount: number
     token: string
+    onMeetings: () => void
 }
 
 // this should eventually become the explore/meetings page
 export default function LocationTest({
     meetingCount,
-    token
+    token,
+    onMeetings
 } : LocationTestProps) {
     const [enabled, setEnabled] = useState(false)
     const [updatingSharing, setUpdatingSharing] = useState(false)
@@ -108,7 +110,7 @@ export default function LocationTest({
             <div>
                 <button
                     className="primary-button"
-                    // onClick should send user to view the meetings
+                    onClick={onMeetings}
                 >
                     Meetings
 

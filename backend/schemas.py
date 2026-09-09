@@ -1,4 +1,5 @@
 from pydantic import BaseModel, field_validator, Field
+from datetime import datetime
 
 class RegisterRequest(BaseModel):
     username: str
@@ -64,3 +65,24 @@ class LocationUpdate(BaseModel):
 
 class LocationSharingUpdate(BaseModel):
     enabled: bool
+
+class MeetingAvatarResponse(BaseModel):
+    eyes: str
+    mouth: str
+    hair: str
+    clothes: str
+    skin_color: str
+    hair_color: str
+    clothes_color: str
+
+class MeetingPersonResponse(BaseModel):
+    id: int
+    username: str
+    greeting: str
+    avatar: MeetingAvatarResponse
+
+class MeetingResponse(BaseModel):
+    id: int
+    started_at: datetime
+    viewed: bool
+    other_user: MeetingPersonResponse
