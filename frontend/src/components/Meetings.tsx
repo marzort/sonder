@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import type { UserProfile, Meeting } from '../api'
 import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
+import '../popup.css'
 
 interface MeetingsProps {
     profile: UserProfile,
@@ -19,6 +20,7 @@ export default function Meetings({
     const [meetings, setMeetings] = useState<Meeting[]>([])
 
     const [isOpen, setIsOpen] = useState(false)
+    const [meetingBeingViewed, setMeetingBeingViewed] = useState<Meeting | null>(null)
 
     useEffect(() => {
         async function loadMeetings() {
@@ -83,13 +85,6 @@ export default function Meetings({
                     <p className="profile-label">Meetings</p>
                     <h2>Let's see who you've met!</h2>
                 </div>
-
-                <button
-                    className="primary-button"
-                    onClick={onBack}
-                >
-                    Back to Explore
-                </button>
             </div>
             
             {message && (
@@ -110,26 +105,51 @@ export default function Meetings({
                             }`}
                             onClick={() => {
                                 setIsOpen(true)
+                                setMeetingBeingViewed(meeting)
                                 handleViewedMeeting(meeting.id)}
                             }
                         >
                             <h3>{meeting.other_user.username}</h3>
-                            <div className="meeting-avatar-preview">
-                                <Avatar 
-                                    eyes={meeting.other_user.avatar.eyes}
-                                    mouth={meeting.other_user.avatar.mouth}
-                                    top={meeting.other_user.avatar.hair}
-                                    clothes={meeting.other_user.avatar.clothes}
-                                    skinColor={meeting.other_user.avatar.skin_color}
-                                    hairColor={meeting.other_user.avatar.hair_color}
-                                    clothesColor={meeting.other_user.avatar.clothes_color}
-                                />
-                            </div>
-                            <p>"{meeting.other_user.greeting}"</p>
+                            
                         </div>
                     ))
                 )}
             </div>
+
+            {isOpen && meetingBeingViewed && (
+                <div className="modal-overlay" onClick={() => setIsOpen(false)}>
+                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                        <button 
+                            className="close-button" 
+                            onClick={() => {
+                                setIsOpen(false)
+                                setMeetingBeingViewed(null)
+                            }
+                            }>
+                            &times;
+                        </button>
+                        <div className="meeting-avatar-preview">
+                            <Avatar 
+                                eyes={meetingBeingViewed.other_user.avatar.eyes}
+                                mouth={meetingBeingViewed.other_user.avatar.mouth}
+                                top={meetingBeingViewed.other_user.avatar.hair}
+                                clothes={meetingBeingViewed.other_user.avatar.clothes}
+                                skinColor={meetingBeingViewed.other_user.avatar.skin_color}
+                                hairColor={meetingBeingViewed.other_user.avatar.hair_color}
+                                clothesColor={meetingBeingViewed.other_user.avatar.clothes_color}
+                            />
+                        </div>
+                        <p>"{meetingBeingViewed.other_user.greeting}"</p>
+                    </div>
+                </div>
+            )}
+            <button
+                    className="back-button"
+                    onClick={onBack}
+                >
+                    Back to Explore
+                </button>
+            
         </section>
         
     )

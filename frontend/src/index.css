@@ -141,7 +141,8 @@ button {
 
 .primary-button,
 .secondary-button,
-.logout-button {
+.logout-button,
+.back-button {
   border: none;
   border-radius: 8px;
   padding: 11px 16px;
@@ -165,6 +166,15 @@ button {
 
 .secondary-button:hover {
   background: #e0e7ff;
+}
+
+.back-button {
+  background: #bf36e5;
+  color: white;
+  margin-top: 10px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }
 
 .profile-card {
