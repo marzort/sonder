@@ -177,6 +177,10 @@ function App() {
     setScreen('explore')
   }
 
+  function handleExploreBack() {
+    setScreen('profile')
+  }
+
   function handleMeetings() {
     setScreen('meetings')
   }
@@ -239,6 +243,7 @@ function App() {
         <LocationTest
           token={token}
           meetingCount={meetingCount}
+          onBack={handleExploreBack}
           onMeetings={handleMeetings}
         />
       )}
