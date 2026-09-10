@@ -59,7 +59,7 @@ button {
 
 .app-header h1 {
   margin: 0;
-  color: #4f46e5;
+  color: #b346e5;
   font-size: 2.5rem;
 }
 
@@ -141,7 +141,8 @@ button {
 
 .primary-button,
 .secondary-button,
-.logout-button {
+.logout-button,
+.back-button {
   border: none;
   border-radius: 8px;
   padding: 11px 16px;
@@ -150,21 +151,30 @@ button {
 }
 
 .primary-button {
-  background: #4f36e5;
+  background: #bf36e5;
   color: white;
 }
 
 .primary-button:hover {
-  background: #4338ca;
+  background: #8f25a9;
 }
 
 .secondary-button {
   background: #eef2ff;
-  color: #4338ca;
+  color: #9e38ca;
 }
 
 .secondary-button:hover {
   background: #e0e7ff;
+}
+
+.back-button {
+  background: #bf36e5;
+  color: white;
+  margin-top: 10px;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
 }
 
 .profile-card {
@@ -180,7 +190,7 @@ button {
 
 .profile-label {
   margin: 0;
-  color: #6366f1;
+  color: #9963f1;
   font-size: 0.85rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -393,6 +403,25 @@ button {
 color-button:focus-visible {
   outline: 3px solid rgba(99, 102, 241, 0.35);
   outline-offset: 2px;
+}
+
+.meeting-header {
+  
+}
+
+.meeting-card {
+  max-width: fit-content;
+  max-height: fit-content;
+  background-color: #dc8dcb;
+  border-radius: 8px;
+  padding: 1px 10px;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.meeting-card:hover {
+  cursor: pointer;
+  background-color: #d180bf;
 }
 
 @media (max-width: 700px) {

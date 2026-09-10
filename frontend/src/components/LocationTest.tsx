@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "../hooks/useLocation"
 import { sendLocation, setLocationSharing } from "../api"
+import '../popup.css'
 
 interface LocationTestProps {
     meetingCount: number
     token: string
+    onBack: () => void
     onMeetings: () => void
 }
 
@@ -12,6 +14,7 @@ interface LocationTestProps {
 export default function LocationTest({
     meetingCount,
     token,
+    onBack,
     onMeetings
 } : LocationTestProps) {
     const [enabled, setEnabled] = useState(false)
@@ -119,6 +122,15 @@ export default function LocationTest({
                             {meetingCount}
                         </span>
                     )}
+                </button>
+            </div>
+
+            <div>
+                <button
+                    className="back-button"
+                    onClick={onBack}
+                >
+                    Back to Profile
                 </button>
             </div>
         </div>
