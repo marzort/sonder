@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import type { UserProfile, Meeting } from '../api'
 import { getMeetings, markMeetingViewed } from '../api'
+import Avatar from './Avatar'
 
 interface MeetingsProps {
     profile: UserProfile,
@@ -16,6 +17,8 @@ export default function Meetings({
 }: MeetingsProps) {
     const [message, setMessage] = useState('')
     const [meetings, setMeetings] = useState<Meeting[]>([])
+
+    const [isOpen, setIsOpen] = useState(false)
 
     useEffect(() => {
         async function loadMeetings() {
@@ -105,9 +108,23 @@ export default function Meetings({
                             className={`meeting-card ${
                                 !meeting.viewed ? 'unviewed' : ''
                             }`}
-                            onClick={() => handleViewedMeeting(meeting.id)}
+                            onClick={() => {
+                                setIsOpen(true)
+                                handleViewedMeeting(meeting.id)}
+                            }
                         >
                             <h3>{meeting.other_user.username}</h3>
+                            <div className="meeting-avatar-preview">
+                                <Avatar 
+                                    eyes={meeting.other_user.avatar.eyes}
+                                    mouth={meeting.other_user.avatar.mouth}
+                                    top={meeting.other_user.avatar.hair}
+                                    clothes={meeting.other_user.avatar.clothes}
+                                    skinColor={meeting.other_user.avatar.skin_color}
+                                    hairColor={meeting.other_user.avatar.hair_color}
+                                    clothesColor={meeting.other_user.avatar.clothes_color}
+                                />
+                            </div>
                             <p>"{meeting.other_user.greeting}"</p>
                         </div>
                     ))
