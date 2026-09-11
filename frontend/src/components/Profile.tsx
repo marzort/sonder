@@ -172,24 +172,6 @@ function Profile({
                             </p>
                         )}
                     </div>
-
-                    <div className="launch-campus-section">
-                        <button
-                            className="primary-button launch-campus-button"
-                            onClick = {onCampusLaunch}
-                        >
-                            Go To Campus
-                        </button>
-                    </div>
-
-                    <div>
-                        <button
-                            className="primary-button"
-                            onClick = {onExplore}
-                        >
-                            Explore The World!
-                        </button>
-                    </div>
                 </div>
             </div>
         </section>
