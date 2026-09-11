@@ -143,13 +143,6 @@ export default function Meetings({
                     </div>
                 </div>
             )}
-            <button
-                    className="back-button"
-                    onClick={onBack}
-                >
-                    Back to Explore
-                </button>
-            
         </section>
         
     )

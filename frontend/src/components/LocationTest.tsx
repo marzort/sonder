@@ -124,15 +124,6 @@ export default function LocationTest({
                     )}
                 </button>
             </div>
-
-            <div>
-                <button
-                    className="back-button"
-                    onClick={onBack}
-                >
-                    Back to Profile
-                </button>
-            </div>
         </div>
     )
 }
