@@ -178,24 +178,16 @@ function App() {
     setScreen('explore')
   }
 
-  function handleExploreBack() {
-    setScreen('profile')
-  }
-
   function handleMeetings() {
     setScreen('meetings')
-  }
-
-  function handleMeetingsBack() {
-    setScreen('explore')
   }
 
   if (loading) {
     return (
       <main className="app">
         <div className="loading-card">
-          <h1>CampusPass</h1>
-          <p>Loading your campus...</p>
+          <h1>Sonder</h1>
+          <p>Loading...</p>
         </div>
       </main>
     )
@@ -245,8 +237,6 @@ function App() {
           token={token}
           onLogout={handleLogout}
           onProfileUpdate={setProfile}
-          onCampusLaunch={handleCampusLaunch}
-          onExplore={handleExplore}
         />
       )}
 
@@ -263,7 +253,6 @@ function App() {
         <LocationTest
           token={token}
           meetingCount={meetingCount}
-          onBack={handleExploreBack}
           onMeetings={handleMeetings}
         />
       )}
@@ -272,7 +261,6 @@ function App() {
         <Meetings
           profile={profile}
           token={token}
-          onBack={handleMeetingsBack}
           onMeetingCountChange={setMeetingCount}
         />
       )}
