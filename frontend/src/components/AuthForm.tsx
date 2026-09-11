@@ -66,6 +66,10 @@ function AuthForm({ onLogin }: AuthFormProps) {
     }
 
     return (
+        <header className="app-header">
+            <h1>Sonder</h1>
+            <p>Connect with the world around you.</p>
+        
         <section className="auth-card">
             <h2>Welcome to Sonder!</h2>
 
@@ -120,6 +124,7 @@ function AuthForm({ onLogin }: AuthFormProps) {
                 </p>
             )}
         </section>
+        </header>
     )
 }
 

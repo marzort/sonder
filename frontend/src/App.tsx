@@ -7,6 +7,7 @@ import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
 import LocationTest from './components/LocationTest'
 import Meetings from './components/Meetings'
+import './menu.css'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -210,13 +211,32 @@ function App() {
       }
     >
       <div className="app-container">
-        <header className="app-header">
-          <h1>Sonder</h1>
-          <p>Connect with the world around you.</p>
-        </header>
 
       {!profile && (
         <AuthForm onLogin={handleLogin} />
+      )}
+
+      {profile && (
+        <header className="menu">
+          <h1>Sonder</h1>
+          <ul className="nav-links">
+            <li>
+              <button className="menu-button" onClick={handleCampusBack}>
+                Profile
+              </button>
+            </li>
+            <li>
+              <button className="menu-button" onClick={handleCampusLaunch}>
+                Campus
+              </button>
+            </li>
+            <li>
+              <button className="menu-button" onClick={handleExplore}>
+                Explore
+              </button>
+            </li>
+          </ul>
+        </header>
       )}
 
       {profile && token && screen === 'profile' && (
