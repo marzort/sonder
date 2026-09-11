@@ -7,13 +7,11 @@ import '../popup.css'
 interface MeetingsProps {
     profile: UserProfile,
     token: string,
-    onBack: () => void
     onMeetingCountChange: (count: number) => void
 }
 
 export default function Meetings({
     token,
-    onBack,
     onMeetingCountChange
 }: MeetingsProps) {
     const [message, setMessage] = useState('')
@@ -143,13 +141,6 @@ export default function Meetings({
                     </div>
                 </div>
             )}
-            <button
-                    className="back-button"
-                    onClick={onBack}
-                >
-                    Back to Explore
-                </button>
-            
         </section>
         
     )

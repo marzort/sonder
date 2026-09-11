@@ -9,8 +9,6 @@ interface ProfileProps {
     token: string
     onLogout: () => void
     onProfileUpdate: (profile: UserProfile) => void
-    onCampusLaunch: () => void
-    onExplore: () => void
 }
 
 function Profile({
@@ -18,8 +16,6 @@ function Profile({
     token,
     onLogout,
     onProfileUpdate,
-    onCampusLaunch,
-    onExplore
 }: ProfileProps) {
     const [message, setMessage] = useState('')
 
@@ -171,24 +167,6 @@ function Profile({
                                 {message}
                             </p>
                         )}
-                    </div>
-
-                    <div className="launch-campus-section">
-                        <button
-                            className="primary-button launch-campus-button"
-                            onClick = {onCampusLaunch}
-                        >
-                            Go To Campus
-                        </button>
-                    </div>
-
-                    <div>
-                        <button
-                            className="primary-button"
-                            onClick = {onExplore}
-                        >
-                            Explore The World!
-                        </button>
                     </div>
                 </div>
             </div>
