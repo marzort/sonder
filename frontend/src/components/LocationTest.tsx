@@ -6,7 +6,6 @@ import '../popup.css'
 interface LocationTestProps {
     meetingCount: number
     token: string
-    onBack: () => void
     onMeetings: () => void
 }
 
@@ -14,7 +13,6 @@ interface LocationTestProps {
 export default function LocationTest({
     meetingCount,
     token,
-    onBack,
     onMeetings
 } : LocationTestProps) {
     const [enabled, setEnabled] = useState(false)
