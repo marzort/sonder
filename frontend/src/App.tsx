@@ -227,6 +227,9 @@ function App() {
                 Explore
               </button>
             </li>
+            <button className="menu-button" onClick={handleLogout}>
+                Log Out
+            </button>
           </ul>
         </header>
       )}
@@ -235,7 +238,6 @@ function App() {
         <Profile 
           profile={profile}
           token={token}
-          onLogout={handleLogout}
           onProfileUpdate={setProfile}
         />
       )}
