@@ -365,6 +365,39 @@ button {
   margin-top: 14px;
 }
 
+.profile-left {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .greeting-preview {
+    width: 100%;
+    .label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+    .text-area {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      font: inherit;
+      resize: vertical;
+    }
+    .text-area:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+    .button {
+      margin-top: 12px;
+    }
+  }
+
 .avatar-options {
   display: flex;
   flex-wrap: wrap;
@@ -439,8 +472,12 @@ color-button:focus-visible {
     order: 1;
   }
 
-  .profile-controls {
+  .greeting-preview {
     order: 2;
+  }
+
+  .profile-controls {
+    order: 3;
   }
 
   .auth-buttons {
