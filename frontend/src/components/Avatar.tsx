@@ -1,5 +1,6 @@
 import { Avatar as DiceBearAvatar } from '@dicebear/core'
 import avataaars from '@dicebear/styles/avataaars.json'
+import '../templates/avatar.css'
 
 import type {
     EyeVariant,

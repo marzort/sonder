@@ -1,0 +1,98 @@
+.avatar-customizer {
+    width: 100%;
+    min-width: 0;
+}
+
+.avatar-customizer > h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #111827;
+}
+
+.customizer-section {
+    margin-bottom: 24px;
+    min-width: 0;
+}
+
+.customizer-section h3 {
+    margin-top: 0;
+    margin-bottom: 12px;
+    color: #374151;
+    font-size: 1rem;
+}
+
+.options-scroll {
+    width: 100%;
+    min-width: 0;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 4px;
+    padding-left: 4px;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+
+    .avatar-options,
+    .color-options {
+        width: max-content;
+        min-width: max-content;
+        flex-wrap: nowrap;
+    }
+
+    .color-options {
+        justify-content: flex-start;
+    }
+
+    .color-button {
+        flex: 0 0 auto;
+    }
+
+    .avatar-options button {
+        flex: 0 0 auto;
+    }
+}
+
+.avatar-image {
+    width: 240px;
+    height: 240px;
+    margin: 0 auto 24px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 50%;
+}
+
+.avatar-image > div {
+    width: 100%;
+    height: 100%;
+}
+
+.avatar-image svg {
+    display: block;
+    width: 100%;
+    height: 90%;
+}
+
+@media (max-width: 700px) {
+    .customizer-section {
+        margin-bottom: 36px;
+    }
+
+    .avatar-image {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto;
+    }
+
+    .options-scroll .color-options {
+        width: 100%;
+        min-width: 100%;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 420px) {
+    .avatar-image {
+        width: 200px;
+        height: 200px;
+    }
+}
