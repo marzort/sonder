@@ -423,20 +423,6 @@ color-button:focus-visible {
   outline-offset: 2px;
 }
 
-.meeting-card {
-  max-width: fit-content;
-  max-height: fit-content;
-  background-color: #dc8dcb;
-  border-radius: 8px;
-  padding: 1px 10px;
-  margin-top: 10px;
-  text-align: center;
-}
-
-.meeting-card:hover {
-  cursor: pointer;
-  background-color: #d180bf;
-}
 
 @media (max-width: 700px) {
   .app {
