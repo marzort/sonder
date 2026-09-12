@@ -8,6 +8,7 @@ import skyBackground from './assets/sky_background.png'
 import LocationTest from './components/LocationTest'
 import Meetings from './components/Meetings'
 import './menu.css'
+import './templates/auth.css'
 
 function App() {
   const [token, setToken] = useState<string | null>(
