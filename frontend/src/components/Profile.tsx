@@ -75,7 +75,7 @@ function Profile({
             </div>
 
             <div className="profile-content">
-                <div className="profile-left">
+                
                     <div className="avatar-preview">
                         
                         <Avatar 
@@ -112,7 +112,7 @@ function Profile({
                         </div>
                         
                     </div>
-                </div>
+                
 
                 <div className="profile-controls">
                     <AvatarCustomizer 
