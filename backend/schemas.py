@@ -55,6 +55,9 @@ class AvatarUpdateRequest(BaseModel):
     hair_color: str
     clothes_color: str
 
+class GreetingUpdateRequest(BaseModel):
+    greeting: str
+
 class LocationUpdate(BaseModel):
     latitude: float = Field(ge=-90, le=90)
     longitude: float = Field(ge=-180, le=180)

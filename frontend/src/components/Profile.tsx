@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { updateAvatar } from '../api'
+import { updateAvatar, updateGreeting } from '../api'
 import type { UserProfile } from '../api'
 import Avatar from './Avatar'
 import AvatarCustomizer from './AvatarCustomizer'
@@ -7,17 +7,16 @@ import AvatarCustomizer from './AvatarCustomizer'
 interface ProfileProps {
     profile: UserProfile
     token: string
-    onLogout: () => void
     onProfileUpdate: (profile: UserProfile) => void
 }
 
 function Profile({
     profile,
     token,
-    onLogout,
-    onProfileUpdate,
+    onProfileUpdate
 }: ProfileProps) {
     const [message, setMessage] = useState('')
+    const [greeting, setGreeting] = useState(profile.greeting)
 
     async function handleAvatarUpdate() {
         setMessage('')
@@ -43,34 +42,76 @@ function Profile({
         }
     }
 
+    async function handleGreetingUpdate() {
+        setMessage('')
+
+        try {
+            const updated = await updateGreeting(
+                token,
+                greeting
+            )
+
+            onProfileUpdate({
+                ...profile,
+                greeting: updated.greeting
+            })
+
+            setMessage('Greeting updated successfully!')
+        } catch (error) {
+            setMessage(
+                error instanceof Error
+                ? error.message
+                : 'Could not update greeting'
+            )
+        }
+    }
+
     return (
         <section className="profile-card">
             <div className="profile-header">
                 <div>
-                    <p className="profile-label">Campus member</p>
                     <h2>Welcome, {profile.username}!</h2>
                 </div>
-
-                <button 
-                    className="logout-button"
-                    onClick={onLogout}
-                >
-                    Log Out
-                </button>
             </div>
 
             <div className="profile-content">
-                <div className="avatar-preview">
-                    
-                    <Avatar 
-                        eyes={profile.avatar.eyes}
-                        mouth={profile.avatar.mouth}
-                        top={profile.avatar.hair}
-                        clothes={profile.avatar.clothes}
-                        skinColor={profile.avatar.skin_color}
-                        hairColor={profile.avatar.hair_color}
-                        clothesColor={profile.avatar.clothes_color}
-                    />
+                <div className="profile-left">
+                    <div className="avatar-preview">
+                        
+                        <Avatar 
+                            eyes={profile.avatar.eyes}
+                            mouth={profile.avatar.mouth}
+                            top={profile.avatar.hair}
+                            clothes={profile.avatar.clothes}
+                            skinColor={profile.avatar.skin_color}
+                            hairColor={profile.avatar.hair_color}
+                            clothesColor={profile.avatar.clothes_color}
+                        />
+                    </div>
+
+                    <div className="greeting-preview">
+                        <div>
+                            <label htmlFor="greeting">Greeting:</label>
+                        </div>
+                        
+                        <div>
+                            <textarea 
+                            id="greeting" 
+                            name="greeting"
+                            rows={4} 
+                            cols={50}
+                            value={greeting}
+                            onChange={(event) => setGreeting(event.target.value)}
+                        />
+                        </div>
+                        
+                        <div>
+                            <button onClick={handleGreetingUpdate}>
+                            Save Greeting
+                        </button>
+                        </div>
+                        
+                    </div>
                 </div>
 
                 <div className="profile-controls">
