@@ -128,6 +128,28 @@ export async function updateAvatar(
     return data
 }
 
+export async function updateGreeting(
+    accessToken: string,
+    greeting: string
+) : Promise<{ greeting: string }> {
+    const response = await fetch(`${API_URL}/greeting`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ greeting })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.details || 'Could not update greeting')
+    }
+
+    return data
+}
+
 export interface LocationUpdate {
     latitude: number
     longitude: number

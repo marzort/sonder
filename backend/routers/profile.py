@@ -1,6 +1,10 @@
 from fastapi import APIRouter, Depends
 from models import User
 from auth import get_current_user
+from database import get_db
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+from schemas import GreetingUpdateRequest
 
 router = APIRouter()
 
@@ -18,5 +22,19 @@ def profile(current_user: User = Depends(get_current_user)):
             "skin_color": current_user.avatar.skin_color,
             "hair_color": current_user.avatar.hair_color,
             "clothes_color": current_user.avatar.clothes_color
-        }
+        },
+        "greeting": current_user.greeting
+    }
+
+@router.put("/greeting")
+def updateGreeting(
+    request: GreetingUpdateRequest,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    current_user.greeting = request.greeting
+    db.commit()
+
+    return {
+        "greeting": current_user.greeting
     }
