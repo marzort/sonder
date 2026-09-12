@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { loginUser, registerUser } from '../api'
+import '../templates/auth.css'
 
 interface AuthFormProps {
     onLogin: (token: string) => void
