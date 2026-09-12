@@ -68,14 +68,7 @@ button {
   color: #6b7280;
 }
 
-.auth-background {
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 .loading-card,
-.auth-card,
 .profile-card {
   background: white;
   border-radius: 16px;
@@ -93,14 +86,7 @@ button {
   color: #4f46e5;
 }
 
-.auth-card {
-  max-width: 440px;
-  margin: 0 auto;
-}
 
-.auth-card h2 {
-  margin-top: 0;
-}
 
 .card-description {
   color: #6b7280;
@@ -133,11 +119,7 @@ button {
   box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
 }
 
-.auth-buttons {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
+
 
 .primary-button,
 .secondary-button,
@@ -525,12 +507,9 @@ color-button:focus-visible {
     text-align: center;
   }
 
-  .auth-buttons {
-    flex-direction: column;
-  }
+
 
   .loading-card,
-  .auth-card,
   .profile-card {
     padding: 24px;
   }
