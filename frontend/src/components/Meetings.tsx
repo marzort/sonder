@@ -3,6 +3,7 @@ import type { UserProfile, Meeting } from '../api'
 import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
 import '../popup.css'
+import '../templates/meetings.css'
 
 interface MeetingsProps {
     profile: UserProfile,
