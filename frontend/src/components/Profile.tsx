@@ -3,6 +3,7 @@ import { updateAvatar, updateGreeting } from '../api'
 import type { UserProfile } from '../api'
 import Avatar from './Avatar'
 import AvatarCustomizer from './AvatarCustomizer'
+import '../templates/profile.css'
 
 interface ProfileProps {
     profile: UserProfile
