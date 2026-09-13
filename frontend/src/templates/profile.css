@@ -1,0 +1,151 @@
+.profile-card {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    width: 100%;
+}
+
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.profile-content {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px;
+    align-items: start;
+}
+
+.avatar-preview {
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    background: linear-gradient(180deg, #eef2ff 0%, #f9fafb 100%);
+    border: 1px solid #e0e7ff;
+    border-radius: 16px;
+    padding: 28px;
+    text-align: center;
+}
+
+.avatar-preview h2 {
+    margin-top: 0;
+    margin-bottom: 24px;
+    color: #111827;
+}
+
+.avatar-preview h3 {
+    margin-top: 28px;
+    margin-bottom: 12px;
+    color: #374151;
+}
+
+.greeting-preview {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+
+    .label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+
+    .text-area {
+        display: block;
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font: inherit;
+        resize: vertical;
+    }
+
+    .text-area:focus {
+        outline: none;
+        border-color: #6366f1;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+    }
+
+    .button {
+        margin-top: 12px;
+    }
+}
+
+.profile-controls {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    min-width: 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.save-section {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.primary-button save-button {
+    width: 100%;
+    margin-top: 0;
+}
+
+@media (max-width: 700px) {
+    .profile-content {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 24px;
+    }
+
+    .profile-header {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .avatar-preview {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        width: 75%;
+        max-width: 500px;
+        padding: 10px;
+        border: 1px solid #e0e7ff;
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .greeting-preview,
+    .profile-controls {
+        width: 100%;
+        max-width: 500px;
+    }
+
+    .greeting-preview {
+        text-align: center;
+        
+        .text-area {
+            width: 100%;
+        }
+
+        .button {
+            display: block;
+            margin: 12px auto 0;
+        }
+    }
+
+    .profile-controls {
+        max-height: none;
+        overflow-y: visible;
+        text-align: center;
+    }
+
+    .profile-card {
+        padding: 24px;
+    }
+}
