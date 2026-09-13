@@ -18,6 +18,8 @@ import type {
     ClothesColor
 } from '../avatarOptions'
 
+import '../templates/avatar.css'
+
 interface AvatarCustomizerProps {
     eyes: EyeVariant
     mouth: MouthVariant

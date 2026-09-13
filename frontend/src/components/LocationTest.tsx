@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "../hooks/useLocation"
 import { sendLocation, setLocationSharing } from "../api"
-import '../popup.css'
+
 
 interface LocationTestProps {
     meetingCount: number

@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import type { UserProfile, Meeting } from '../api'
 import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
-import '../popup.css'
+import '../templates/popup.css'
+import '../templates/meetings.css'
 
 interface MeetingsProps {
     profile: UserProfile,
@@ -80,7 +81,7 @@ export default function Meetings({
         <section className="meeting-screen">
             <div className="meeting-header">
                 <div>
-                    <p className="profile-label">Meetings</p>
+                    <p className="meetings-label">Meetings</p>
                     <h2>Let's see who you've met!</h2>
                 </div>
             </div>
