@@ -19,25 +19,25 @@
 
 .form-group {
     margin-bottom: 18px;
+}
 
-    .label {
-        display: block;
-        margin-bottom: 6px;
-        font-weight: 600;
-    }
+.form-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
 
-    .input {
-        width: 100%;
-        padding: 11px 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        outline: none;
-    }
+.form-group input {
+    width: 100%;
+    padding: 11px 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+}
 
-    .input:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
+.form-group input:focus {
+    border-color: #6366f1;
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
 }
 
 .auth-buttons {
