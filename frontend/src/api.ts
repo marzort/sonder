@@ -26,6 +26,7 @@ export type UserProfile = {
     created_at: string
     avatar: Avatar
     greeting: string
+    gift_flower_id: number
 }
 
 export type Meeting = {
@@ -145,6 +146,28 @@ export async function updateGreeting(
 
     if (!response.ok) {
         throw new Error(data.details || 'Could not update greeting')
+    }
+
+    return data
+}
+
+export async function updateGift(
+    accessToken: string,
+    gift: number
+): Promise<{ gift: number }> {
+    const response = await fetch(`${API_URL}/gifts/${gift}`, {
+        method: "PUT",
+        headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ gift })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.details || 'Could not update gift')
     }
 
     return data

@@ -76,6 +76,14 @@ class User(Base):
         default = "Hello"
     )
 
+    gift_flower_id: Mapped[int] = mapped_column(
+        ForeignKey("flowers.id"),
+        nullable=False,
+        default=1
+    )
+
+    gift_flower: Mapped["Flower"] = relationship()
+
 class Avatar(Base):
     __tablename__ = "avatars"
 
@@ -163,3 +171,12 @@ class MeetingUser(Base):
     user: Mapped["User"] = relationship(
         back_populates="meeting_users"
     )
+
+class Flower(Base):
+    __tablename__ = "flowers"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    name: Mapped[str]
+
+    
