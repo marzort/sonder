@@ -1,9 +1,31 @@
 import { useState } from 'react'
-import { updateAvatar, updateGreeting } from '../api'
+import { updateAvatar, updateGreeting, updateGift } from '../api'
 import type { UserProfile } from '../api'
 import Avatar from './Avatar'
 import AvatarCustomizer from './AvatarCustomizer'
 import '../templates/profile.css'
+
+import cactus from '../assets/flowers/cactus.svg'
+import daisy from '../assets/flowers/daisy.svg'
+import tulip from '../assets/flowers/tulip.svg'
+
+const gift_choices = [
+    {
+        id: 1,
+        name: 'Cactus',
+        image: cactus
+    },
+    {
+        id: 2,
+        name: 'Daisy',
+        image: daisy
+    },
+    {
+        id: 3,
+        name: 'Tulip',
+        image: tulip
+    }
+]
 
 interface ProfileProps {
     profile: UserProfile
@@ -18,6 +40,7 @@ function Profile({
 }: ProfileProps) {
     const [message, setMessage] = useState('')
     const [greeting, setGreeting] = useState(profile.greeting)
+    const [gift, setGift] = useState(profile.gift_flower_id)
 
     async function handleAvatarUpdate() {
         setMessage('')
@@ -67,6 +90,30 @@ function Profile({
         }
     }
 
+    async function handleGiftUpdate() {
+        setMessage('')
+
+        try {
+            const updated = await updateGift(
+                token,
+                gift
+            )
+
+            onProfileUpdate({
+                ...profile,
+                gift_flower_id: updated.gift
+            })
+
+            setMessage('Gift updated successfully!')
+        } catch (error) {
+            setMessage(
+                error instanceof Error
+                ? error.message
+                : 'Could not update gift'
+            )
+        }
+    }
+
     return (
         <section className="profile-card">
             <div className="profile-header">
@@ -103,7 +150,7 @@ function Profile({
                             cols={50}
                             value={greeting}
                             onChange={(event) => setGreeting(event.target.value)}
-                        />
+                            />
                         </div>
                         
                         <div>
@@ -112,6 +159,38 @@ function Profile({
                         </button>
                         </div>
                         
+                    </div>
+
+                    <div className="gift-preview">
+                        <div>
+                            <img
+                                src={gift_choices.find(
+                                    (flower) => flower.id === profile.gift_flower_id
+                                )?.image}
+                                alt="Current gift"
+                                className="gift"
+                            />
+                        </div>
+
+                        <div className="gift-choices">
+                            {gift_choices.map((flower) => (
+                                <img
+                                    key={flower.id}
+                                    src={flower.image}
+                                    alt={flower.name}
+                                    className={`gift ${
+                                        gift === flower.id ? 'selected' : ''
+                                    }`}
+                                    onClick={() => setGift(flower.id)}
+                                />
+                            ))}
+                        </div>
+
+                        <div>
+                            <button onClick={handleGiftUpdate}>
+                                Save Gift
+                            </button>
+                        </div>
                     </div>
                 
 

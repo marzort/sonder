@@ -1,40 +1,24 @@
-from pathlib import Path
 from database import SessionLocal
-from models import Flowers
-
-FLOWERS_DIR = Path(__file__).parent.parent / "frontend" / "src" / "assets" / "flowers"
+from models import Flower
 
 def seed_flowers():
     db = SessionLocal()
 
     try:
-        print("looking for svgs in:", FLOWERS_DIR)
-        print("directory exists:", FLOWERS_DIR.exists())
+        flowers = [
+            Flower(id=1, name="Cactus"),
+            Flower(id=2, name="Daisy"),
+            Flower(id=3, name="Tulip")
+        ]
 
-        svg_files = list(FLOWERS_DIR.glob("*.svg"))
-        print("svg files found:", len(svg_files))
-
-        for svg_file in FLOWERS_DIR.glob("*.svg"):
-            print("found:", svg_file)
-
-            flower_name = svg_file.stem.replace("_", " ").title()
-
-            flower = Flowers(
-                name=flower_name,
-                svg_path=f"assets/flowers/{svg_file.name}"
-            )
-
-            db.add(flower)
-
+        db.add_all(flowers)
         db.commit()
 
-        print("Flowers in database:")
+        print("Flowers seeded successfully!")
 
-        flowers = db.query(Flowers).all()
-
-        for flower in flowers:
-            print(f"{flower.id}: {flower.name} -> {flower.svg_path}")
-
+        for flower in db.query(Flower).all():
+            print(f"{flower.id}: {flower.name}")
+        
     except Exception:
         db.rollback()
         raise

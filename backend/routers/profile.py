@@ -1,5 +1,5 @@
-from fastapi import APIRouter, Depends
-from models import User
+from fastapi import APIRouter, Depends, HTTPException
+from models import User, Flower
 from auth import get_current_user
 from database import get_db
 from sqlalchemy import select
@@ -23,7 +23,8 @@ def profile(current_user: User = Depends(get_current_user)):
             "hair_color": current_user.avatar.hair_color,
             "clothes_color": current_user.avatar.clothes_color
         },
-        "greeting": current_user.greeting
+        "greeting": current_user.greeting,
+        "gift_flower_id": current_user.gift_flower_id
     }
 
 @router.put("/greeting")
@@ -37,4 +38,26 @@ def updateGreeting(
 
     return {
         "greeting": current_user.greeting
+    }
+
+@router.put("/gifts/{gift_id}")
+def update_gift(
+    gift_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    gift = db.query(Flower).filter(Flower.id == gift_id).first()
+
+    if not gift:
+        raise HTTPException(
+            status_code=404,
+            detail="Gift not found"
+        )
+
+    current_user.gift_flower_id = gift_id
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "gift": current_user.gift_flower_id
     }
