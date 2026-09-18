@@ -5,6 +5,8 @@ import Avatar from './Avatar'
 import '../templates/popup.css'
 import '../templates/meetings.css'
 
+import { GIFT_CHOICES } from '../data/giftChoices'
+
 interface MeetingsProps {
     profile: UserProfile,
     token: string,
@@ -136,6 +138,15 @@ export default function Meetings({
                                 skinColor={meetingBeingViewed.other_user.avatar.skin_color}
                                 hairColor={meetingBeingViewed.other_user.avatar.hair_color}
                                 clothesColor={meetingBeingViewed.other_user.avatar.clothes_color}
+                            />
+                        </div>
+                        <div className="meeting-gift-preview">
+                            <img
+                                src={GIFT_CHOICES.find(
+                                    (flower) => flower.id === meetingBeingViewed.gift_received
+                                )?.image}
+                                alt="Gift received"
+                                className="gift-received"
                             />
                         </div>
                         <p>"{meetingBeingViewed.other_user.greeting}"</p>

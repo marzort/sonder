@@ -29,8 +29,78 @@ export function useLocation(enabled: boolean) {
             return
         }
 
+        let isActive = true
         let watchId: number | null = null
         let permissionStatus: PermissionStatus | null = null
+
+        function stopWatching() {
+            if (watchId !== null) {
+                console.log("Stopping watcher:", watchId)
+
+                navigator.geolocation.clearWatch(watchId)
+                watchId = null
+            }
+        }
+
+        function startWatching() {
+            if (!isActive) {
+                console.log("Not starting watcher because effect is inactive")
+                return
+            }
+
+            if (watchId !== null) {
+                console.log(
+                    "Watcher already exists:",
+                    watchId
+                )
+                return
+            }
+
+            console.log("6. startWatching called")
+
+            watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    if (!isActive) {
+                        return
+                    }
+
+                    console.log(
+                        "7. WATCH SUCCESS:",
+                        position.coords
+                    )
+
+                    setLocation({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy
+                    })
+
+                    setError(null)
+                },
+                (error) => {
+                    if (!isActive) {
+                        return
+                    }
+
+                    console.error(
+                        "7. WATCH ERROR:",
+                        {
+                            code: error.code,
+                            message: error.message
+                        }
+                    )
+
+                    setError(error.message)
+                },
+                {
+                    enableHighAccuracy: true,
+                    maximumAge: 10_000,
+                    timeout: 10_000
+                }
+            )
+
+            console.log("8. watchId:", watchId)
+        }
 
         async function setupLocation() {
             console.log("1. setupLocation started")
@@ -40,6 +110,10 @@ export function useLocation(enabled: boolean) {
                     name: "geolocation",
                 })
 
+                if (!isActive) {
+                    return
+                }
+
                 console.log(
                     "2. permission state:",
                     permissionStatus.state
@@ -48,12 +122,17 @@ export function useLocation(enabled: boolean) {
                 setPermission(permissionStatus.state)
 
                 permissionStatus.onchange = () => {
+                    if (!isActive) {
+                        return
+                    }
+
                     const state = permissionStatus!.state
 
                     console.log(
                         "3. permission changed:",
                         permissionStatus!.state
                     )
+
                     setPermission(state)
 
                     // using right now for testing, but may want different behavior
@@ -61,14 +140,14 @@ export function useLocation(enabled: boolean) {
                     if (state === "granted") {
                         startWatching()
                     } else {
-                        if (watchId !== null) {
-                            console.log("Stopping watcher:", watchId)
-                            navigator.geolocation.clearWatch(watchId)
-                            watchId = null
-                        }
+                        stopWatching()
                     }
                 }
             } catch (err) {
+                if (!isActive) {
+                    return
+                }
+
                 console.error(
                     "Permissions API failed:",
                     err
@@ -77,19 +156,32 @@ export function useLocation(enabled: boolean) {
                 // use geolocation api itself
             }
 
+            if (!isActive) {
+                return
+            }
+
             console.log("4. calling getCurrentPosition")
 
             navigator.geolocation.getCurrentPosition(
                 (position) => {
+                    if (!isActive) {
+                        return
+                    }
+
                     console.log(
                         "5. getCurrentPosition SUCCESS:",
                         position.coords
                     )
+
                     setPermission("granted")
 
                     startWatching()
                 },
                 (error) => {
+                    if (!isActive) {
+                        return
+                    }
+
                     console.error(
                         "5. getCurrentPosition ERROR:",
                         {
@@ -97,6 +189,7 @@ export function useLocation(enabled: boolean) {
                             message: error.message
                         }
                     )
+
                     if (
                         error.code ===
                         GeolocationPositionError.PERMISSION_DENIED
@@ -115,56 +208,15 @@ export function useLocation(enabled: boolean) {
             )
         }
 
-        function startWatching() {
-            console.log("6. startWatching called")
-
-            if (watchId !== null) {
-                console.log("Watcher already exists:", watchId)
-                return
-            }
-
-            watchId = navigator.geolocation.watchPosition(
-                (position) => {
-                    console.log(
-                        "7. WATCH SUCCESS:",
-                        position.coords
-                    )
-
-                    setLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        accuracy: position.coords.accuracy
-                    })
-
-                    setError(null)
-                },
-                (error) => {
-                    console.error(
-                        "7. WATCH ERROR:",
-                        {
-                            code: error.code,
-                            message: error.message
-                        }
-                    )
-                    setError(error.message)
-                },
-                {
-                    enableHighAccuracy: true,
-                    maximumAge: 10_000,
-                    timeout: 10_000
-                }
-            )
-
-            console.log("8. watchId:", watchId)
-        }
-
         setupLocation()
 
         return () => {
-            if (watchId !== null) {
-                navigator.geolocation.clearWatch(watchId)
-            }
-            
+            console.log("Cleaning up location effect")
+
+            isActive = false
+
+            stopWatching()
+
             if (permissionStatus) {
                 permissionStatus.onchange = null
             }

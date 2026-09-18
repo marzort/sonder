@@ -22,9 +22,12 @@ def meeting(
 
             joinedload(MeetingUser.meeting)
             .joinedload(Meeting.user_b)
-            .joinedload(User.avatar)
+            .joinedload(User.avatar),
+
+            joinedload(MeetingUser.meeting)
+            .joinedload(Meeting.gifts)
         )
-    ).all()
+    ).unique().all()
 
     meetings = []
     print(meetings)
@@ -36,6 +39,15 @@ def meeting(
             other_user = meeting.user_b
         else:
             other_user = meeting.user_a
+
+        gift_received = next(
+                    (
+                        gift.flower_id
+                        for gift in meeting.gifts
+                        if gift.receiver_id == current_user.id
+                    ),
+                    None
+                )
 
         meetings.append(
             MeetingResponse(
@@ -55,7 +67,8 @@ def meeting(
                         "hair_color": other_user.avatar.hair_color,
                         "clothes_color": other_user.avatar.clothes_color
                     }
-                }
+                },
+                gift_received=gift_received
             )
         )
 

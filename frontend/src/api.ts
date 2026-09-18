@@ -39,6 +39,7 @@ export type Meeting = {
         greeting: string
         avatar: Avatar
     }
+    gift_received: number
 }
 
 export async function registerUser(

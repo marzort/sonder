@@ -89,3 +89,4 @@ class MeetingResponse(BaseModel):
     started_at: datetime
     viewed: bool
     other_user: MeetingPersonResponse
+    gift_received: int | None
