@@ -18,6 +18,20 @@ export default function LocationTest({
     const [enabled, setEnabled] = useState(false)
     const [updatingSharing, setUpdatingSharing] = useState(false)
 
+    useEffect(() => {
+        return () => {
+            if (enabled && token) {
+                setLocationSharing(false, token)
+                .catch((error) => {
+                    console.error(
+                        "Failed to disable location sharing:",
+                        error
+                    )
+                })
+            }
+        }
+    }, [enabled, token])
+
     async function handleToggleLocation() {
         if (!token) {
             console.error("No authentication token found")

@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models import User, Meeting, MeetingUser
+from models import User, Meeting, MeetingUser, Gift
 from schemas import LocationUpdate, LocationSharingUpdate
 from sqlalchemy import select, func, text
 from sqlalchemy.orm import Session
@@ -19,11 +19,12 @@ def check_for_meetings(
         db: Session
 ):
     query = text(""" 
-        SELECT id, username
+        SELECT id, username, gift_flower_id
         FROM users
         WHERE id != :user_id
             AND location_sharing_enabled = TRUE
             AND current_location IS NOT NULL
+            AND location_updated_at > NOW() - INTERVAL '60 seconds'
             AND ST_DWithin(
                 current_location,
                 (
@@ -65,12 +66,25 @@ def check_for_meetings(
                 user_a_id=user_a_id,
                 user_b_id=user_b_id,
                 meeting_location=current_user.current_location,
-                started_at=datetime.now(timezone.utc)
+                started_at=datetime.now(timezone.utc),
             )
 
             meeting.users = [
                 MeetingUser(user_id=user_a_id),
                 MeetingUser(user_id=user_b_id)
+            ]
+
+            meeting.gifts = [
+                Gift(
+                    giver_id=current_user.id,
+                    receiver_id=nearby_user.id,
+                    flower_id=current_user.gift_flower_id
+                ),
+                Gift(
+                    giver_id=nearby_user.id,
+                    receiver_id=current_user.id,
+                    flower_id=nearby_user.gift_flower_id
+                )
             ]
 
             db.add(meeting)

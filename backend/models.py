@@ -145,6 +145,11 @@ class Meeting(Base):
         cascade="all, delete-orphan"
     )
 
+    gifts: Mapped[list["Gift"]] = relationship(
+        back_populates="meeting",
+        cascade="all, delete-orphan"
+    )
+
 class MeetingUser(Base):
     __tablename__ = "meeting_users"
 
@@ -179,4 +184,56 @@ class Flower(Base):
 
     name: Mapped[str]
 
+class Gift(Base):
+    __tablename__ = "gifts"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    meeting_id: Mapped[int] = mapped_column(
+        ForeignKey("meetings.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    giver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    flower_id: Mapped[int] = mapped_column(
+        ForeignKey("flowers.id"),
+        nullable=False
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    meeting: Mapped["Meeting"] = relationship(
+        back_populates="gifts"
+    )
+
+    giver: Mapped["User"] = relationship(
+        foreign_keys=[giver_id]
+    )
+
+    receiver: Mapped["User"] = relationship(
+        foreign_keys=[receiver_id]
+    )
+
+    flower: Mapped["Flower"] = relationship()
+
+    __table_args__ = (
+        UniqueConstraint(
+            "meeting_id",
+            "giver_id",
+            name="uq_gift_meeting_giver"
+        ),
+    )
     

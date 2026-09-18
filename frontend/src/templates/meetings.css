@@ -37,3 +37,9 @@
 .meeting-avatar-preview {
 
 }
+
+.gift-received {
+    width: 50px;
+    height: 50px;
+    padding: 2px;
+}
