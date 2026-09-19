@@ -65,7 +65,7 @@ export default function Garden({
                         >
                             <img
                                 src={GIFT_CHOICES.find(
-                                    (flower) => flower.id === gift.gift_choice
+                                    (flower) => flower.id === gift.gift_choice.id
                                 )?.image}
                                 alt="Gift"
                                 className={styles.gift}
@@ -79,7 +79,7 @@ export default function Garden({
                 <div className={styles['modal-overlay']} onClick={() => setIsOpen(false)}>
                     <div className={styles['modal-content']} onClick={(e) => e.stopPropagation()}>
                         <button
-                            className="close-button"
+                            className={styles['close-button']}
                             onClick={() => {
                                 setIsOpen(false)
                                 setGiftBeingViewed(null)
@@ -90,19 +90,21 @@ export default function Garden({
                         <div className={styles['gift-preview']}>
                             <img
                                 src={GIFT_CHOICES.find(
-                                    (flower) => flower.id === giftBeingViewed.gift_choice
+                                    (flower) => flower.id === giftBeingViewed.gift_choice.id
                                 )?.image}
                                 alt="Gift being viewed"
                                 className={styles['gift-received']}
                             />
 
-                            <div>
-                                
+                            <div className={styles['gift-info']}>
+                                <h3>{giftBeingViewed.gift_choice.name}</h3>
+                                <p>Did you know?</p>
                             </div>
                         </div>
 
-                        <div className={styles['gift-info']}>
-                            <p>From: {giftBeingViewed.given_by.username}</p>
+                        <div className={styles['giver-info']}>
+                            <h3>From:</h3>
+                            <p>{giftBeingViewed.given_by.username}</p>
 
                             <div className={styles['garden-avatar-preview']}>
                                 <Avatar
@@ -113,6 +115,7 @@ export default function Garden({
                                     skinColor={giftBeingViewed.given_by.avatar.skin_color}
                                     hairColor={giftBeingViewed.given_by.avatar.hair_color}
                                     clothesColor={giftBeingViewed.given_by.avatar.clothes_color}
+                                    size={120}
                                 />
                             </div>
 

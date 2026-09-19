@@ -106,7 +106,11 @@ class GiftPersonResponse(BaseModel):
     greeting: str
     avatar: GiftAvatarResponse
 
+class GiftChoiceResponse(BaseModel):
+    id: int
+    name: str
+
 class GiftResponse(BaseModel):
     id: int
     given_by: GiftPersonResponse
-    gift_choice: int
+    gift_choice: GiftChoiceResponse

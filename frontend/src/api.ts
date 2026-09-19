@@ -50,7 +50,10 @@ export type Gift = {
         greeting: string
         avatar: Avatar
     }
-    gift_choice: number
+    gift_choice: {
+        id: number
+        name: string
+    }
 }
 
 export async function registerUser(

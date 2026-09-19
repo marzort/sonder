@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from models import Gift, User
+from models import Gift, User, Flower
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session, joinedload
 from auth import get_current_user, get_db
@@ -27,6 +27,7 @@ def gift(
 
     for gift_received in gifts_received:
         giver = gift_received.giver
+        flower = gift_received.flower
 
         gifts.append(
             GiftResponse(
@@ -45,7 +46,10 @@ def gift(
                         "clothes_color": giver.avatar.clothes_color
                     }
                 },
-                gift_choice=gift_received.flower.id
+                gift_choice={
+                    "id": flower.id,
+                    "name": flower.name
+                }
             )
         )
 
