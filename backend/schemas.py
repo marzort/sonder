@@ -90,3 +90,12 @@ class MeetingResponse(BaseModel):
     viewed: bool
     other_user: MeetingPersonResponse
     gift_received: int | None
+
+class GiftPersonResponse(BaseModel):
+    id: int
+    username: str
+
+class GiftResponse(BaseModel):
+    id: int
+    given_by: GiftPersonResponse
+    gift_choice: int

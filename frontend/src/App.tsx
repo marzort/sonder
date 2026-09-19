@@ -8,6 +8,7 @@ import skyBackground from './assets/sky_background.png'
 import LocationTest from './components/LocationTest'
 import Meetings from './components/Meetings'
 import './templates/menu.css'
+import Garden from './components/Garden'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -25,7 +26,7 @@ function App() {
   const [meetingCount, setMeetingCount] = useState(0)
 
   const [screen, setScreen] = useState<
-    'profile' | 'campus' | 'explore' | 'meetings'
+    'profile' | 'campus' | 'explore' | 'meetings' | 'garden'
   >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -178,6 +179,10 @@ function App() {
     setScreen('explore')
   }
 
+  function handleGarden() {
+    setScreen('garden')
+  }
+
   function handleMeetings() {
     setScreen('meetings')
   }
@@ -227,6 +232,11 @@ function App() {
                 Explore
               </button>
             </li>
+            <li>
+              <button className="menu-button" onClick={handleGarden}>
+                Garden
+              </button>
+            </li>
             <button className="menu-button" onClick={handleLogout}>
                 Log Out
             </button>
@@ -264,6 +274,12 @@ function App() {
           profile={profile}
           token={token}
           onMeetingCountChange={setMeetingCount}
+        />
+      )}
+
+      {profile && token && screen === 'garden' && (
+        <Garden
+          token={token}
         />
       )}
       </div>

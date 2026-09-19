@@ -42,6 +42,15 @@ export type Meeting = {
     gift_received: number
 }
 
+export type Gift = {
+    id: number
+    given_by: {
+        id: number
+        username: string
+    }
+    gift_choice: number
+}
+
 export async function registerUser(
     username: string,
     password: string
@@ -269,6 +278,28 @@ export async function markMeetingViewed(
     if (!response.ok) {
         throw new Error(
             data.detail || 'Could not mark meeting as viewed'
+        )
+    }
+
+    return data
+}
+
+export async function getGifts(
+    accessToken: string
+): Promise<Gift[]> {
+    const response = await fetch(`${API_URL}/gifts`, 
+        {
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not load gifts'
         )
     }
 

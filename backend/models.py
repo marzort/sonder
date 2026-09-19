@@ -227,7 +227,9 @@ class Gift(Base):
         foreign_keys=[receiver_id]
     )
 
-    flower: Mapped["Flower"] = relationship()
+    flower: Mapped["Flower"] = relationship(
+        foreign_keys=[flower_id]
+    )
 
     __table_args__ = (
         UniqueConstraint(
