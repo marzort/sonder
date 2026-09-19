@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { GIFT_CHOICES } from '../data/giftChoices'
 import { getGifts } from '../api'
 import type { Gift } from '../api'
-import '../templates/garden.css'
+import Avatar from './Avatar'
+import styles from '../templates/garden.module.css'
 import '../templates/popup.css'
 
 interface GardenProps {
@@ -36,10 +37,10 @@ export default function Garden({
     }, [token])
 
     return (
-        <section className="garden-screen">
-            <div className="garden-header">
+        <section className={styles['garden-screen']}>
+            <div className={styles['garden-header']}>
                 <div>
-                    <p className="garden-label">Garden</p>
+                    <p className={styles['garden-label']}>Garden</p>
                 </div>
             </div>
 
@@ -49,14 +50,14 @@ export default function Garden({
                 </p>
             )}
 
-            <div className="garden-area">
+            <div className={styles['garden-area']}>
                 {gifts.length === 0 ? (
                     <p>Your garden is currently empty.</p>
                 ) : (
                     gifts.map((gift) => (
                         <div
                             key={gift.id}
-                            className="gift-plot"
+                            className={styles['gift-plot']}
                             onClick={() => {
                                 setIsOpen(true)
                                 setGiftBeingViewed(gift)
@@ -67,7 +68,7 @@ export default function Garden({
                                     (flower) => flower.id === gift.gift_choice
                                 )?.image}
                                 alt="Gift"
-                                className="gift"
+                                className={styles.gift}
                             />
                         </div>
                     ))
@@ -75,8 +76,8 @@ export default function Garden({
             </div>
 
             {isOpen && giftBeingViewed && (
-                <div className="modal-overlay" onClick={() => setIsOpen(false)}>
-                    <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+                <div className={styles['modal-overlay']} onClick={() => setIsOpen(false)}>
+                    <div className={styles['modal-content']} onClick={(e) => e.stopPropagation()}>
                         <button
                             className="close-button"
                             onClick={() => {
@@ -86,18 +87,36 @@ export default function Garden({
                                 &times;
                         </button>
 
-                        <div className="gift-preview">
+                        <div className={styles['gift-preview']}>
                             <img
                                 src={GIFT_CHOICES.find(
                                     (flower) => flower.id === giftBeingViewed.gift_choice
                                 )?.image}
                                 alt="Gift being viewed"
-                                className="gift-received"
+                                className={styles['gift-received']}
                             />
+
+                            <div>
+                                
+                            </div>
                         </div>
 
-                        <div className="gift-info">
+                        <div className={styles['gift-info']}>
                             <p>From: {giftBeingViewed.given_by.username}</p>
+
+                            <div className={styles['garden-avatar-preview']}>
+                                <Avatar
+                                    eyes={giftBeingViewed.given_by.avatar.eyes}
+                                    mouth={giftBeingViewed.given_by.avatar.mouth}
+                                    top={giftBeingViewed.given_by.avatar.hair}
+                                    clothes={giftBeingViewed.given_by.avatar.clothes}
+                                    skinColor={giftBeingViewed.given_by.avatar.skin_color}
+                                    hairColor={giftBeingViewed.given_by.avatar.hair_color}
+                                    clothesColor={giftBeingViewed.given_by.avatar.clothes_color}
+                                />
+                            </div>
+
+                            <p>{giftBeingViewed.given_by.greeting}</p>
                         </div>
                     </div>
                 </div>

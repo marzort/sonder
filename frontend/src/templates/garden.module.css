@@ -1,0 +1,104 @@
+.garden-area {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    background-color: rgb(66, 175, 66);
+    padding: 20px;
+    border-radius: 10px;
+    border-color: rgba(165, 42, 42, 0.639);
+    border-style: ridge;
+    border-width: 10px;
+}
+
+.garden-label {
+    margin: 0;
+    color: #9963f1;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding-bottom: 15px;
+}
+
+.gift-plot {
+    max-width: 100px;
+    max-height: 100px;
+    
+    padding: 1px 10px;
+    margin-top: 10px;
+    align-items: center;
+    transition: 
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+}
+
+.gift-plot:hover {
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+.gift {
+    width: 100px;
+    height: 100px;
+    padding: 10px;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    position: relative;
+    max-width:fit-content;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+}
+
+.gift-preview {
+    grid-column: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.gift-received {
+    max-width: 100%;
+    height: auto;
+    border-style: solid;
+    border-radius: 10px;
+    padding: 10px;
+    
+}
+
+.gift-info {
+    grid-column: 2;
+    background-color: pink;
+    border-style: solid;
+    border-color: black;
+    border-width: 2px;
+    border-radius: 5px;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.gift-avatar-preview {
+    width: 100px;
+    height: 100px;
+}

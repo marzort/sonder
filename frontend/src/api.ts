@@ -47,6 +47,8 @@ export type Gift = {
     given_by: {
         id: number
         username: string
+        greeting: string
+        avatar: Avatar
     }
     gift_choice: number
 }

@@ -91,9 +91,20 @@ class MeetingResponse(BaseModel):
     other_user: MeetingPersonResponse
     gift_received: int | None
 
+class GiftAvatarResponse(BaseModel):
+    eyes: str
+    mouth: str
+    hair: str
+    clothes: str
+    skin_color: str
+    hair_color: str
+    clothes_color: str
+
 class GiftPersonResponse(BaseModel):
     id: int
     username: str
+    greeting: str
+    avatar: GiftAvatarResponse
 
 class GiftResponse(BaseModel):
     id: int

@@ -16,7 +16,8 @@ def gift(
         select(Gift)
         .where(Gift.receiver_id == current_user.id)
         .options(
-            joinedload(Gift.giver),
+            joinedload(Gift.giver)
+            .joinedload(User.avatar),
             joinedload(Gift.flower)
         )
     ).unique().all()
@@ -32,7 +33,17 @@ def gift(
                 id=gift_received.id,
                 given_by={
                     "id": giver.id,
-                    "username": giver.username
+                    "username": giver.username,
+                    "greeting": giver.greeting,
+                    "avatar": {
+                        "eyes": giver.avatar.eyes,
+                        "mouth": giver.avatar.mouth,
+                        "hair": giver.avatar.hair,
+                        "clothes": giver.avatar.clothes,
+                        "skin_color": giver.avatar.skin_color,
+                        "hair_color": giver.avatar.hair_color,
+                        "clothes_color": giver.avatar.clothes_color
+                    }
                 },
                 gift_choice=gift_received.flower.id
             )
