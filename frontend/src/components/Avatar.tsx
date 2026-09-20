@@ -23,6 +23,7 @@ interface AvatarProps {
     skinColor: SkinColor
     hairColor: HairColor
     clothesColor: ClothesColor
+    size?: number
 }
 
 export default function Avatar ({
@@ -32,7 +33,8 @@ export default function Avatar ({
     clothes,
     skinColor,
     hairColor,
-    clothesColor
+    clothesColor,
+    size = 240
 }: AvatarProps) {
     const avatar = new DiceBearAvatar(avataaars, {
         seed: 'campuspass',
@@ -53,7 +55,14 @@ export default function Avatar ({
     })
 
     return (
-        <div className="avatar-image" >
+        <div 
+            className="avatar-image"
+            style={{
+                width: `${size}px`,
+                height: `${size}px`
+            }} 
+        
+        >
             <div
                 dangerouslySetInnerHTML={{
                     __html: avatar.toString()
