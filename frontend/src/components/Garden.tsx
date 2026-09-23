@@ -98,7 +98,7 @@ export default function Garden({
 
                             <div className={styles['gift-info']}>
                                 <h3>{giftBeingViewed.gift_choice.name}</h3>
-                                <p>Did you know?</p>
+                                <p>{giftBeingViewed.gift_choice.fact}</p>
                             </div>
                         </div>
 
