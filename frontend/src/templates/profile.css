@@ -4,6 +4,7 @@
     padding: 32px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     width: 100%;
+    box-sizing: border-box;
 }
 
 .profile-header {
@@ -44,42 +45,54 @@
     color: #374151;
 }
 
+.greeting-preview,
+.gift-preview {
+    width: 100%;
+    box-sizing: border-box;
+}
+
 .greeting-preview {
     grid-column: 1;
     grid-row: 2;
-    width: 100%;
+    margin-top: 0;
+}
 
-    .label {
+.greeting-preview label {
         display: block;
         margin-bottom: 8px;
         font-weight: 600;
-    }
+}
 
-    .text-area {
+.greeting-preview text-area {
         display: block;
         width: 100%;
+        box-sizing: border-box;
         padding: 12px;
         border: 1px solid #d1d5db;
         border-radius: 8px;
         font: inherit;
         resize: vertical;
-    }
+}
 
-    .text-area:focus {
+.greeting-preview text-area:focus {
         outline: none;
         border-color: #6366f1;
         box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
-    }
+}
 
-    .button {
+.greeting-preview button {
         margin-top: 12px;
-    }
+}
+
+.gift-preview {
+    grid-column: 1;
+    grid-row: 3;
+    margin-top: 24px;
 }
 
 .profile-controls {
     grid-column: 2;
-    grid-row: 1 / span 2;
-    min-width: 0;
+    grid-row: 1 / span 3;
     min-width: 0;
     display: flex;
     flex-direction: column;
@@ -99,11 +112,13 @@
     display: flex;
     gap: 16px;
     align-items: center;
+    flex-wrap: wrap;
 }
 
 .gift {
     width: 100px;
     height: 100px;
+    box-sizing: border-box;
     cursor: pointer;
     border: 1px solid #d1d5db;
     border-radius: 12px;
@@ -127,16 +142,22 @@
 }
 
 @media (max-width: 700px) {
+    .profile-card {
+        padding: 16px;
+        border-radius: 12px;
+    }
+
     .profile-content {
         display: flex;
         flex-direction: column;
-        align-items: center;
+        align-items: stretch;
         gap: 24px;
     }
 
     .profile-header {
         align-items: flex-start;
         flex-direction: column;
+        margin-bottom: 24px;
     }
 
     .avatar-preview {
@@ -151,32 +172,48 @@
         text-align: center;
     }
 
+    .avatar-preview,
     .greeting-preview,
+    .gift-preview,
     .profile-controls {
         width: 100%;
         max-width: 500px;
     }
 
     .greeting-preview {
-        text-align: center;
-        
-        .text-area {
-            width: 100%;
-        }
+        text-align: left;
+    }
 
-        .button {
-            display: block;
-            margin: 12px auto 0;
-        }
+    .greeting-preview textarea {
+        width: 100%;
+        min-height: 120px;
+    }
+
+    .greeting-preview button {
+        display: block;
+        width: 100%;
+        margin-top: 12px;
+    }
+
+    .gift-preview {
+        text-align: center;
+    }
+
+    .gift-choices {
+        justify-content: center;
+        gap: 12px;
+    }
+
+    .gift {
+        width: 80px;
+        height: 80px;
     }
 
     .profile-controls {
-        max-height: none;
-        overflow-y: visible;
         text-align: center;
     }
 
-    .profile-card {
-        padding: 24px;
+    .primary-button.save-button {
+        width: 100%;
     }
 }

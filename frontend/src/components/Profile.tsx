@@ -147,7 +147,6 @@ function Profile({
                             id="greeting" 
                             name="greeting"
                             rows={4} 
-                            cols={50}
                             value={greeting}
                             onChange={(event) => setGreeting(event.target.value)}
                             />
