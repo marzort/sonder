@@ -25,6 +25,8 @@ function App() {
 
   const [meetingCount, setMeetingCount] = useState(0)
 
+  const [menuOpen, setMenuOpen] = useState(false)
+
   const [screen, setScreen] = useState<
     'profile' | 'campus' | 'explore' | 'meetings' | 'garden'
   >('profile')
@@ -167,20 +169,8 @@ function App() {
     }
   }
 
-  function handleCampusLaunch() {
-    setScreen('campus')
-  }
-
   function handleCampusBack() {
     setScreen('profile')
-  }
-
-  function handleExplore() {
-    setScreen('explore')
-  }
-
-  function handleGarden() {
-    setScreen('garden')
   }
 
   function handleMeetings() {
@@ -214,33 +204,94 @@ function App() {
       )}
 
       {profile && (
-        <header className="menu">
-          <h1>Sonder</h1>
-          <ul className="nav-links">
-            <li>
-              <button className="menu-button" onClick={handleCampusBack}>
-                Profile
-              </button>
-            </li>
-            <li>
-              <button className="menu-button" onClick={handleCampusLaunch}>
-                Campus
-              </button>
-            </li>
-            <li>
-              <button className="menu-button" onClick={handleExplore}>
-                Explore
-              </button>
-            </li>
-            <li>
-              <button className="menu-button" onClick={handleGarden}>
-                Garden
-              </button>
-            </li>
-            <button className="menu-button" onClick={handleLogout}>
-                Log Out
+        <header className="navbar">
+          <div className="navbar-container">
+            <button
+              className="navbar-brand"
+              onClick={() => {
+                setScreen('profile')
+                setMenuOpen(false)
+              }}
+            >
+              Sonder
             </button>
-          </ul>
+
+            <button
+              className="navbar-toggle"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+
+            <nav className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
+              <ul className="nav-links">
+
+                <li>
+                  <button
+                    className={screen === 'profile' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('profile')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Profile
+                  </button>
+                </li>
+
+                  <li>
+                  <button
+                    className={screen === 'campus' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('campus')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Campus
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    className={screen === 'explore' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('explore')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Explore
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    className={screen === 'garden' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('garden')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Garden
+                  </button>
+                </li>
+
+                <li className="logout-item">
+                  <button
+                    className="logout-button"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      handleLogout()
+                    }}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
         </header>
       )}
 
