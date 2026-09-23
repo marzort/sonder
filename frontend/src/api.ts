@@ -53,6 +53,7 @@ export type Gift = {
     gift_choice: {
         id: number
         name: string
+        fact: string
     }
 }
 

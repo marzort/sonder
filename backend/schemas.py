@@ -109,6 +109,7 @@ class GiftPersonResponse(BaseModel):
 class GiftChoiceResponse(BaseModel):
     id: int
     name: str
+    fact: str
 
 class GiftResponse(BaseModel):
     id: int

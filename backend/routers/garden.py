@@ -48,7 +48,8 @@ def gift(
                 },
                 gift_choice={
                     "id": flower.id,
-                    "name": flower.name
+                    "name": flower.name,
+                    "fact": flower.fact
                 }
             )
         )
