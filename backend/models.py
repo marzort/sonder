@@ -184,6 +184,8 @@ class Flower(Base):
 
     name: Mapped[str]
 
+    fact: Mapped[str]
+
 class Gift(Base):
     __tablename__ = "gifts"
 
