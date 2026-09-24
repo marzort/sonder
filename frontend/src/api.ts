@@ -75,6 +75,13 @@ export async function registerUser(
     const data = await response.json()
 
     if(!response.ok) {
+        if (Array.isArray(data.detail)) {
+            const message = data.detail[0]?.msg ?? 'Validation failed'
+
+            throw new Error(
+                message.replace(/^Value error,\s*/, '')
+            )
+        }
         throw new Error(data.detail || 'Registration failed')
     }
 
