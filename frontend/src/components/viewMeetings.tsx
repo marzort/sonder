@@ -3,6 +3,8 @@ import type { UserProfile, Meeting } from '../api'
 import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
 
+import '../templates/viewmeetings.css'
+
 import { GIFT_CHOICES } from '../data/giftChoices'
 
 interface ViewMeetingsProps {
@@ -127,7 +129,7 @@ export default function ViewMeetings({
             )}
 
             <div className="meeting-launcher">
-                {meetings.length === 0 ? (
+                {unviewedMeetings.length === 0 ? (
                     <p>You haven't met anyone yet.</p>
                 ) : (
                     <button
@@ -144,7 +146,7 @@ export default function ViewMeetings({
 
             {meetingBeingViewed && (
                     <div
-                        className="meeting-card unviewed"
+                        className="meeting-card"
                         key={meetingBeingViewed.id}
                     >
                         <div className="meeting-page">
