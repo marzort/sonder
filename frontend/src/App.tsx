@@ -7,6 +7,7 @@ import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
 import LocationTest from './components/LocationTest'
 import Meetings from './components/Meetings'
+import ViewMeetings from './components/viewMeetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
 
@@ -321,7 +322,7 @@ function App() {
       )}
 
       {profile && token && screen === 'meetings' && (
-        <Meetings
+        <ViewMeetings
           profile={profile}
           token={token}
           onMeetingCountChange={setMeetingCount}
