@@ -151,7 +151,8 @@ export default function ViewMeetings({
                     >
                         <div className="meeting-page">
                             <div className="other-avatar-preview">
-                                <Avatar 
+                                <Avatar
+                                        size="min(15vw, 20vh)"
                                         eyes={meetingBeingViewed.other_user.avatar.eyes}
                                         mouth={meetingBeingViewed.other_user.avatar.mouth}
                                         top={meetingBeingViewed.other_user.avatar.hair}
@@ -200,7 +201,8 @@ export default function ViewMeetings({
                             </div>
 
                             <div className="user-avatar-preview">
-                                <Avatar 
+                                <Avatar
+                                    size="min(15vw, 20vh)"
                                     eyes={profile.avatar.eyes}
                                     mouth={profile.avatar.mouth}
                                     top={profile.avatar.hair}
