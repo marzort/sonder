@@ -4,6 +4,11 @@ import Profile from './components/Profile'
 import { getProfile } from './api'
 import type { UserProfile } from './api'
 import Campus from './components/Campus'
+import skyBackground from './assets/sky_background.png'
+import LocationTest from './components/LocationTest'
+import Meetings from './components/Meetings'
+import './templates/menu.css'
+import Garden from './components/Garden'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -18,7 +23,13 @@ function App() {
     Record<number, { x: number, y: number }>
   >({})
 
-  const [screen, setScreen] = useState<'profile' | 'campus'>('profile')
+  const [meetingCount, setMeetingCount] = useState(0)
+
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const [screen, setScreen] = useState<
+    'profile' | 'campus' | 'explore' | 'meetings' | 'garden'
+  >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
 
@@ -67,6 +78,7 @@ function App() {
 
       if (data.type === 'welcome') {
         setPlayers(data.players)
+        setMeetingCount(data.unviewed_meeting_count)
       }
 
       if (data.type === 'player_moved') {
@@ -95,6 +107,10 @@ function App() {
           delete updated[data.user_id]
           return updated
         })
+      }
+
+      if (data.type === 'meeting_count_updated') {
+        setMeetingCount(data.count)
       }
     }
 
@@ -153,46 +169,137 @@ function App() {
     }
   }
 
-  function handleCampusLaunch() {
-    setScreen('campus')
-  }
-
   function handleCampusBack() {
     setScreen('profile')
+  }
+
+  function handleMeetings() {
+    setScreen('meetings')
   }
 
   if (loading) {
     return (
       <main className="app">
         <div className="loading-card">
-          <h1>CampusPass</h1>
-          <p>Loading your campus...</p>
+          <h1>Sonder</h1>
+          <p>Loading...</p>
         </div>
       </main>
     )
   }
 
   return (
-    <main className="app">
+    <main 
+      className={`app ${!profile ? 'auth-background' : `${screen}-background`}`}
+      style={
+        !profile
+          ? { backgroundImage: `url(${skyBackground})` }
+          : undefined
+      }
+    >
       <div className="app-container">
-        <header className="app-header">
-          <h1>CampusPass</h1>
-          <p>Your campus. Your character. Your community.</p>
-
-          
-        </header>
 
       {!profile && (
         <AuthForm onLogin={handleLogin} />
+      )}
+
+      {profile && (
+        <header className="navbar">
+          <div className="navbar-container">
+            <button
+              className="navbar-brand"
+              onClick={() => {
+                setScreen('profile')
+                setMenuOpen(false)
+              }}
+            >
+              Sonder
+            </button>
+
+            <button
+              className="navbar-toggle"
+              onClick={() => setMenuOpen(!menuOpen)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+
+            <nav className={`navbar-menu ${menuOpen ? 'open' : ''}`}>
+              <ul className="nav-links">
+
+                <li>
+                  <button
+                    className={screen === 'profile' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('profile')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Profile
+                  </button>
+                </li>
+
+                  <li>
+                  <button
+                    className={screen === 'campus' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('campus')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Campus
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    className={screen === 'explore' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('explore')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Explore
+                  </button>
+                </li>
+
+                <li>
+                  <button
+                    className={screen === 'garden' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('garden')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Garden
+                  </button>
+                </li>
+
+                <li className="logout-item">
+                  <button
+                    className="logout-button"
+                    onClick={() => {
+                      setMenuOpen(false)
+                      handleLogout()
+                    }}
+                  >
+                    Logout
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </header>
       )}
 
       {profile && token && screen === 'profile' && (
         <Profile 
           profile={profile}
           token={token}
-          onLogout={handleLogout}
           onProfileUpdate={setProfile}
-          onCampusLaunch={handleCampusLaunch}
         />
       )}
 
@@ -202,6 +309,28 @@ function App() {
           players={players}
           onBack={handleCampusBack}
           onMove={handleMove}
+        />
+      )}
+
+      {profile && token && screen === 'explore' && (
+        <LocationTest
+          token={token}
+          meetingCount={meetingCount}
+          onMeetings={handleMeetings}
+        />
+      )}
+
+      {profile && token && screen === 'meetings' && (
+        <Meetings
+          profile={profile}
+          token={token}
+          onMeetingCountChange={setMeetingCount}
+        />
+      )}
+
+      {profile && token && screen === 'garden' && (
+        <Garden
+          token={token}
         />
       )}
       </div>

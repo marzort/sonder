@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { loginUser, registerUser } from '../api'
+import '../templates/auth.css'
 
 interface AuthFormProps {
     onLogin: (token: string) => void
@@ -66,11 +67,15 @@ function AuthForm({ onLogin }: AuthFormProps) {
     }
 
     return (
+        <header className="app-header">
+            <h1>Sonder</h1>
+            <p>Connect with the world around you.</p>
+        
         <section className="auth-card">
-            <h2>Welcome to CampusPass</h2>
+            <h2>Welcome to Sonder!</h2>
 
             <p className="card-description">
-                Sign in to enter campus, or create a new account.
+                Sign in to enter, or create a new account.
             </p>
 
             <div className="form-group">
@@ -120,6 +125,7 @@ function AuthForm({ onLogin }: AuthFormProps) {
                 </p>
             )}
         </section>
+        </header>
     )
 }
 

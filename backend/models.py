@@ -1,5 +1,27 @@
-from sqlalchemy import String, DateTime, ForeignKey, func
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+import uuid
+
+from sqlalchemy import (
+    String, 
+    Boolean, 
+    DateTime, 
+    ForeignKey,
+    CheckConstraint,
+    UniqueConstraint,
+    Float,
+    func
+)
+
+from sqlalchemy.orm import (
+    DeclarativeBase, 
+    Mapped, 
+    mapped_column, 
+    relationship
+)
+
+from sqlalchemy.dialects.postgresql import UUID
+
+from geoalchemy2 import Geography
+
 from datetime import datetime
 
 class Base(DeclarativeBase):
@@ -15,8 +37,52 @@ class User(Base):
         server_default=func.now(),
         nullable=False
     )
+
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
     avatar = relationship("Avatar", uselist=False)
+
+    meeting_users: Mapped[list["MeetingUser"]] = relationship(
+        back_populates="user",
+        cascade="all, delete-orphan"
+    )
+
+    location_sharing_enabled: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    current_location: Mapped[object | None] = mapped_column(
+        Geography(
+            geometry_type="POINT",
+            srid=4326,
+            spatial_index=True
+        ),
+        nullable=True
+    )
+
+    location_accuracy: Mapped[float | None] = mapped_column(
+        Float,
+        nullable=True
+    )
+
+    location_updated_at: Mapped[datetime | None] = mapped_column(
+        DateTime(timezone=True),
+        nullable=True
+    )
+
+    greeting: Mapped[str] = mapped_column(
+        String(250),
+        default = "Hello"
+    )
+
+    gift_flower_id: Mapped[int] = mapped_column(
+        ForeignKey("flowers.id"),
+        nullable=False,
+        default=1
+    )
+
+    gift_flower: Mapped["Flower"] = relationship()
 
 class Avatar(Base):
     __tablename__ = "avatars"
@@ -30,3 +96,148 @@ class Avatar(Base):
     skin_color: Mapped[str] = mapped_column(String(6))
     hair_color: Mapped[str] = mapped_column(String(6))
     clothes_color: Mapped[str] = mapped_column(String(6))
+
+class Meeting(Base):
+    __tablename__ = "meetings"
+
+    id: Mapped[int] = mapped_column(
+        primary_key=True
+    )
+
+    user_a_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    user_b_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    meeting_location: Mapped[object] = mapped_column(
+        Geography(
+            geometry_type='POINT',
+            srid=4326
+        ),
+        nullable=False
+    )
+
+    started_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        nullable=False
+    )
+
+    user_a: Mapped["User"] = relationship(
+        foreign_keys=[user_a_id]
+    )
+
+    user_b: Mapped["User"] = relationship(
+        foreign_keys=[user_b_id]
+    )
+
+    __table_args__ = (
+        CheckConstraint("user_a_id < user_b_id"),
+        UniqueConstraint("user_a_id", "user_b_id")
+    )
+
+    users: Mapped[list["MeetingUser"]] = relationship(
+        back_populates="meeting",
+        cascade="all, delete-orphan"
+    )
+
+    gifts: Mapped[list["Gift"]] = relationship(
+        back_populates="meeting",
+        cascade="all, delete-orphan"
+    )
+
+class MeetingUser(Base):
+    __tablename__ = "meeting_users"
+
+    meeting_id: Mapped[int] = mapped_column(
+        ForeignKey("meetings.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    user_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True
+    )
+
+    viewed: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+    meeting: Mapped["Meeting"] = relationship(
+        back_populates="users"
+    )
+
+    user: Mapped["User"] = relationship(
+        back_populates="meeting_users"
+    )
+
+class Flower(Base):
+    __tablename__ = "flowers"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    name: Mapped[str]
+
+    fact: Mapped[str]
+
+class Gift(Base):
+    __tablename__ = "gifts"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    meeting_id: Mapped[int] = mapped_column(
+        ForeignKey("meetings.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    giver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    flower_id: Mapped[int] = mapped_column(
+        ForeignKey("flowers.id"),
+        nullable=False
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    meeting: Mapped["Meeting"] = relationship(
+        back_populates="gifts"
+    )
+
+    giver: Mapped["User"] = relationship(
+        foreign_keys=[giver_id]
+    )
+
+    receiver: Mapped["User"] = relationship(
+        foreign_keys=[receiver_id]
+    )
+
+    flower: Mapped["Flower"] = relationship(
+        foreign_keys=[flower_id]
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "meeting_id",
+            "giver_id",
+            name="uq_gift_meeting_giver"
+        ),
+    )
+    

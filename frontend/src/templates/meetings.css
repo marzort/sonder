@@ -1,0 +1,45 @@
+.meeting-screen {
+
+}
+
+.meeting-header {
+
+}
+
+.meetings-label {
+    margin: 0;
+    color: #9963f1;
+    font-size: 0.85rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.meetings-list {
+
+}
+
+.meeting-card {
+    max-width: fit-content;
+    max-height: fit-content;
+    background-color: #dc8dcb;
+    border-radius: 8px;
+    padding: 1px 10px;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.meeting-card:hover {
+    cursor: pointer;
+    background-color: #d180bf;
+}
+
+.meeting-avatar-preview {
+
+}
+
+.gift-received {
+    width: 50px;
+    height: 50px;
+    padding: 2px;
+}

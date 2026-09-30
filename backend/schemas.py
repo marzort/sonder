@@ -1,4 +1,5 @@
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, field_validator, Field
+from datetime import datetime
 
 class RegisterRequest(BaseModel):
     username: str
@@ -53,3 +54,64 @@ class AvatarUpdateRequest(BaseModel):
     skin_color: str
     hair_color: str
     clothes_color: str
+
+class GreetingUpdateRequest(BaseModel):
+    greeting: str
+
+class LocationUpdate(BaseModel):
+    latitude: float = Field(ge=-90, le=90)
+    longitude: float = Field(ge=-180, le=180)
+    accuracy: float | None = Field(
+        default=None,
+        ge=0
+    )
+
+class LocationSharingUpdate(BaseModel):
+    enabled: bool
+
+class MeetingAvatarResponse(BaseModel):
+    eyes: str
+    mouth: str
+    hair: str
+    clothes: str
+    skin_color: str
+    hair_color: str
+    clothes_color: str
+
+class MeetingPersonResponse(BaseModel):
+    id: int
+    username: str
+    greeting: str
+    avatar: MeetingAvatarResponse
+
+class MeetingResponse(BaseModel):
+    id: int
+    started_at: datetime
+    viewed: bool
+    other_user: MeetingPersonResponse
+    gift_received: int | None
+
+class GiftAvatarResponse(BaseModel):
+    eyes: str
+    mouth: str
+    hair: str
+    clothes: str
+    skin_color: str
+    hair_color: str
+    clothes_color: str
+
+class GiftPersonResponse(BaseModel):
+    id: int
+    username: str
+    greeting: str
+    avatar: GiftAvatarResponse
+
+class GiftChoiceResponse(BaseModel):
+    id: int
+    name: str
+    fact: str
+
+class GiftResponse(BaseModel):
+    id: int
+    given_by: GiftPersonResponse
+    gift_choice: GiftChoiceResponse
