@@ -23,6 +23,8 @@ export default function Meetings({
     const [isOpen, setIsOpen] = useState(false)
     const [meetingBeingViewed, setMeetingBeingViewed] = useState<Meeting | null>(null)
 
+    
+
     useEffect(() => {
         async function loadMeetings() {
             setMessage('')
