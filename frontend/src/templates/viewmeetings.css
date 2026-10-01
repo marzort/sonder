@@ -122,24 +122,29 @@
 
 .other-greeting,
 .user-greeting {
-    width: clamp(60px, 10vw, 100px);
-    height: clamp(60px, 10vw, 100px);
-    box-sizing: border-box;
+    width: clamp(70px, 10vw, 100px);
+    min-height: clamp(70px, 10vw, 100px);
+    height: auto;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
     border: 1px solid #d1d5db;
     border-radius: 12px;
     background-color: antiquewhite;
-    padding: clamp(4px, 1vw, 8px);
-    transition:
-        transform 0.15s ease,
-        border-color 0.15s ease,
-        box-shadow 0.15s ease;
+
+    padding: clamp(6px, 1vw, 10px);
 
     text-align: center;
-    font-size: 0.85rem;
+    font-size: clamp(0.65rem, 1vw, 0.85rem);
+    line-height: 1.25;
+
+    overflow-wrap: anywhere;
 }
 
 .other-greeting {
-    transform: translate(70%, -50%);
+    transform: translate(40px, -50px);
 
     position: relative;
 }
@@ -162,7 +167,7 @@
 }
 
 .user-greeting {
-    transform: translate(-70%, 50%);
+    transform: translate(-40px, 50px);
 
     position: relative;
 }
