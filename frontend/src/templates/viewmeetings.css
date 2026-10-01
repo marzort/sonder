@@ -22,8 +22,27 @@
     flex: 0 0 auto;
 }
 
-.view-meetings-button {
+.meeting-status {
+    font-weight: 200;
+    line-height: 2;
+}
 
+.view-meetings-button,
+.next-button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-weight: 600;
+    transition: 0.2s ease;
+}
+
+.view-meetings-button {
+    background: #bf36e5;
+    color: white;
+}
+
+.view-meetings-button:hover {
+    background: #8f25a9;
 }
 
 .meeting-card {
@@ -38,6 +57,10 @@
     box-sizing: border-box;
 
     overflow: hidden;
+
+    background-color: #a16eb3;
+
+    border-radius: 8px;
 }
 
 .meeting-page {
@@ -99,7 +122,64 @@
 
 .other-greeting,
 .user-greeting {
-    width: 100%;
+    width: clamp(60px, 10vw, 100px);
+    height: clamp(60px, 10vw, 100px);
+    box-sizing: border-box;
+    border: 1px solid #d1d5db;
+    border-radius: 12px;
+    background-color: antiquewhite;
+    padding: clamp(4px, 1vw, 8px);
+    transition:
+        transform 0.15s ease,
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
+
+    text-align: center;
+    font-size: 0.85rem;
+}
+
+.other-greeting {
+    transform: translate(70%, -50%);
+
+    position: relative;
+}
+
+.other-greeting::after {
+    content: "";
+    position: absolute;
+
+    top: -12px;
+    right: 12px;
+    left: auto;
+    bottom: auto;
+
+    width: 20px;
+    height: 16px;
+
+    background-color: antiquewhite;
+
+    clip-path: polygon(0 100%, 100% 100%, 100% 0%);
+}
+
+.user-greeting {
+    transform: translate(-70%, 50%);
+
+    position: relative;
+}
+
+.user-greeting::after {
+    content: "";
+    position: absolute;
+
+    bottom: -12px;
+    left: 12px;
+
+    width: 20px;
+    height: 16px;
+
+    background-color: antiquewhite;
+
+    clip-path: polygon(0 0, 100% 0, 0 100%);
 }
 
 .gift-exchange {
@@ -170,7 +250,14 @@
 }
 
 .next-button {
+    background: #eef2ff;
+    color: #9e38ca;
 
+    margin-top: 24px;
+}
+
+.next-button:hover {
+    background: #e0e7ff;
 }
 
 @keyframes orbit-top {

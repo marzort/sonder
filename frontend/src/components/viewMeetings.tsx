@@ -22,6 +22,7 @@ export default function ViewMeetings({
     const [meetings, setMeetings] = useState<Meeting[]>([])
 
     const [meetingBeingViewed, setMeetingBeingViewed] = useState<Meeting | null>(null)
+    const [viewMeeting, setViewMeeting] = useState(false)
 
     const [pageNum, setPageNum] = useState(0)
 
@@ -92,6 +93,7 @@ export default function ViewMeetings({
             } else {
                 setMeetingBeingViewed(null)
                 setPageNum(0)
+                setViewMeeting(false)
             }
         } catch (error) {
             console.error(
@@ -128,14 +130,24 @@ export default function ViewMeetings({
                 </p>
             )}
 
-            <div className="meeting-launcher">
+            {!viewMeeting && (
+                <div className="meeting-launcher">
                 {unviewedMeetings.length === 0 ? (
-                    <p>You haven't met anyone yet.</p>
+                    meetings.length > 0 ? (
+                        <p className="meeting-status">
+                            You have no unviewed meetings.
+                            <br />
+                            Go check out your garden!
+                        </p>
+                    ) : (
+                        <p className="meeting-status">You haven't met anyone yet.</p>
+                    )
                 ) : (
                     <button
                         className="view-meetings-button"
                         onClick={() => {
                             setMeetingBeingViewed(unviewedMeetings[0])
+                            setViewMeeting(true)
                             setPageNum(1)
                         }}
                     >
@@ -143,8 +155,10 @@ export default function ViewMeetings({
                     </button>
                 )}
             </div>
+            )}
+            
 
-            {meetingBeingViewed && (
+            {meetingBeingViewed && viewMeeting && (
                     <div
                         className="meeting-card"
                         key={meetingBeingViewed.id}
