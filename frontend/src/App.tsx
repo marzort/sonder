@@ -5,8 +5,8 @@ import { getProfile } from './api'
 import type { UserProfile } from './api'
 import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
-import LocationTest from './components/LocationTest'
-import Meetings from './components/Meetings'
+import Explore from './components/Explore'
+import ViewMeetings from './components/viewMeetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
 
@@ -62,7 +62,7 @@ function App() {
     }
 
     const socket = new WebSocket(
-      `ws://localhost:8000/ws?token=${token}`
+      `${import.meta.env.VITE_WS_URL}/ws?token=${token}`
     )
 
     socketRef.current = socket
@@ -153,7 +153,7 @@ function App() {
     const token = localStorage.getItem('access_token')
 
     try {
-      await fetch('http://localhost:8000/logout', {
+      await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`
@@ -313,7 +313,7 @@ function App() {
       )}
 
       {profile && token && screen === 'explore' && (
-        <LocationTest
+        <Explore
           token={token}
           meetingCount={meetingCount}
           onMeetings={handleMeetings}
@@ -321,7 +321,7 @@ function App() {
       )}
 
       {profile && token && screen === 'meetings' && (
-        <Meetings
+        <ViewMeetings
           profile={profile}
           token={token}
           onMeetingCountChange={setMeetingCount}

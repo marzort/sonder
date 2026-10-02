@@ -23,7 +23,7 @@ interface AvatarProps {
     skinColor: SkinColor
     hairColor: HairColor
     clothesColor: ClothesColor
-    size?: number
+    size?: number | string
 }
 
 export default function Avatar ({
@@ -58,8 +58,8 @@ export default function Avatar ({
         <div 
             className="avatar-image"
             style={{
-                width: `${size}px`,
-                height: `${size}px`
+                width: typeof size === "number" ? `${size}px` : size,
+                height: typeof size === "number" ? `${size}px` : size
             }} 
         
         >
