@@ -5,7 +5,7 @@ import { getProfile } from './api'
 import type { UserProfile } from './api'
 import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
-import LocationTest from './components/LocationTest'
+import Explore from './components/Explore'
 import ViewMeetings from './components/viewMeetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
@@ -313,7 +313,7 @@ function App() {
       )}
 
       {profile && token && screen === 'explore' && (
-        <LocationTest
+        <Explore
           token={token}
           meetingCount={meetingCount}
           onMeetings={handleMeetings}
