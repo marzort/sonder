@@ -1,0 +1,80 @@
+.explore-screen {
+
+}
+
+.explore-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 32px;
+}
+
+.explore-label {
+
+}
+
+.enable-location-blurb {
+    display: flex;
+    align-items: center;
+    font-weight: 20;
+    line-height: 2;
+}
+
+.enable-location-button {
+    border: none;
+    border-radius: 8px;
+    padding: 11px 16px;
+    font-weight: 600;
+    transition: 0.2s ease;
+    background: #bf36e5;
+    color: white;
+    margin: 20px;
+}
+
+.enable-location-button:hover {
+    background: #8f25a9;
+}
+
+.explore-graphic {
+    width: 30px;
+    height: 20px;
+    background-color: #621076;
+    margin: 50px;
+}
+
+.meetings-section {
+    position: relative;
+    display: inline-block;
+    margin: 20px;
+}
+
+.meetings-button {
+    background-color: #bf36e5;
+    color: white;
+    font-size: 16px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.meetings-button:hover {
+    background-color: #8f25a9;
+}
+
+.meeting-count {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background-color: antiquewhite;
+    font-size: 12px;
+    font-weight: bold;
+    min-width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
