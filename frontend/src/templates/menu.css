@@ -5,11 +5,11 @@
     width: 100%;
     z-index: 1000;
 
-    background: rgba(255, 255, 255, 0.9);
+    background: #6b25a93e;
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
 
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);    
 }
 
 .navbar-container {
@@ -28,8 +28,9 @@
     background: none;
 
     font-size: 1.6rem;
-    font-weight: 700;
-    color: #cf48cf;
+    font-weight: 900;
+    letter-spacing: 0.1em;
+    color: #f3b2f3;
 
     cursor: pointer;
     padding: 0;
@@ -60,9 +61,9 @@
     padding: 10px 16px;
     border-radius: 8px;
 
-    color: #555;
+    color: #e5e3e3;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
     cursor: pointer;
 
     transition: 
@@ -71,12 +72,12 @@
 }
 
 .nav-link:hover {
-    background: rgba(0, 0, 0, 0.06);
-    color: #111;
+    background: rgba(160, 11, 128, 0.427);
+    color: #fcf8fb;
 }
 
 .nav-link.active {
-    background: #222;
+    background: #56316e;
     color: white;
 }
 
@@ -93,9 +94,9 @@
     padding: 10px 16px;
     border-radius: 8px;
 
-    color: #b42318;
+    color: #b41876;
     font-size: 0.95rem;
-    font-weight: 500;
+    font-weight: 600;
 
     cursor: pointer;
 
@@ -105,7 +106,7 @@
 }
 
 .logout-button:hover {
-    background: rgba(180, 35, 24, 0.08);
+    background: rgba(160, 11, 128, 0.427);
     color: #8f1d15;
 }
 
@@ -172,6 +173,8 @@
         align-items: stretch;
 
         gap: 4px;
+
+        background-color: #b880cd;
 
         padding: 12px 16px 16px;
     }
