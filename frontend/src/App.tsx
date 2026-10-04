@@ -3,7 +3,6 @@ import AuthForm from './components/AuthForm'
 import Profile from './components/Profile'
 import { getProfile } from './api'
 import type { UserProfile } from './api'
-import Campus from './components/Campus'
 import skyBackground from './assets/sky_background.png'
 import Explore from './components/Explore'
 import ViewMeetings from './components/viewMeetings'
@@ -19,16 +18,12 @@ function App() {
 
   const [loading, setLoading] = useState(true)
 
-  const [players, setPlayers] = useState<
-    Record<number, { x: number, y: number }>
-  >({})
-
   const [meetingCount, setMeetingCount] = useState(0)
 
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [screen, setScreen] = useState<
-    'profile' | 'campus' | 'explore' | 'meetings' | 'garden'
+    'profile' | 'explore' | 'meetings' | 'garden'
   >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -47,7 +42,6 @@ function App() {
         localStorage.removeItem('access_token')
         setToken(null)
         setProfile(null)
-        setPlayers({})
       } finally {
         setLoading(false)
       }
@@ -77,36 +71,7 @@ function App() {
       const data = JSON.parse(event.data)
 
       if (data.type === 'welcome') {
-        setPlayers(data.players)
         setMeetingCount(data.unviewed_meeting_count)
-      }
-
-      if (data.type === 'player_moved') {
-        setPlayers((current) => ({
-          ...current,
-          [data.user_id]: {
-            x: data.x,
-            y: data.y
-          }
-        }))
-      }
-
-      if (data.type === 'player_joined') {
-        setPlayers((current) => ({
-          ...current,
-          [data.user_id]: {
-            x: data.x,
-            y: data.y
-          }
-        }))
-      }
-
-      if (data.type === 'player_left') {
-        setPlayers((current) => {
-          const updated = { ...current }
-          delete updated[data.user_id]
-          return updated
-        })
       }
 
       if (data.type === 'meeting_count_updated') {
@@ -132,19 +97,6 @@ function App() {
     }
   }, [token])
 
-  function handleMove(
-    direction: 'up' | 'down' | 'left' | 'right'
-  ) {
-    if (socketRef.current?.readyState === WebSocket.OPEN) {
-      socketRef.current.send(
-        JSON.stringify({
-          type: 'move',
-          direction
-        })
-      )
-    }
-  }
-
   function handleLogin(accessToken: string) {
     setToken(accessToken)
   }
@@ -165,12 +117,7 @@ function App() {
       localStorage.removeItem('access_token')
       setToken(null)
       setProfile(null)
-      setPlayers({})
     }
-  }
-
-  function handleCampusBack() {
-    setScreen('profile')
   }
 
   function handleMeetings() {
@@ -242,18 +189,6 @@ function App() {
                   </button>
                 </li>
 
-                  <li>
-                  <button
-                    className={screen === 'campus' ? 'nav-link active' : 'nav-link'}
-                    onClick={() => {
-                      setScreen('campus')
-                      setMenuOpen(false)
-                    }}
-                  >
-                    Campus
-                  </button>
-                </li>
-
                 <li>
                   <button
                     className={screen === 'explore' ? 'nav-link active' : 'nav-link'}
@@ -300,15 +235,6 @@ function App() {
           profile={profile}
           token={token}
           onProfileUpdate={setProfile}
-        />
-      )}
-
-      {profile && token && screen === 'campus' && (
-        <Campus
-          profile={profile}
-          players={players}
-          onBack={handleCampusBack}
-          onMove={handleMove}
         />
       )}
 
