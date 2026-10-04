@@ -32,7 +32,7 @@
     border: 3px solid #111827;
     box-shadow:
         0 0 0 1.5px white,
-        0 0 0 3.5px #362592;
+        0 0 0 3.5px #a250e9;
 }
 
 .color-options {
@@ -95,7 +95,7 @@
 .avatar-options button {
     border: 1px solid #d1d5db;
     background: white;
-    color: #374151;
+    color: #0a0a0adc;
     border-radius: 8px;
     padding: 9px 13px;
     font-weight: 500;
@@ -108,15 +108,15 @@
 }
 
 .avatar-options button:hover {
-    background: #eef2ff;
-    border-color: #6366f1;
+    background: #fbeeff;
+    border-color: #c463f1;
     transform: translateY(-1px);
 }
 
 .avatar-options button.selected {
-    background: #4f46e5;
+    background: #9438bf;
     color: white;
-    border-color: #4f46e5;
+    border-color: #9046e5;
     box-shadow: 0 2px 6px rgba(79, 70, 229, 0.25);
 }
 

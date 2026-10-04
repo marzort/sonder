@@ -49,6 +49,10 @@
 .gift-preview {
     width: 100%;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .greeting-preview {
@@ -57,31 +61,42 @@
     margin-top: 0;
 }
 
-.greeting-preview label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
+.greeting-preview label,
+.gift-preview label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
 }
 
-.greeting-preview text-area {
-        display: block;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font: inherit;
-        resize: vertical;
+.greeting-preview textarea {
+    display: block;
+    width: 100%;
+
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font: inherit;
+    resize: vertical;
 }
 
-.greeting-preview text-area:focus {
-        outline: none;
-        border-color: #6366f1;
-        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+.greeting-preview textarea:focus {
+    outline: none;
+    border-color: #440a7a;
+    box-shadow: 0 0 0 3px rgba(170, 99, 241, 0.15);
 }
 
-.greeting-preview button {
-        margin-top: 12px;
+.save-greeting-button,
+.save-gift-button {
+    margin-top: 12px;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 8px;
+    font-weight: 600;
+    font-size: small;
+    transition: 0.2s ease;
+    background: #bf36e5;
+    color: white;
 }
 
 .gift-preview {
@@ -138,7 +153,7 @@
     border: 3px solid #111827;
     box-shadow:
     0 0 0 1.5px white,
-    0 0 0 3.5px #362592;
+    0 0 0 3.5px #a250e9;
 }
 
 @media (max-width: 700px) {
