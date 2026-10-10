@@ -32,18 +32,7 @@ button {
 .app {
   min-height: 100vh;
   padding: 40px 20px;
-  background:
-    radial-gradient(
-      circle at top left,
-      #dbeafe 0%,
-      transparent 35%
-    ),
-    radial-gradient(
-      circle at bottom right,
-      #e0e7ff 0%,
-      transparent 35%
-    ),
-    #f3f4f6;
+  background:linear-gradient(to bottom, #6b25a997, #b346e55b);
 }
 
 .app-container {

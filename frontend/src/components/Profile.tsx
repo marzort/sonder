@@ -146,31 +146,28 @@ function Profile({
                             <textarea 
                             id="greeting" 
                             name="greeting"
-                            rows={4} 
+                            rows={4}
                             value={greeting}
                             onChange={(event) => setGreeting(event.target.value)}
                             />
                         </div>
                         
                         <div>
-                            <button onClick={handleGreetingUpdate}>
-                            Save Greeting
-                        </button>
+                            <button 
+                                className="save-greeting-button"
+                                onClick={handleGreetingUpdate}
+                            >
+                                Save Greeting
+                            </button>
                         </div>
                         
                     </div>
 
                     <div className="gift-preview">
                         <div>
-                            <img
-                                src={gift_choices.find(
-                                    (flower) => flower.id === profile.gift_flower_id
-                                )?.image}
-                                alt="Current gift"
-                                className="gift"
-                            />
+                            <label htmlFor="gift">Gift:</label>
                         </div>
-
+                        
                         <div className="gift-choices">
                             {gift_choices.map((flower) => (
                                 <img
@@ -186,7 +183,10 @@ function Profile({
                         </div>
 
                         <div>
-                            <button onClick={handleGiftUpdate}>
+                            <button 
+                                className="save-gift-button"
+                                onClick={handleGiftUpdate}
+                            >
                                 Save Gift
                             </button>
                         </div>

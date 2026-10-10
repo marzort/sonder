@@ -1,23 +1,10 @@
 import json
 from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect, Depends
 from auth import verify_access_token, active_sessions
-from data.buildings import buildings
 from models import MeetingUser
 from database import get_db
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
-
-DIRECTION_DELTAS = {
-    "up": (0, -10),
-    "down": (0, 10),
-    "left": (-10, 0),
-    "right": (10, 0)
-}
-
-WORLD_WIDTH = 2400
-WORLD_HEIGHT = 1600
-
-PLAYER_SIZE = 30
 
 router = APIRouter()
 
@@ -25,7 +12,9 @@ class ConnectionManager:
 
     def __init__(self):
         self.active_connections = {}
-        self.active_players = {}
+
+    def get_active_players(self):
+        return list(self.active_connections.keys())
 
     async def connect(self, user_id, websocket):
         if user_id in self.active_connections:
@@ -38,18 +27,6 @@ class ConnectionManager:
         await websocket.accept()
 
         self.active_connections[user_id] = websocket
-
-        spawn_x = 200 + (len(self.active_players) * 50)
-        spawn_y = 200
-        
-
-        spawn_x = min(spawn_x, WORLD_WIDTH - PLAYER_SIZE)
-        spawn_y = min(spawn_y, WORLD_HEIGHT - PLAYER_SIZE)
-
-        self.active_players[user_id] = {
-            "x": spawn_x,
-            "y": spawn_y
-        }
 
         return True
 
@@ -64,8 +41,6 @@ class ConnectionManager:
 
     async def disconnect(self, user_id, session_id=None, close_socket=False):
         websocket = self.active_connections.pop(user_id, None)
-
-        self.active_players.pop(user_id, None)
 
         if session_id is None or active_sessions.get(user_id) == session_id:
             active_sessions.pop(user_id, None)
@@ -132,7 +107,7 @@ async def websocket_endpoint(
         json.dumps({
             "type": "welcome",
             "user_id": user_id,
-            "players": manager.active_players,
+            "players": manager.get_active_players(),
             "unviewed_meeting_count": unviewed_count
         })
     )
@@ -141,13 +116,11 @@ async def websocket_endpoint(
         json.dumps({
             "type": "player_joined",
             "user_id": user_id,
-            "x": manager.active_players[user_id]["x"],
-            "y": manager.active_players[user_id]["y"]
         })
     )
 
     print("Authenticated user:", user_id)
-    print("Active players:", manager.active_players)
+    print("Active players:", manager.get_active_players())
 
     try:
         while True:
@@ -156,61 +129,6 @@ async def websocket_endpoint(
             data = json.loads(message)
 
             print("Received:", data)
-
-            if data["type"] == "move":
-                direction = data["direction"]
-
-                if direction not in DIRECTION_DELTAS:
-                    continue
-
-                player = manager.active_players[user_id]
-
-                dx, dy = DIRECTION_DELTAS[direction]
-
-                new_x = player["x"] + dx
-                new_y = player["y"] + dy
-
-                new_x = max(
-                    0,
-                    min(new_x, WORLD_WIDTH - PLAYER_SIZE)
-                )
-
-                new_y = max(
-                    0,
-                    min(new_y, WORLD_HEIGHT - PLAYER_SIZE)
-                )
-
-                collision = False
-
-                for building in buildings:
-                    if (
-                        new_x < building["x"] + building["width"]
-                        and new_x + PLAYER_SIZE > building["x"]
-                        and new_y < building["y"] + building["height"]
-                        and new_y + PLAYER_SIZE > building["y"]
-                    ):
-                        collision = True
-                        break
-
-                if collision == False:
-                    player["x"] = new_x
-                    player["y"] = new_y
-
-                print(
-                    "Player moved:",
-                    user_id,
-                    player["x"],
-                    player["y"]
-                )
-
-                await manager.broadcast(
-                    json.dumps({
-                        "type": "player_moved",
-                        "user_id": user_id,
-                        "x": player["x"],
-                        "y": player["y"]
-                    })
-                )
 
     except WebSocketDisconnect:
         await manager.disconnect(
