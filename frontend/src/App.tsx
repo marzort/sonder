@@ -22,8 +22,6 @@ function App() {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const [wsStatus, setWsStatus] = useState('Connecting...')
-
   const [screen, setScreen] = useState<
     'profile' | 'explore' | 'meetings' | 'garden'
   >('profile')
@@ -65,7 +63,6 @@ function App() {
 
     socket.onopen = () => {
       console.log('WebSocket connected')
-      setWsStatus('Connected')
     }
 
     socket.onmessage = (event) => {
@@ -84,7 +81,6 @@ function App() {
 
     socket.onerror = (error) => {
       console.error('WebSocket error:', error)
-      setWsStatus('Connection error')
     }
 
     socket.onclose = (event) => {
@@ -92,10 +88,6 @@ function App() {
         'WebSocket closed:',
         event.code,
         event.reason
-      )
-
-      setWsStatus(
-        `Disconnected (${event.code})`
       )
     }
 
@@ -252,18 +244,6 @@ function App() {
           meetingCount={meetingCount}
           onMeetings={handleMeetings}
         />
-      )}
-
-      {profile && (
-        <p
-          style={{
-            textAlign: 'center',
-            fontSize: '12px',
-            padding: '8px'
-          }}
-        >
-          Live connection: {wsStatus}
-        </p>
       )}
 
       {profile && token && screen === 'meetings' && (
