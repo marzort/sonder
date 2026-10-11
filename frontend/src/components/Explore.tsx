@@ -58,8 +58,6 @@ export default function Explore({
 
     const {
         location,
-        error,
-        permission
     } = useLocation(enabled)
 
     useEffect(() => {
