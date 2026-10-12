@@ -67,65 +67,67 @@ function AuthForm({ onLogin }: AuthFormProps) {
     }
 
     return (
-        <header className="app-header">
-            <h1>Sonder</h1>
-            <p>Connect with the world around you.</p>
-        
-        <section className="auth-card">
-            <h2>Welcome to Sonder!</h2>
+        <section>
+            <header className="app-header">
+                <h1>SONDER</h1>
+                <p className="subtext">Connect with the world around you.</p>
+            </header>
+            
+            <section className="auth-card">
+                <h2>Welcome to Sonder!</h2>
 
-            <p className="card-description">
-                Sign in to enter, or create a new account.
-            </p>
-
-            <div className="form-group">
-                <label htmlFor="username">Username</label>
-                
-                <input 
-                    type="text"
-                    value={username}
-                    onChange={(event) =>
-                        setUsername(event.target.value)
-                    }
-                    placeholder="Enter your username"
-                />
-            </div>
-
-            <div className="form-group">
-                <label htmlFor="password">Password</label>
-                <input 
-                    type="text"
-                    value={password}
-                    onChange={(event) =>
-                        setPassword(event.target.value)
-                    }
-                    placeholder="Enter your password"
-                />
-            </div>
-
-            <div className="auth-buttons">
-                <button 
-                    className="primary-button"
-                    onClick={handleLogin}
-                >
-                    Log In
-                </button>
-
-                <button 
-                    className="secondary-button"
-                    onClick={handleRegister}
-                >
-                    Create Account
-                </button>
-            </div>
-
-            {message && (
-                <p className="message">
-                    {message}
+                <p className="card-description">
+                    Sign in to enter, or create a new account.
                 </p>
-            )}
+
+                <div className="form-group">
+                    <label htmlFor="username">Username</label>
+                    
+                    <input 
+                        type="text"
+                        value={username}
+                        onChange={(event) =>
+                            setUsername(event.target.value)
+                        }
+                        placeholder="Enter your username"
+                    />
+                </div>
+
+                <div className="form-group">
+                    <label htmlFor="password">Password</label>
+                    <input 
+                        type="text"
+                        value={password}
+                        onChange={(event) =>
+                            setPassword(event.target.value)
+                        }
+                        placeholder="Enter your password"
+                    />
+                </div>
+
+                <div className="auth-buttons">
+                    <button 
+                        className="primary-button"
+                        onClick={handleLogin}
+                    >
+                        Log In
+                    </button>
+
+                    <button 
+                        className="secondary-button"
+                        onClick={handleRegister}
+                    >
+                        Create Account
+                    </button>
+                </div>
+
+                {message && (
+                    <p className="message">
+                        {message}
+                    </p>
+                )}
+            </section>
         </section>
-        </header>
     )
 }
 
