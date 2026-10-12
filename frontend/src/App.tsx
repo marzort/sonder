@@ -160,7 +160,7 @@ function App() {
                 setMenuOpen(false)
               }}
             >
-              Sonder
+              SONDER
             </button>
 
             <button
