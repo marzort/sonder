@@ -1,9 +1,14 @@
-from database import SessionLocal
-from models import Flower
+from database import SessionLocal, engine
+from models import Flower, Base
+from sqlalchemy import text
 
 from data.flower_facts import FLOWER_FACTS
 
 def seed_flowers():
+    with engine.connect() as conn:
+        conn.execute(text("CREATE EXTENSION IF NOT EXISTS postgis;"))
+        conn.commit()
+    Base.metadata.create_all(bind=engine)
     db = SessionLocal()
 
     try:
