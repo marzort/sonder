@@ -22,8 +22,6 @@ function App() {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const [wsStatus, setWsStatus] = useState('Connecting...')
-
   const [screen, setScreen] = useState<
     'profile' | 'explore' | 'meetings' | 'garden'
   >('profile')
@@ -65,7 +63,6 @@ function App() {
 
     socket.onopen = () => {
       console.log('WebSocket connected')
-      setWsStatus('Connected')
     }
 
     socket.onmessage = (event) => {
@@ -84,7 +81,6 @@ function App() {
 
     socket.onerror = (error) => {
       console.error('WebSocket error:', error)
-      setWsStatus('Connection error')
     }
 
     socket.onclose = (event) => {
@@ -92,10 +88,6 @@ function App() {
         'WebSocket closed:',
         event.code,
         event.reason
-      )
-
-      setWsStatus(
-        `Disconnected (${event.code})`
       )
     }
 
@@ -112,6 +104,18 @@ function App() {
   async function handleLogout() {
     const token = localStorage.getItem('access_token')
 
+    if (socketRef.current) {
+     socketRef.current.onclose = (event) => {
+      console.log('Websocket cleanly closed from logout:', event.code, event.reason)
+
+      localStorage.removeItem('access_token')
+      setToken(null)
+      setProfile(null)
+      setScreen('profile')
+      socketRef.current = null
+     }
+    }
+
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
@@ -121,10 +125,13 @@ function App() {
       })
     } catch (error) {
       console.error('Logout request failed:', error)
-    } finally {
-      localStorage.removeItem('access_token')
-      setToken(null)
-      setProfile(null)
+
+      if (!socketRef.current) {
+        localStorage.removeItem('access_token')
+        setToken(null)
+        setProfile(null)
+        setScreen('profile')
+      }
     }
   }
 
@@ -168,7 +175,7 @@ function App() {
                 setMenuOpen(false)
               }}
             >
-              Sonder
+              SONDER
             </button>
 
             <button
@@ -252,18 +259,6 @@ function App() {
           meetingCount={meetingCount}
           onMeetings={handleMeetings}
         />
-      )}
-
-      {profile && (
-        <p
-          style={{
-            textAlign: 'center',
-            fontSize: '12px',
-            padding: '8px'
-          }}
-        >
-          Live connection: {wsStatus}
-        </p>
       )}
 
       {profile && token && screen === 'meetings' && (

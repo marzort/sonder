@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { useLocation } from "../hooks/useLocation"
 import { sendLocation, setLocationSharing } from "../api"
+import TrackingAnimation from "./TrackingAnimation"
 
 import '../templates/explore.css'
 
@@ -77,11 +78,6 @@ export default function Explore({
 
     return (
         <section className="explore-screen">
-            <div className="explore-header">
-                <div>
-                    <p className="explore-label">Explore</p>
-                </div>
-            </div>
 
             {!enabled && (
                 <div className="">
@@ -103,12 +99,13 @@ export default function Explore({
             )}
 
             {enabled && (
-                <div className="explore-graphic">
-
+                <div className="parent-wrapper">
+                    <TrackingAnimation/>
                 </div>
             )}
 
-            <button
+            <div className="buttons">
+                <button
                 className="enable-location-button"
                 onClick={handleToggleLocation}
                 disabled={updatingSharing}
@@ -130,6 +127,8 @@ export default function Explore({
                     </span>
                 )}
             </div>
+            </div>
+            
         </section>
     )
 }

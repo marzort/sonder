@@ -96,17 +96,25 @@
     justify-content: center;
 }
 
-.gift-received {
-    max-width: 100%;
-    width: 200px;
-    height: auto;
+.gift-image-container {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     background-color: rgb(196, 97, 97);
+    border: 2px solid;
+    box-sizing: border-box;
+}
 
-    border-style: solid;
-    border-radius: 50%;
-    border-width: 2px;
-
+.gift-received {
+    width: 75%;
+    height: auto;
+    object-fit: contain;
     padding: 10px;
     box-sizing: border-box;
 }
@@ -149,6 +157,49 @@
     border: none;
     font-size: 24px;
     cursor: pointer;
+}
+
+.info-button-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-bubble {
+    visibility: hidden;
+    width: 200px;
+    background-color: #d17ee8ec;
+    color: white;
+    text-align: center;
+    font-size: small;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 650%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+@media (hover: hover) {
+    .tooltip-container:hover .tooltip-bubble {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@media (hover: none) {
+    .tooltip-container:focus .tooltip-bubble {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 @media (max-width:700px) {

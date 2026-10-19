@@ -15,6 +15,7 @@ def gift(
     gifts_received = db.scalars(
         select(Gift)
         .where(Gift.receiver_id == current_user.id)
+        .order_by(Gift.created_at.asc())
         .options(
             joinedload(Gift.giver)
             .joinedload(User.avatar),

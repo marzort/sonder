@@ -3,6 +3,7 @@
     display: flex;
     flex-direction: column;
     box-sizing: border-box;
+    align-items: center;
 }
 
 .meeting-header {
@@ -25,6 +26,16 @@
 .meeting-status {
     font-weight: 200;
     line-height: 2;
+}
+
+.garden-image {
+    width: 200px;
+    height: 200px;
+}
+
+.night-sky-image {
+    width: 200px;
+    height: 200px;
 }
 
 .view-meetings-button,

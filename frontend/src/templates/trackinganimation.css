@@ -1,0 +1,41 @@
+.tracker-animation {
+    overflow: hidden;
+    width: 100%;
+    max-width: 600px;
+    background-color: blueviolet;
+    box-sizing: border-box;
+    padding: 20px;
+    border-style:solid;
+    border-radius: 10px;
+    border-color:black;
+    border-width:5px;
+    
+}
+
+.scroll-track{
+    display: flex;
+    width: max-content;
+    animation: scrollLeft 20s linear infinite;
+}
+
+.scroll-group {
+    display: flex;
+    flex-shrink: 0;
+    gap: 60px;
+    padding-right: 60px;
+}
+
+.cloud-box{
+    flex-shrink: 0;
+}
+
+.cloud-box img {
+    height: auto;
+    width: 250px;
+    display: block;
+}
+
+@keyframes scrollLeft {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
