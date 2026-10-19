@@ -159,6 +159,49 @@
     cursor: pointer;
 }
 
+.info-button-icon {
+  width: 20px;
+  height: 20px;
+}
+
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-bubble {
+    visibility: hidden;
+    width: 200px;
+    background-color: #d17ee8ec;
+    color: white;
+    text-align: center;
+    font-size: small;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: -5px;
+    left: 650%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+@media (hover: hover) {
+    .tooltip-container:hover .tooltip-bubble {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@media (hover: none) {
+    .tooltip-container:focus .tooltip-bubble {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
 @media (max-width:700px) {
     .garden-area {
         grid-template-columns: repeat(3, minmax(0, 1fr));
