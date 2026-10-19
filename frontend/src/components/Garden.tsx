@@ -5,6 +5,7 @@ import type { Gift } from '../api'
 import Avatar from './Avatar'
 import styles from '../templates/garden.module.css'
 import '../templates/popup.css'
+import info from '../assets/info_icon.svg'
 
 interface GardenProps {
     token: string,
@@ -38,17 +39,19 @@ export default function Garden({
 
     return (
         <section className={styles['garden-screen']}>
-            <div className={styles['garden-header']}>
-                <div>
-                    <p className={styles['garden-label']}>Garden</p>
-                </div>
-            </div>
 
             {message && (
                 <p className="error-message">
                     {message}
                 </p>
             )}
+
+            <div className={styles['tooltip-container']}>
+                <img src={info} alt="info button" className={styles['info-button-icon']}/>
+                <span className={styles['tooltip-bubble']}>
+                    Click on the flowers to view info!
+                </span>
+            </div>
 
             <div className={styles['garden-area']}>
                 {gifts.length === 0 ? (
