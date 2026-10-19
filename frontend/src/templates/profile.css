@@ -180,9 +180,18 @@
     transition: opacity 0.3s;
 }
 
-.tooltip-container:hover .tooltip-bubble {
-    visibility: visible;
-    opacity: 1;
+@media (hover: hover) {
+    .tooltip-container:hover .tooltip-bubble {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+@media (hover: none) {
+    .tooltip-container:focus .tooltip-bubble {
+        visibility: visible;
+        opacity: 1;
+    }
 }
 
 @media (max-width: 700px) {
