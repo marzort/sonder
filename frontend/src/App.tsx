@@ -104,6 +104,18 @@ function App() {
   async function handleLogout() {
     const token = localStorage.getItem('access_token')
 
+    if (socketRef.current) {
+     socketRef.current.onclose = (event) => {
+      console.log('Websocket cleanly closed from logout:', event.code, event.reason)
+
+      localStorage.removeItem('access_token')
+      setToken(null)
+      setProfile(null)
+      setScreen('profile')
+      socketRef.current = null
+     }
+    }
+
     try {
       await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
@@ -113,10 +125,13 @@ function App() {
       })
     } catch (error) {
       console.error('Logout request failed:', error)
-    } finally {
-      localStorage.removeItem('access_token')
-      setToken(null)
-      setProfile(null)
+
+      if (!socketRef.current) {
+        localStorage.removeItem('access_token')
+        setToken(null)
+        setProfile(null)
+        setScreen('profile')
+      }
     }
   }
 
