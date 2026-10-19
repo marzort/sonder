@@ -9,7 +9,7 @@ from auth import get_current_user
 from datetime import datetime, timezone
 from .websocket import manager
 
-NEARBY_DISTANCE_METERS = 50
+NEARBY_DISTANCE_METERS = 20
 
 router = APIRouter()
 
