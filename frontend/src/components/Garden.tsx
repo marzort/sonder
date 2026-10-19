@@ -88,13 +88,16 @@ export default function Garden({
                         </button>
 
                         <div className={styles['gift-preview']}>
-                            <img
+                            <div className={styles['gift-image-container']}>
+                                <img
                                 src={GIFT_CHOICES.find(
                                     (flower) => flower.id === giftBeingViewed.gift_choice.id
                                 )?.image}
                                 alt="Gift being viewed"
                                 className={styles['gift-received']}
-                            />
+                                />
+                            </div>
+                            
 
                             <div className={styles['gift-info']}>
                                 <h3>{giftBeingViewed.gift_choice.name}</h3>
