@@ -156,6 +156,35 @@
     0 0 0 3.5px #a250e9;
 }
 
+.tooltip-container {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.tooltip-bubble {
+    visibility: hidden;
+    width: 100px;
+    background-color: #d17ee8ec;
+    color: white;
+    text-align: center;
+    font-size: small;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip-container:hover .tooltip-bubble {
+    visibility: visible;
+    opacity: 1;
+}
+
 @media (max-width: 700px) {
     .profile-card {
         padding: 16px;
