@@ -78,11 +78,6 @@ export default function Explore({
 
     return (
         <section className="explore-screen">
-            <div className="explore-header">
-                <div>
-                    <p className="explore-label">Explore</p>
-                </div>
-            </div>
 
             {!enabled && (
                 <div className="">
