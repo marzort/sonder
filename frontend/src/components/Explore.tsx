@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState, useCallback } from "react"
 import { useLocation } from "../hooks/useLocation"
+import type { UserLocation } from "../hooks/useLocation"
 import { sendLocation, setLocationSharing } from "../api"
 import TrackingAnimation from "./TrackingAnimation"
 
@@ -57,24 +58,20 @@ export default function Explore({
         }
     }
 
-    const {
-        location,
-    } = useLocation(enabled)
+    const handleThrottledLocationChange = useCallback((throttledLocation: UserLocation) => {
+        if (!token) return
 
-    useEffect(() => {
-        if (!enabled || !location) {
-            console.log("Not sending location.")
-            return
-        }
+        console.log("Sending throttled location update to backend:", throttledLocation)
+        sendLocation(token, throttledLocation)
+            .then((result) => {
+                console.log("Location successfully saved:", result)
+            })
+            .catch((error) => {
+                console.error("Failed to save location:", error)
+            })
+    }, [token])
 
-        sendLocation(token, location)
-        .then((result) => {
-            console.log("Location successfully saved:", result)
-        })
-        .catch((error) => {
-            console.error("Failed to save location:", error)
-        })
-    }, [location, enabled, token])
+    useLocation(enabled, handleThrottledLocationChange)
 
     return (
         <section className="explore-screen">
