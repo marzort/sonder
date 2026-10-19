@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 
 export interface UserLocation {
     latitude: number
@@ -12,12 +12,17 @@ export type LocationPermission =
     | "denied"
     | "unsupported"
 
-//const LOCATION_SEND_INTERVAL = 10_000
+const LOCATION_SEND_INTERVAL = 30_000
 
-export function useLocation(enabled: boolean) {
+export function useLocation(
+    enabled: boolean,
+    onThrottledLocationChange?: (loc: UserLocation) => void
+) {
     const [location, setLocation] = useState<UserLocation | null>(null)
     const [error, setError] = useState<string | null>(null)
     const [permission, setPermission] = useState<LocationPermission>("prompt")
+
+    const lastSentTimeRef = useRef<number>(0)
 
     const isSupported = 
         typeof navigator !== "undefined" &&
@@ -69,13 +74,24 @@ export function useLocation(enabled: boolean) {
                         position.coords
                     )
 
-                    setLocation({
+                    const newLocation: UserLocation = {
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         accuracy: position.coords.accuracy
-                    })
+                    }
+
+                    setLocation(newLocation)
 
                     setError(null)
+
+                    const now = Date.now()
+                    if (now - lastSentTimeRef.current >= LOCATION_SEND_INTERVAL) {
+                        if (onThrottledLocationChange) {
+                            console.log("Throttled limit cleared! Sending to backend...")
+                            onThrottledLocationChange(newLocation)
+                        }
+                        lastSentTimeRef.current = now
+                    }
                 },
                 (error) => {
                     if (!isActive) {
@@ -221,7 +237,7 @@ export function useLocation(enabled: boolean) {
                 permissionStatus.onchange = null
             }
         }
-    }, [enabled, isSupported])
+    }, [enabled, isSupported, onThrottledLocationChange])
 
     return {
         location,
