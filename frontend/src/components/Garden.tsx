@@ -18,6 +18,7 @@ export default function Garden({
     const [gifts, setGifts] = useState<Gift[]>([])
     const [isOpen, setIsOpen] = useState(false)
     const [giftBeingViewed, setGiftBeingViewed] = useState<Gift | null>(null)
+    const [infoIsOpen, setInfoIsOpen] = useState(false)
 
     useEffect(() => {
         async function loadGifts() {
@@ -37,6 +38,10 @@ export default function Garden({
     loadGifts()
     }, [token])
 
+    const toggleTooltip = () => {
+        setInfoIsOpen(!infoIsOpen)
+    }
+
     return (
         <section className={styles['garden-screen']}>
 
@@ -47,10 +52,20 @@ export default function Garden({
             )}
 
             <div className={styles['tooltip-container']}>
-                <img src={info} alt="info button" className={styles['info-button-icon']}/>
-                <span className={styles['tooltip-bubble']}>
-                    Click on the flowers to view info!
-                </span>
+                <button
+                    type="button"
+                    className={styles["tooltip-trigger"]}
+                    onClick={toggleTooltip}
+                    aria-expanded={infoIsOpen}
+                >
+                    <img src={info} alt="info button" className={styles['info-button-icon']}/>
+                </button>
+
+                {infoIsOpen && (
+                    <div className={styles["tooltip-box"]}>
+                        <p>Click on the flowers to view info!</p>
+                    </div>
+                )}
             </div>
 
             <div className={styles['garden-area']}>
