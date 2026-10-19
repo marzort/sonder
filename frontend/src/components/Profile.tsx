@@ -5,27 +5,7 @@ import Avatar from './Avatar'
 import AvatarCustomizer from './AvatarCustomizer'
 import '../templates/profile.css'
 
-import cactus from '../assets/flowers/cactus.svg'
-import daisy from '../assets/flowers/daisy.svg'
-import tulip from '../assets/flowers/tulip.svg'
-
-const gift_choices = [
-    {
-        id: 1,
-        name: 'Cactus',
-        image: cactus
-    },
-    {
-        id: 2,
-        name: 'Daisy',
-        image: daisy
-    },
-    {
-        id: 3,
-        name: 'Tulip',
-        image: tulip
-    }
-]
+import { GIFT_CHOICES } from '../data/giftChoices'
 
 interface ProfileProps {
     profile: UserProfile
@@ -169,7 +149,7 @@ function Profile({
                         </div>
                         
                         <div className="gift-choices">
-                            {gift_choices.map((flower) => (
+                            {GIFT_CHOICES.map((flower) => (
                                 <img
                                     key={flower.id}
                                     src={flower.image}
