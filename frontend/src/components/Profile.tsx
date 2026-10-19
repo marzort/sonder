@@ -150,6 +150,7 @@ function Profile({
                         
                         <div className="gift-choices">
                             {GIFT_CHOICES.map((flower) => (
+                                <div className="tooltip-container">
                                 <img
                                     key={flower.id}
                                     src={flower.image}
@@ -159,6 +160,8 @@ function Profile({
                                     }`}
                                     onClick={() => setGift(flower.id)}
                                 />
+                                <span className="tooltip-bubble">{flower.name}</span>
+                                </div>
                             ))}
                         </div>
 
