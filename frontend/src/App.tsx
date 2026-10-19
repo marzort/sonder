@@ -102,36 +102,29 @@ function App() {
   }
 
   async function handleLogout() {
-    const token = localStorage.getItem('access_token')
+    const activeToken = token || localStorage.getItem('access_token')
 
     if (socketRef.current) {
-     socketRef.current.onclose = (event) => {
-      console.log('Websocket cleanly closed from logout:', event.code, event.reason)
-
-      localStorage.removeItem('access_token')
-      setToken(null)
-      setProfile(null)
-      setScreen('profile')
-      socketRef.current = null
-     }
+     socketRef.current.onclose = null
+     socketRef.current.onerror = null
+     socketRef.current.close()
+     socketRef.current = null
     }
 
-    try {
-      await fetch(`${import.meta.env.VITE_API_URL}/logout`, {
+    localStorage.removeItem('access_token')
+    setToken(null)
+    setProfile(null)
+    setScreen('profile')
+
+    if (activeToken) {
+      fetch(`${import.meta.env.VITE_API_URL}/logout`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${activeToken}`
         }
+      }).catch((error) => {
+        console.error('Background logout clean-up failed:', error)
       })
-    } catch (error) {
-      console.error('Logout request failed:', error)
-
-      if (!socketRef.current) {
-        localStorage.removeItem('access_token')
-        setToken(null)
-        setProfile(null)
-        setScreen('profile')
-      }
     }
   }
 
