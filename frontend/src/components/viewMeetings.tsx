@@ -4,6 +4,8 @@ import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
 
 import '../templates/viewmeetings.css'
+import night from '../assets/meeting/night.svg'
+import gardenimage from '../assets/meeting/garden.svg'
 
 import { GIFT_CHOICES } from '../data/giftChoices'
 
@@ -119,7 +121,6 @@ export default function ViewMeetings({
         <section className="meeting-screen">
             <div className="meeting-header">
                 <div>
-                    <p className="meetings-label">Meetings</p>
                     <h2>Let's see who you've met!</h2>
                 </div>
             </div>
@@ -134,13 +135,27 @@ export default function ViewMeetings({
                 <div className="meeting-launcher">
                 {unviewedMeetings.length === 0 ? (
                     meetings.length > 0 ? (
-                        <p className="meeting-status">
-                            You have no unviewed meetings.
-                            <br />
-                            Go check out your garden!
-                        </p>
+                        <div className="no-current-meetings">
+                            <img 
+                                src={gardenimage} 
+                                alt="garden icon"
+                                className="garden-image"    
+                            />
+                            <p className="meeting-status">
+                                You have no unviewed meetings.
+                                <br />
+                                Go check out your garden!
+                            </p>
+                        </div>
                     ) : (
-                        <p className="meeting-status">You haven't met anyone yet.</p>
+                        <div className="never-met">
+                            <img 
+                                src={night} 
+                                alt="night sky"
+                                className="night-sky-image"
+                            />
+                            <p className="meeting-status">You haven't met anyone yet.</p>
+                        </div>
                     )
                 ) : (
                     <button
