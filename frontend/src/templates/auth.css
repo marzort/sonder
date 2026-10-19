@@ -63,3 +63,9 @@
         padding: 24px;
     }
 }
+
+@media (max-width: 400px) {
+    .card-description {
+        font-size: 0.8rem;
+    }
+}

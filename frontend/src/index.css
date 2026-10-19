@@ -58,7 +58,6 @@ button {
   padding: 8px 20px;
   border-radius: 75%;
   text-shadow: 3px 2.7px 1px rgb(243, 167, 249);
-  font-size: 2.5rem;
   font-weight: 400;
   font-size: 5rem;
   letter-spacing: 0.05rem;
@@ -144,6 +143,10 @@ button {
 
   .app-container {
     padding-top: 64px;
+  }
+
+  .app-header h1 {
+    font-size: 4rem;
   }
 
   .loading-card {
