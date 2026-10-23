@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import type { UserProfile } from '../api'
 import Avatar from './Avatar'
 import EditProfile from './EditProfile'
@@ -26,8 +26,29 @@ function Profile({
 
     const chosenGift = GIFT_CHOICES.find(flower => flower.id === profile.gift_flower_id)
 
+    useEffect(() => {
+        if (!message) return
+
+        const timer = setTimeout(() => {
+            setMessage('')
+        }, 3000)
+
+        return () => clearTimeout(timer)
+    }, [message])
+
+    const isError = message.toLowerCase().includes('could not') || message.toLowerCase().includes('error')
+
     return (
         <section className="profile-card">
+
+            {message && (
+                <div className="toast-container">
+                    <div className={`profile-message-popup ${isError ? 'error' : 'success'}`}>
+                        {message}
+                    </div>
+                </div>
+            )}
+
             <div className="profile-header">
                 <h2>{profile.username}</h2>
                 {isOwner && (
@@ -42,8 +63,6 @@ function Profile({
                     </button>
                 )}
             </div>
-
-            {message && <div className="profile-message">{message}</div>}
 
             {!isEditing && (
                 <div className="profile-view-only">
