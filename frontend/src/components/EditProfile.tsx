@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { updateAvatar, updateGift, updateGreeting } from '../api'
 import type { UserProfile } from '../api'
+import Avatar from './Avatar'
 import AvatarCustomizer from './AvatarCustomizer'
-import '../templates/profile.css'
+import '../templates/editprofile.css'
 
 import { GIFT_CHOICES } from '../data/giftChoices'
 
@@ -97,6 +98,18 @@ function EditProfile({
 
     return (
         <section className="edit-profile-section">
+            <div className="avatar-preview">
+                <Avatar 
+                    eyes={profile.avatar.eyes}
+                    mouth={profile.avatar.mouth}
+                    top={profile.avatar.hair}
+                    clothes={profile.avatar.clothes}
+                    skinColor={profile.avatar.skin_color}
+                    hairColor={profile.avatar.hair_color}
+                    clothesColor={profile.avatar.clothes_color}
+                />
+            </div>
+
             <div className="edit-greeting">
                 <div>
                     <label htmlFor="greeting">Greeting:</label>
@@ -234,16 +247,18 @@ function EditProfile({
                         })
                     }
                 />
-            </div>
 
-            <div className="save-section">
+                <div className="save-section">
                 <button
-                    className="primary button save-button"
+                    className="save-avatar-button"
                     onClick={handleAvatarUpdate}
                 >
                     Save Avatar
                 </button>
             </div>
+            </div>
+
+            
         </section>
     )
 }
