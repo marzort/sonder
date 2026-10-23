@@ -241,6 +241,7 @@ function App() {
       {profile && token && screen === 'profile' && (
         <Profile 
           profile={profile}
+          currentUserId={profile.id}
           token={token}
           onProfileUpdate={setProfile}
         />
