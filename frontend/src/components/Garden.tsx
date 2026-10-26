@@ -9,10 +9,12 @@ import info from '../assets/info_icon.svg'
 
 interface GardenProps {
     token: string,
+    onFriendProfile: (friendId: number) => void
 }
 
 export default function Garden({
     token,
+    onFriendProfile
 }: GardenProps) {
     const [message, setMessage] = useState('')
     const [gifts, setGifts] = useState<Gift[]>([])
@@ -141,6 +143,15 @@ export default function Garden({
                             </div>
 
                             <p>{giftBeingViewed.given_by.greeting}</p>
+
+                            <div className={styles['view-profile-option']}>
+                                <button
+                                    className={styles['view-profile-button']}
+                                    onClick={() => onFriendProfile(giftBeingViewed.given_by.id)}
+                                >
+                                    View Profile
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
