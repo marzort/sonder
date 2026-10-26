@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from 'react'
 import AuthForm from './components/AuthForm'
 import Profile from './components/Profile'
-import { getProfile } from './api'
+import { getProfile, getFriendProfile } from './api'
 import type { UserProfile } from './api'
 import skyBackground from './assets/sky_background.png'
 import Explore from './components/Explore'
@@ -16,6 +16,8 @@ function App() {
 
   const [profile, setProfile] = useState<UserProfile | null>(null)
 
+  const [friendProfile, setFriendProfile] = useState<UserProfile | null>(null)
+
   const [loading, setLoading] = useState(true)
 
   const [meetingCount, setMeetingCount] = useState(0)
@@ -23,7 +25,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [screen, setScreen] = useState<
-    'profile' | 'explore' | 'meetings' | 'garden'
+    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile'
   >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -130,6 +132,18 @@ function App() {
 
   function handleMeetings() {
     setScreen('meetings')
+  }
+
+  async function handleFriendProfile(friendId: number) {
+    if (!token) return
+    try {
+      const data = await getFriendProfile(friendId, token)
+      setFriendProfile(data)
+      setScreen('view_profile')
+    } catch (error) {
+      console.error(error)
+      alert(error instanceof Error ? error.message : 'Failed to view profile.')
+    }
   }
 
   if (loading) {
@@ -266,7 +280,29 @@ function App() {
       {profile && token && screen === 'garden' && (
         <Garden
           token={token}
+          onFriendProfile={handleFriendProfile}
         />
+      )}
+
+      {profile && token && screen == 'view_profile' && friendProfile && (
+        <div className="friend-profile-view">
+          <button
+            className="back-button"
+            onClick={() => {
+              setScreen('garden')
+              setFriendProfile(null)
+            }}
+          >
+            Back to Garden
+          </button>
+          
+          <Profile 
+            profile={friendProfile}
+            currentUserId={profile.id}
+            token={token}
+            onProfileUpdate={() => {}}
+          />
+        </div>
       )}
       </div>
     </main>
