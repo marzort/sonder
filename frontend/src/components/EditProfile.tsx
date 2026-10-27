@@ -141,20 +141,23 @@ function EditProfile({
                 </div>
 
                 <div className="gift-choices">
-                    {GIFT_CHOICES.map((flower) => (
-                        <div className="tooltip-container">
-                            <img 
-                                key={flower.id}
-                                src={flower.image}
-                                alt={flower.name}
-                                className={`gift ${
-                                    gift === flower.id ? 'selected' : ''
-                                }`}
-                                onClick={() => setGift(flower.id)}
-                            />
-                            <span className="tooltip-bubble">{flower.name}</span>
-                        </div>
-                    ))}
+                    {GIFT_CHOICES.map((flower) => {
+                        const FlowerImg = flower.image
+
+                        return (
+                            <div key={flower.id} className="tooltip-container">
+                                <FlowerImg 
+                                    className={`gift ${
+                                        gift === flower.id ? 'selected' : ''
+                                    }`}
+                                    onClick={() => setGift(flower.id)}
+                                    role="button"
+                                    aria-label={flower.name}
+                                />
+                                <span className="tooltip-bubble">{flower.name}</span>
+                            </div>
+                        )
+                    })}
                 </div>
 
                 <div>

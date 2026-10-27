@@ -88,15 +88,19 @@ function Profile({
                         <h3>Current Gift: {chosenGift ? chosenGift.name : 'No gift chosen.'}</h3>
                         {chosenGift ? (
                             <div className="gift-showcase">
-                                <img src={chosenGift.image} alt={chosenGift.name} className="gift-static"/>
+                                {(() => {
+                                    const GiftImg = chosenGift.image
+
+                                    return <GiftImg className="gift-static" aria-label={chosenGift.name} />
+                                })()}
                             </div>
                         ) : (
                             <p>No gift to display.</p>
                         )}
                     </div>
-                    </div>
-                    
                 </div>
+                    
+            </div>
             )}
 
                 {isEditing && isOwner && (

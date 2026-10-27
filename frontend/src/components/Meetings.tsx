@@ -4,8 +4,8 @@ import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
 
 import '../templates/meetings.css'
-import night from '../assets/meeting/night.svg'
-import gardenimage from '../assets/meeting/garden.svg'
+import NightImg from '../assets/meeting/night.svg?react'
+import GardenImg from '../assets/meeting/garden.svg?react'
 
 import { GIFT_CHOICES } from '../data/giftChoices'
 
@@ -117,6 +117,15 @@ export default function Meetings({
         }
     }
 
+    const receivedFlower = meetingBeingViewed
+    ? GIFT_CHOICES.find((flower) => flower.id === meetingBeingViewed.gift_received)
+    : null
+
+    const ReceivedGiftImg = receivedFlower?.image
+
+    const userFlower = GIFT_CHOICES.find((flower) => flower.id === profile.gift_flower_id)
+    const UserGiftImg = userFlower?.image
+
     return (
         <section className="meeting-screen">
             <div className="meeting-header">
@@ -136,11 +145,7 @@ export default function Meetings({
                 {unviewedMeetings.length === 0 ? (
                     meetings.length > 0 ? (
                         <div className="no-current-meetings">
-                            <img 
-                                src={gardenimage} 
-                                alt="garden icon"
-                                className="garden-image"    
-                            />
+                            <GardenImg className="garden-image" />
                             <p className="meeting-status">
                                 You have no unviewed meetings.
                                 <br />
@@ -149,11 +154,7 @@ export default function Meetings({
                         </div>
                     ) : (
                         <div className="never-met">
-                            <img 
-                                src={night} 
-                                alt="night sky"
-                                className="night-sky-image"
-                            />
+                            <NightImg className="night-sky-image" />
                             <p className="meeting-status">You haven't met anyone yet.</p>
                         </div>
                     )
@@ -207,23 +208,19 @@ export default function Meetings({
                                 {pageNum === 2 && (
                                     <div className="gift-exchange">
                                         <div className="other-gift">
-                                            <img 
-                                                src={GIFT_CHOICES.find(
-                                                    (flower) => flower.id === meetingBeingViewed.gift_received
-                                                )?.image}
-                                                alt="Gift received"
-                                                className="gift-received"
-                                            />
+                                            {ReceivedGiftImg ? (
+                                                <ReceivedGiftImg className="gift-received" aria-label="Gift received" />
+                                            ) : (
+                                                <span className="no-gift">No gift received</span>
+                                            )}
                                         </div>
 
                                         <div className="user-gift">
-                                            <img 
-                                                src={GIFT_CHOICES.find(
-                                                    (flower) => flower.id === profile.gift_flower_id
-                                                )?.image}
-                                                alt="Gift given"
-                                                className="gift-given"
-                                            />
+                                            {UserGiftImg ? (
+                                                <UserGiftImg className="gift-given" aria-label="Gift given" />
+                                            ) : (
+                                                <span className="no-gift">No gift given</span>
+                                            )}
                                         </div>
                                     </div>
                                 )}
