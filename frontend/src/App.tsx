@@ -5,7 +5,7 @@ import { getProfile, getFriendProfile } from './api'
 import type { UserProfile } from './api'
 import skyBackground from './assets/sky_background.png'
 import Explore from './components/Explore'
-import ViewMeetings from './components/viewMeetings'
+import Meetings from './components/Meetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
 
@@ -270,7 +270,7 @@ function App() {
       )}
 
       {profile && token && screen === 'meetings' && (
-        <ViewMeetings
+        <Meetings
           profile={profile}
           token={token}
           onMeetingCountChange={setMeetingCount}

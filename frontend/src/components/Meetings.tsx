@@ -3,23 +3,23 @@ import type { UserProfile, Meeting } from '../api'
 import { getMeetings, markMeetingViewed } from '../api'
 import Avatar from './Avatar'
 
-import '../templates/viewmeetings.css'
+import '../templates/meetings.css'
 import night from '../assets/meeting/night.svg'
 import gardenimage from '../assets/meeting/garden.svg'
 
 import { GIFT_CHOICES } from '../data/giftChoices'
 
-interface ViewMeetingsProps {
+interface MeetingsProps {
     profile: UserProfile,
     token: string,
     onMeetingCountChange: (count: number) => void
 }
 
-export default function ViewMeetings({
+export default function Meetings({
     profile,
     token,
     onMeetingCountChange
-}: ViewMeetingsProps) {
+}: MeetingsProps) {
     const [message, setMessage] = useState('')
     const [meetings, setMeetings] = useState<Meeting[]>([])
 
