@@ -309,3 +309,80 @@
             rotate(-180deg);
     }
 }
+
+@media (max-width: 700px) {
+    .meeting-screen {
+        height: 100dvh;
+        justify-content: flex-start;
+        padding: 16px;
+    }
+
+    .meeting-header {
+        margin-bottom: 12px;
+    }
+
+    .meeting-card {
+        flex: 0 1 auto;
+        height: auto;
+        width: 95%;
+        max-width: 420px;
+        margin: 0 auto;
+    }
+
+    .meeting-page {
+        grid-template-columns: 0.8fr 1.4fr 0.8fr;
+        grid-template-rows: auto auto auto;
+        gap: 4px;
+        height: auto;
+    }
+
+    .exchange {
+        height: auto;
+        min-height: 90px;
+    }
+
+    .greetings {
+        gap: 4px;
+    }
+
+    .other-avatar-preview,
+    .user-avatar-preview {
+        padding: 4px;
+        border-radius: 12px;
+    }
+
+    .other-greeting,
+    .user-greeting {
+        width: 100%;
+        max-width: 125px;
+        min-width: 85px;
+        height: auto;
+        min-height: unset;
+        padding: 8px 10px;
+        font-size: 0.75rem;
+    }
+
+    .other-greeting {
+        transform: translate(12px, -14px);
+    }
+
+    .user-greeting {
+        transform: translate(-12px, 14px);
+    }
+
+    .other-greeting::after {
+        top: -8px;
+        right: 12px;
+    }
+
+    .user-greeting::after {
+        bottom: -8px;
+        left: 12px;
+    }
+
+    .next-button {
+        margin-top: 12px;
+        padding: 8px 14px;
+        font-size: 0.9rem;
+    }
+}
