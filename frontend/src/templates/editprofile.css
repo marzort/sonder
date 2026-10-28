@@ -9,7 +9,7 @@
     grid-column: 1;
     grid-row: 1;
     width: 100%;
-    background: #a62bed7b;
+    background: #c950e1;
     border: 7px double #68227b;
     border-radius: 16px;
     padding: 28px;
@@ -184,8 +184,7 @@
         width: 75%;
         max-width: 500px;
         padding: 10px;
-        background: #ba6ce7;
-        border-radius: 12px;
+        background: #c950e1;
         text-align: center;
     }
 
