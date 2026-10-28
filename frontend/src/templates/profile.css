@@ -1,5 +1,5 @@
 .profile-card {
-    background: white;
+    background: rgb(227, 147, 223);
     border-radius: 16px;
     padding: 32px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
@@ -38,8 +38,8 @@
     grid-column: 1;
     grid-row: 1;
     width: 100%;
-    background: linear-gradient(180deg, #eef2ff 0%, #f9fafb 100%);
-    border: 1px solid #e0e7ff;
+    background: #a62bed7b;
+    border: 7px double #68227b;
     border-radius: 16px;
     padding: 28px;
     text-align: center;
@@ -61,7 +61,7 @@
 
 .greeting-text {
     margin-top: 0;
-    background-color: #e536cb3a;
+    background-color: #e536cb68;
     padding: 10px;
 
     border-style:double;
@@ -79,6 +79,8 @@
 .gift-static{
     width: 100px;
     height: 100px;
+
+    background-color: #7e1ae291;
     box-sizing: border-box;
     border: 10px double #68227b;
     border-radius: 12px;
