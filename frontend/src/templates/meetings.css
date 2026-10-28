@@ -95,8 +95,8 @@
 
     padding: clamp(8px, 2vw, 28px);
 
-    background: linear-gradient(180deg, #eef2ff 0%, #f9fafb 100%);
-    border: 1px solid #e0e7ff;
+    background: #db53e87b;
+    border: 7px double #68227b;
     border-radius: 16px;
 
     text-align: center;
@@ -212,7 +212,7 @@
     width: clamp(60px, 10vw, 100px);
     height: clamp(60px, 10vw, 100px);
     box-sizing: border-box;
-    border: 1px solid #d1d5db;
+    border: 7px double #7b299a;
     border-radius: 12px;
     background-color: #f69ce2;
     padding: clamp(4px, 1vw, 8px);
@@ -325,7 +325,7 @@
         flex: 0 1 auto;
         height: auto;
         width: 95%;
-        max-width: 420px;
+        max-width: 470px;
         margin: 0 auto;
     }
 
