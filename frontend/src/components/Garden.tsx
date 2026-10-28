@@ -44,6 +44,12 @@ export default function Garden({
         setInfoIsOpen(!infoIsOpen)
     }
 
+    const flowerBeingViewed = giftBeingViewed
+        ? GIFT_CHOICES.find((flower) => flower.id === giftBeingViewed.gift_choice.id)
+        : null
+    
+    const ModalFlowerImg = flowerBeingViewed?.image
+
     return (
         <section className={styles['garden-screen']}>
 
@@ -74,24 +80,30 @@ export default function Garden({
                 {gifts.length === 0 ? (
                     <p>Your garden is currently empty.</p>
                 ) : (
-                    gifts.map((gift) => (
-                        <div
-                            key={gift.id}
-                            className={styles['gift-plot']}
-                            onClick={() => {
-                                setIsOpen(true)
-                                setGiftBeingViewed(gift)
-                            }}
-                        >
-                            <img
-                                src={GIFT_CHOICES.find(
-                                    (flower) => flower.id === gift.gift_choice.id
-                                )?.image}
-                                alt="Gift"
-                                className={styles.gift}
-                            />
-                        </div>
-                    ))
+                    gifts.map((gift) => {
+                        const matchedFlower = GIFT_CHOICES.find(
+                            (flower) => flower.id === gift.gift_choice.id
+                        )
+
+                        const PlotFlowerImg = matchedFlower?.image
+
+                        return (
+                            <div
+                                key={gift.id}
+                                className={styles['gift-plot']}
+                                onClick={() => {
+                                    setIsOpen(true)
+                                    setGiftBeingViewed(gift)
+                                }}
+                            >
+                                {PlotFlowerImg ? (
+                                    <PlotFlowerImg className={styles['gift']} aria-label="Gift" />
+                                ) : (
+                                    <span className="no-gift">Gift</span>
+                                )}
+                            </div>
+                        )
+                    })
                 )}
             </div>
 
@@ -109,13 +121,11 @@ export default function Garden({
 
                         <div className={styles['gift-preview']}>
                             <div className={styles['gift-image-container']}>
-                                <img
-                                src={GIFT_CHOICES.find(
-                                    (flower) => flower.id === giftBeingViewed.gift_choice.id
-                                )?.image}
-                                alt="Gift being viewed"
-                                className={styles['gift-received']}
-                                />
+                                {ModalFlowerImg ? (
+                                    <ModalFlowerImg className={styles['gift-received']} aria-label="Gift being viewed" />
+                                ) : (
+                                    <span className="no-gift-viewed">Received gift</span>
+                                )}
                             </div>
                             
 
