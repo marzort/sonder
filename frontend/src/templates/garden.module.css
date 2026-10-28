@@ -68,7 +68,7 @@
 }
 
 .modal-content {
-    background: white;
+    background: rgb(183, 125, 206);
     border-radius: 8px;
     position: relative;
 
@@ -107,7 +107,7 @@
     justify-content: center;
 
     background-color: rgb(196, 97, 175);
-    border: 2px solid;
+    border: 7px double #68227b;
     box-sizing: border-box;
 }
 
@@ -130,10 +130,8 @@
     box-sizing: border-box;
 
     background-color: rgb(227, 135, 187);
-    border-style: solid;
-    border-color: black;
-    border-width: 2px;
-    border-radius: 5px;
+    border: 7px double #68227b;
+    border-radius: 8px;
     padding: 10px;
 
     text-align: center;
