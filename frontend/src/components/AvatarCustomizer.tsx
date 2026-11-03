@@ -58,9 +58,11 @@ export default function AvatarCustomizer({
     return (
         <div className="avatar-customizer">
 
-            <div className="customizer-section">
-                <h3>Skin</h3>
-
+            <details className="customizer-section">
+                <summary className="customizer-header">
+                    <h3>Skin</h3>
+                </summary>
+            
                 <div className="options-scroll">
                     <div className="color-options">
                     {SKIN_COLOR_OPTIONS.map((color) => (
@@ -76,10 +78,12 @@ export default function AvatarCustomizer({
                     ))}
                     </div>
                 </div>
-            </div>
+            </details>
             
-            <div className="customizer-section">
-                <h3>Eyes</h3>
+            <details className="customizer-section">
+                <summary className="customizer-header">
+                    <h3>Eyes</h3>
+                </summary>
 
                 <div className="options-scroll">
                     <div className="avatar-options">
@@ -94,10 +98,12 @@ export default function AvatarCustomizer({
                         ))}
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <div className="customizer-section">
-                <h3>Mouth</h3>
+            <details className="customizer-section">
+                <summary className="customizer-header">
+                        <h3>Mouth</h3>
+                </summary>
 
                 <div className="options-scroll">
                     <div className="avatar-options">
@@ -112,10 +118,12 @@ export default function AvatarCustomizer({
                         ))}
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <div className="customizer-section">
-                <h3>Hair</h3>
+            <details className="customizer-section">
+                <summary className="customizer-header">
+                    <h3>Hair</h3>
+                </summary>
 
                 <div className="options-scroll">
                     <div className="avatar-options">
@@ -146,11 +154,13 @@ export default function AvatarCustomizer({
                         ))}
                     </div>
                 </div>
-            </div>
+            </details>
 
-            <div className="customizer-section">
-                <h3>Clothes</h3>
-
+            <details className="customizer-section">
+                <summary className="customizer-header">
+                    <h3>Clothes</h3>
+                </summary>
+                
                 <div className="options-scroll">
                     <div className="avatar-options">
                         {CLOTHES_OPTIONS.map((clothesOption) => (
@@ -180,7 +190,7 @@ export default function AvatarCustomizer({
                         ))}
                     </div>
                 </div>
-            </div>
+            </details>
 
         </div>
     )
