@@ -46,13 +46,41 @@
 .customizer-section {
     margin-bottom: 24px;
     min-width: 0;
+
+    border: 3px solid #a953e6;
+    border-radius: 8px;
+    background: #bf82db;
 }
 
-.customizer-section h3 {
+.customizer-header {
+    padding: 14px 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    list-style: none;
+}
+
+.customizer-header::-webkit-details-marker {
+    display: none;
+}
+
+.customizer-header::after {
+    content: '▼';
+    font-size: 20px;
+    transition: transform 0.2s;
+}
+
+.customizer-header h3 {
     margin-top: 0;
-    margin-bottom: 12px;
+    margin-bottom: 0;
     color: #374151;
     font-size: 1rem;
+}
+
+details[open] .customizer-header::after {
+    transform: rotate(180deg);
 }
 
 .options-scroll {
@@ -62,14 +90,13 @@
     overflow-y: hidden;
     padding: 10px;
 
-    margin-top: 10px;
+    margin-top: 0;
 
-    border: 3px solid #a953e6;
-    border-radius: 8px;
-    background: #bf82db;
+    border-top: 2px solid #650d721e;
 
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
+    scrollbar-color: #570d72 #a953e6;
 }
 
 .options-scroll .avatar-options button {
