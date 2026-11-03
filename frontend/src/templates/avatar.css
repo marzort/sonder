@@ -96,6 +96,7 @@ details[open] .customizer-header::after {
 
     -webkit-overflow-scrolling: touch;
     scrollbar-width: thin;
+    scrollbar-color: #570d72 #a953e6;
 }
 
 .options-scroll .avatar-options button {
