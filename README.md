@@ -1,15 +1,51 @@
 # Sonder
-
-Connect with the world around you
-
-## Highlights
-
-- Virtually meet other users!
-- Exchange flower gifts with others!
-- Watch your garden grow as you meet more people!
+> **Connect with the world around you**
 
 ## Overview
-Sonder is a web application that seeks to connect people together in a way that has the option for little to no commitment. Many apps already exist that allow you to meet people around you and converse with them via instant messaging. However, from my own personal experience, as an introvert, I have come to realize that I like the sense of meeting new people but do not necessarily like the idea of engaging in long conversations with them. This could be for multiple reasons: the conversation could become stale as the participants realize that they do not have similar interests, or the pressure could become too much to try and find new topics to talk about. Or sometimes the social energy necessary for meaningful conversations is not present, leading to awkward or unpleasant encounters. With Sonder, I seek to alleviate those concerns. As more of an idle app, users can leave it open and running while they continue on with their lives. In the instance that they do come across someone else using the app, they will meet virtually and exchange custom, predetermined messages and gifts with each other. From there, their interaction would end, but the flower gifts they received would be planted in their garden to serve as memories of the meetings. That way, each user can look back on the collection of gifts they accrue over time; a reflection of all the people they have encountered before.
+**Sonder** is an ambient, low-friction social web application designed for low-commitment, meaningful human connection.
+
+Traditional social apps demand sustained conversation, which can feel draining, high-pressure, or awkward -- especially for introverts or during low social-energy moments. Sonder reimagines social interaction as an idle, continuous experience. Users keep the application open while going about their day. When two users cross paths virtually, the app facilitates an automatic exchange of custom gifts and messages. Interactions wrap up immediately, and received flowers are planted in each user's personal virtual garden. The garden then becomes a visual showcase of shared moments and digital encounters.
+
+---
+
+## Interface & Screenshots
+
+### Core Experience & Encounters
+| **Virtual Encounters** | **Profile Previews** |
+| :---: | :---: |
+| ![Meetings](assets/screenshots/greeting%20exchange.png) | ![Profile Preview](assets/screenshots/visit%20friend.png) |
+| *Automated user encounters and gift exchanges* | *View another user's profile card after meeting* |
+
+### Personalization & Progress
+| **Avatar Customization** |  **Personal Garden View** | 
+| :---: | :---: |
+| ![Avatar Customization](assets/screenshots/edit%20profile%202.png) | ![Virtual Garden](assets/screenshots/full%20garden.png) | 
+| *Personalize your visual presence* | *A dynamic, growing reflection of past connections* | 
+
+---
+
+## Key Features
+**Passive Virtual Encounters:** Connect with nearby, active users naturally without the pressure of live text chatting.
+**Custom Gift & Message Exchange:** Send and receive personalized pre-set messages and unique flower gifts.
+**Dynamic Garden Visualization:** Watch your virtual garden flourish as you encounter more people over time.
+**Low-Pressure Design:** Purposefully designed to reduce social fatigue and eliminate awkward small talk.
+
+---
+
+## Tech Stack
+* **Frontend:** React + Vite
+* **Backend:** Python + FastAPI
+* **Database:** PostGreSQL
+* **Real-Time / Networking:** Websockets, Geolocation API
+* **Deployment:** Netlify + Render
+
+---
+
+## Future Roadmap
+* **Seasonal Flower Varieties:** Introduce time-limited and event-based flower gifts.
+* **Location-Based Profile Additions:** Introduce achievement markers after visiting certain landmarks.
+
+---
 
 ## Author
-Maria Ortiz
+Designed and developed by **[Maria Ortiz](https://github.com/marzort)**
