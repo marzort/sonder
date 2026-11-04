@@ -10,25 +10,20 @@ Traditional social apps demand sustained conversation, which can feel draining, 
 
 ## Interface & Screenshots
 
-### Core Experience & Encounters
-| **Virtual Encounters** | **Profile Previews** |
-| :---: | :---: |
-| ![Meetings](assets/screenshots/greeting%20exchange.png) | ![Profile Preview](assets/screenshots/visit%20friend.png) |
-| *Automated user encounters and gift exchanges* | *View another user's profile card after meeting* |
-
-### Personalization & Progress
-| **Avatar Customization** |  **Personal Garden View** | 
-| :---: | :---: |
-| ![Avatar Customization](assets/screenshots/edit%20profile%202.png) | ![Virtual Garden](assets/screenshots/full%20garden.png) | 
-| *Personalize your visual presence* | *A dynamic, growing reflection of past connections* | 
+| Feature | Preview | Description |
+| :--- | :---: | :--- |
+| **Virtual Encounters** | <img src="assets/screenshots/greeting%20exchange.png" width="300" alt="Virtual Encounter"> | *Automated user encounters and gift exchanges* | 
+| **Profile Previews** | <img src="assets/screenshots/visit%20friend.png" width="300" alt="Greeting Exchange"> | *View another user's profile card after meeting* |
+| **Avatar Customization** | <img src="assets/screenshots/edit%20profile%202.png" width="300" alt="Avatar Customization"> | *Personalize your visual presence* |
+| **Personal Garden View** | <img src="assets/screenshots/full%20garden.png" width="300" alt="Virtual Garden"> | *A dynamic, growing reflection of past connections* |
 
 ---
 
 ## Key Features
-**Passive Virtual Encounters:** Connect with nearby, active users naturally without the pressure of live text chatting.
-**Custom Gift & Message Exchange:** Send and receive personalized pre-set messages and unique flower gifts.
-**Dynamic Garden Visualization:** Watch your virtual garden flourish as you encounter more people over time.
-**Low-Pressure Design:** Purposefully designed to reduce social fatigue and eliminate awkward small talk.
+* **Passive Virtual Encounters:** Connect with nearby, active users naturally without the pressure of live text chatting.
+* **Custom Gift & Message Exchange:** Send and receive personalized pre-set messages and unique flower gifts.
+* **Dynamic Garden Visualization:** Watch your virtual garden flourish as you encounter more people over time.
+* **Low-Pressure Design:** Purposefully designed to reduce social fatigue and eliminate awkward small talk.
 
 ---
 
