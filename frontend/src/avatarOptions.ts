@@ -23,10 +23,14 @@ export type MouthVariant = typeof MOUTH_OPTIONS[number]['value']
 export const TOP_OPTIONS = [
     {value: 'bigHair', label: 'Wavy'},
     {value: 'longButNotTooLong', label: 'Medium'},
-    {value: 'shortFlat', label: 'Short'},
+    {value: 'shortFlat', label: 'Short Flat'},
+    {value: 'shortRound', label: 'Short Round'},
     {value: 'straight02', label: 'Straight'},
     {value: 'shaggyMullet', label: 'Mullet'},
-    {value: 'dreads01', label: 'Fade'}
+    {value: 'dreads01', label: 'Fade'},
+    {value: 'frizzle', label: 'Frizzle'},
+    {value: 'fro', label: 'Fro'},
+    
 ]
 
 export type TopVariant = typeof TOP_OPTIONS[number]['value']
@@ -45,6 +49,7 @@ export type ClothesVariant = typeof CLOTHES_OPTIONS[number]['value']
 export const SKIN_COLOR_OPTIONS = [
     '614335',
     'd08b5b',
+    'ae5d29',
     'edb98a',
     'fd9841',
     'ffdbb4'
@@ -55,8 +60,11 @@ export type SkinColor = typeof SKIN_COLOR_OPTIONS[number]
 export const HAIR_COLOR_OPTIONS = [
     'a55728',
     '2c1b18',
+    'b58143',
     'd6b370',
+    '724133',
     '4a312c',
+    'f59797',
     'c93305',
     'e8e1e1'
 ]
@@ -64,6 +72,8 @@ export const HAIR_COLOR_OPTIONS = [
 export type HairColor = typeof HAIR_COLOR_OPTIONS[number]
 
 export const CLOTHES_COLOR_OPTIONS = [
+    '262e33',
+    '929598',
     '65c9ff',
     'a7ffc4',
     'ffffb1',

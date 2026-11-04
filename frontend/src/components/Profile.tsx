@@ -1,111 +1,72 @@
-import { useState } from 'react'
-import { updateAvatar, updateGreeting, updateGift } from '../api'
+import { useState, useEffect } from 'react'
 import type { UserProfile } from '../api'
 import Avatar from './Avatar'
-import AvatarCustomizer from './AvatarCustomizer'
+import EditProfile from './EditProfile'
 import '../templates/profile.css'
 
 import { GIFT_CHOICES } from '../data/giftChoices'
 
 interface ProfileProps {
     profile: UserProfile
+    currentUserId: number
     token: string
     onProfileUpdate: (profile: UserProfile) => void
 }
 
 function Profile({
     profile,
+    currentUserId,
     token,
     onProfileUpdate
 }: ProfileProps) {
     const [message, setMessage] = useState('')
-    const [greeting, setGreeting] = useState(profile.greeting)
-    const [gift, setGift] = useState(profile.gift_flower_id)
+    const [isEditing, setIsEditing] = useState(false)
 
-    async function handleAvatarUpdate() {
-        setMessage('')
+    const isOwner = currentUserId === profile.id
 
-        try {
-            const updatedAvatar = await updateAvatar(
-                token,
-                profile.avatar
-            )
+    const chosenGift = GIFT_CHOICES.find(flower => flower.id === profile.gift_flower_id)
 
-            onProfileUpdate({
-                ...profile,
-                avatar: updatedAvatar
-            })
+    useEffect(() => {
+        if (!message) return
 
-            setMessage('Avatar updated successfully!')
-        } catch (error) {
-            setMessage(
-                error instanceof Error
-                ? error.message
-                : 'Could not update avatar'
-            )
-        }
-    }
+        const timer = setTimeout(() => {
+            setMessage('')
+        }, 3000)
 
-    async function handleGreetingUpdate() {
-        setMessage('')
+        return () => clearTimeout(timer)
+    }, [message])
 
-        try {
-            const updated = await updateGreeting(
-                token,
-                greeting
-            )
-
-            onProfileUpdate({
-                ...profile,
-                greeting: updated.greeting
-            })
-
-            setMessage('Greeting updated successfully!')
-        } catch (error) {
-            setMessage(
-                error instanceof Error
-                ? error.message
-                : 'Could not update greeting'
-            )
-        }
-    }
-
-    async function handleGiftUpdate() {
-        setMessage('')
-
-        try {
-            const updated = await updateGift(
-                token,
-                gift
-            )
-
-            onProfileUpdate({
-                ...profile,
-                gift_flower_id: updated.gift
-            })
-
-            setMessage('Gift updated successfully!')
-        } catch (error) {
-            setMessage(
-                error instanceof Error
-                ? error.message
-                : 'Could not update gift'
-            )
-        }
-    }
+    const isError = message.toLowerCase().includes('could not') || message.toLowerCase().includes('error')
 
     return (
         <section className="profile-card">
-            <div className="profile-header">
-                <div>
-                    <h2>Welcome, {profile.username}!</h2>
+
+            {message && (
+                <div className="toast-container">
+                    <div className={`profile-message-popup ${isError ? 'error' : 'success'}`}>
+                        {message}
+                    </div>
                 </div>
+            )}
+
+            <div className="profile-header">
+                <h2>{profile.username}</h2>
+                {isOwner && (
+                    <button
+                        className="edit-button"
+                        onClick={() => {
+                            setIsEditing(!isEditing)
+                            setMessage('')
+                        }}
+                    >
+                        {isEditing ? 'View Profile' : 'Edit Profile'}
+                    </button>
+                )}
             </div>
 
-            <div className="profile-content">
-                
-                    <div className="avatar-preview">
-                        
+            {!isEditing && (
+                <div className="profile-view-only">
+                    <div className="profile-view-avatar-preview">
                         <Avatar 
                             eyes={profile.avatar.eyes}
                             mouth={profile.avatar.mouth}
@@ -117,162 +78,40 @@ function Profile({
                         />
                     </div>
 
-                    <div className="greeting-preview">
-                        <div>
-                            <label htmlFor="greeting">Greeting:</label>
-                        </div>
-                        
-                        <div>
-                            <textarea 
-                            id="greeting" 
-                            name="greeting"
-                            rows={4}
-                            value={greeting}
-                            onChange={(event) => setGreeting(event.target.value)}
-                            />
-                        </div>
-                        
-                        <div>
-                            <button 
-                                className="save-greeting-button"
-                                onClick={handleGreetingUpdate}
-                            >
-                                Save Greeting
-                            </button>
-                        </div>
-                        
+                    <div className="greeting-gift-wrapper">
+                        <div className="greeting-display">
+                        <h3>Greeting:</h3>
+                        <p className="greeting-text">{profile.greeting}</p>
                     </div>
 
-                    <div className="gift-preview">
-                        <div>
-                            <label htmlFor="gift">Gift:</label>
-                        </div>
-                        
-                        <div className="gift-choices">
-                            {GIFT_CHOICES.map((flower) => (
-                                <div className="tooltip-container">
-                                <img
-                                    key={flower.id}
-                                    src={flower.image}
-                                    alt={flower.name}
-                                    className={`gift ${
-                                        gift === flower.id ? 'selected' : ''
-                                    }`}
-                                    onClick={() => setGift(flower.id)}
-                                />
-                                <span className="tooltip-bubble">{flower.name}</span>
-                                </div>
-                            ))}
-                        </div>
+                    <div className="gift-display">
+                        <h3>Current Gift: {chosenGift ? chosenGift.name : 'No gift chosen.'}</h3>
+                        {chosenGift ? (
+                            <div className="gift-showcase">
+                                {(() => {
+                                    const GiftImg = chosenGift.image
 
-                        <div>
-                            <button 
-                                className="save-gift-button"
-                                onClick={handleGiftUpdate}
-                            >
-                                Save Gift
-                            </button>
-                        </div>
-                    </div>
-                
-
-                <div className="profile-controls">
-                    <AvatarCustomizer 
-                        eyes={profile.avatar.eyes}
-                        mouth={profile.avatar.mouth}
-                        top={profile.avatar.hair}
-                        clothes={profile.avatar.clothes}
-                        skinColor={profile.avatar.skin_color}
-                        hairColor={profile.avatar.hair_color}
-                        clothesColor={profile.avatar.clothes_color}
-
-                        onEyesChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    eyes: value
-                                }
-                            })
-                        }
-
-                        onMouthChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    mouth: value
-                                }
-                            })
-                        }
-
-                        onTopChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    hair: value
-                                }
-                            })
-                        }
-
-                        onClothesChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    clothes: value
-                                }
-                            })
-                        }
-
-                        onSkinColorChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    skin_color: value
-                                }
-                            })
-                        }
-
-                        onHairColorChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    hair_color: value
-                                }
-                            })
-                        }
-
-                        onClothesColorChange={(value) =>
-                            onProfileUpdate({
-                                ...profile,
-                                avatar: {
-                                    ...profile.avatar,
-                                    clothes_color: value
-                                }
-                            })
-                        }
-                    />
-
-                    <div className="save-section">
-                        <button 
-                            className="primary-button save-button"
-                            onClick={handleAvatarUpdate}
-                        >
-                            Save Avatar
-                        </button>
-
-                        {message && (
-                            <p className="message">
-                                {message}
-                            </p>
+                                    return <GiftImg className="gift-static" aria-label={chosenGift.name} />
+                                })()}
+                            </div>
+                        ) : (
+                            <p>No gift to display.</p>
                         )}
                     </div>
                 </div>
+                    
             </div>
+            )}
+
+                {isEditing && isOwner && (
+                    <EditProfile 
+                        profile={profile}
+                        token={token}
+                        onProfileUpdate={onProfileUpdate}
+                        setMessage={setMessage}
+                    />
+                )}
+            
         </section>
     )
 }

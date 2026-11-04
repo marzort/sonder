@@ -130,6 +130,25 @@ export async function getProfile(
     return data
 }
 
+export async function getFriendProfile(
+    friendId: number,
+    accessToken: string
+): Promise<UserProfile> {
+    const response = await fetch(`${API_URL}/friend/${friendId}`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(data.detail || 'Could not load friend profile.')
+    }
+
+    return data
+}
+
 export async function updateAvatar(
     accessToken: string,
     avatar: Avatar
