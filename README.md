@@ -10,12 +10,11 @@ Traditional social apps demand sustained conversation, which can feel draining, 
 
 ## Interface & Screenshots
 
-| Feature | Preview | Description |
-| :--- | :---: | :--- |
-| **Virtual Encounters** | <img src="assets/screenshots/greeting%20exchange.png" width="300" alt="Virtual Encounter"> | *Automated user encounters and gift exchanges* | 
-| **Profile Previews** | <img src="assets/screenshots/visit%20friend.png" width="300" alt="Greeting Exchange"> | *View another user's profile card after meeting* |
-| **Avatar Customization** | <img src="assets/screenshots/edit%20profile%202.png" width="300" alt="Avatar Customization"> | *Personalize your visual presence* |
-| **Personal Garden View** | <img src="assets/screenshots/full%20garden.png" width="300" alt="Virtual Garden"> | *A dynamic, growing reflection of past connections* |
+| **Virtual Encounters** | **Profile Previews** |
+| :---: | :---: |
+| <img src="assets/screenshots/greeting%20exchange.png" width="280" alt="Virtual Encounter"><br>*Automated user encounters and gift exchanges* | <img src="assets/screenshots/visit%20friend.png" width="280" alt="Greeting Exchange"><br>*View another user's profile card after meeting* |
+| **Avatar Customization** | **Personal Garden View** |
+| <img src="assets/screenshots/edit%20profile%202.png" width="280" alt="Avatar Customization"><br>*Personalize your visual presence* | <img src="assets/screenshots/full%20garden.png" width="200" alt="Virtual Garden"> <img src="assets/screenshots/gift%20info.png" width="200" alt="Gift Info"><br>*A dynamic, growing reflection of past connections* |
 
 ---
 
