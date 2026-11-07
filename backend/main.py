@@ -34,6 +34,7 @@ app.include_router(profile_router)
 app.include_router(location_router)
 app.include_router(meeting_router)
 app.include_router(garden_router)
+app.include_router(message_router)
 
 Base.metadata.create_all(engine)
 

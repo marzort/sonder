@@ -76,9 +76,9 @@ def friends(
         meeting = friend.meeting
 
         if meeting.user_a_id == current_user.id:
-            friend_user = meeting.user_b_id
+            friend_user = meeting.user_b
         else:
-            friend_user = meeting.user_a_id
+            friend_user = meeting.user_a
 
         friend_list.append(
             FriendListResponse(
