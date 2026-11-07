@@ -34,6 +34,12 @@
     background-color: #f8f9fa;
     border-radius: 10px;
     border: 1px solid #f0f0f0;
+    cursor: pointer;
+}
+
+.message-card:hover {
+    transform: scale(1.01);
+    border-color: #f3cbf4;
 }
 
 .avatar-circle {
@@ -93,7 +99,8 @@
     color: white;
 }
 
-.new-message-window {
+.new-message-window,
+.view-message-window {
     position: fixed;
     top: 0;
     left: 0;
@@ -107,7 +114,8 @@
     z-index: 1000;
 }
 
-.new-message-window-content {
+.new-message-window-content,
+.view-message-window-content {
     background-color: #ffffff;
     width: 90%;
     max-width: 480px;
