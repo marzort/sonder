@@ -3,6 +3,7 @@ import { getMessages } from '../api'
 import type { Message } from '../api'
 import { sendMessage } from '../api'
 import NewMessage from './NewMessage'
+import '../templates/messages.css'
 
 interface MessagesProps {
     token: string
@@ -86,13 +87,30 @@ export default function Messages({
 
             <div className="messages-list">
                 {inbox.length === 0 ? (
-                    <p>Your inbox is empty.</p>
+                    <p className="empty-inbox">Your inbox is empty.</p>
                 ) : (
-                    inbox.map((msg) => (
-                        <div key={msg.id} className="message-in-list">
-                            <strong>{msg.other_user.username}:</strong> {msg.message_body}
-                        </div>
-                    ))
+                    inbox.map((msg) => {
+                        const formattedDate = new Date(msg.sent_at).toLocaleTimeString([], {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        })
+
+                        return (
+                            <div key={msg.id} className="message-card">
+                                <div className="avatar-circle">
+                                    {msg.other_user.username.charAt(0).toUpperCase()}
+                                </div>
+
+                                <div className="message-content">
+                                    <div className="message-meta">
+                                        <span className="username">{msg.other_user.username}</span>
+                                        <span className="timestamp">{formattedDate}</span>
+                                    </div>
+                                    <p className="message-body">{msg.message_body}</p>
+                                </div>
+                            </div>
+                        )
+                    })
                 )}
             </div>
 

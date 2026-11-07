@@ -15,12 +15,7 @@ def message(
 ):
     stmt = (
         select(Message)
-        .where(
-            or_(
-                Message.sender_id == current_user.id,
-                Message.receiver_id == current_user.id
-            )
-        )
+        .where(Message.receiver_id == current_user.id)
         .options(
             joinedload(Message.sender),
             joinedload(Message.receiver)
@@ -34,10 +29,7 @@ def message(
 
     for msg in messages:
 
-        if msg.sender_id == current_user.id:
-            other_user = msg.receiver
-        else:
-            other_user = msg.sender
+        other_user = msg.sender
 
         response.append(
             MessageResponse(
