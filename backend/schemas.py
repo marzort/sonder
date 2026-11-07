@@ -115,3 +115,13 @@ class GiftResponse(BaseModel):
     id: int
     given_by: GiftPersonResponse
     gift_choice: GiftChoiceResponse
+
+class MessagePersonResponse(BaseModel):
+    id: int
+    username: str
+
+class MessageResponse(BaseModel):
+    id: int
+    sent_at: datetime
+    other_user: MessagePersonResponse
+    message_body: str

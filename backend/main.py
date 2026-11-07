@@ -18,6 +18,7 @@ from routers.profile import router as profile_router
 from routers.location import router as location_router
 from routers.meetings import router as meeting_router
 from routers.garden import router as garden_router
+from routers.messages import router as message_router
 
 app = FastAPI()
 security = HTTPBearer()

@@ -57,6 +57,16 @@ export type Gift = {
     }
 }
 
+export type Message = {
+    id: number
+    sent_at: string
+    other_user: {
+        id: number
+        username: string
+    }
+    message_body: string
+}
+
 export async function registerUser(
     username: string,
     password: string
@@ -332,6 +342,26 @@ export async function getGifts(
     if (!response.ok) {
         throw new Error(
             data.detail || 'Could not load gifts'
+        )
+    }
+
+    return data
+}
+
+export async function getMessages(
+    accessToken: string
+) : Promise<Message[]> {
+    const response = await fetch(`${API_URL}/messages`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not retrieve messages'
         )
     }
 
