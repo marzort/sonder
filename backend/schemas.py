@@ -125,3 +125,15 @@ class MessageResponse(BaseModel):
     sent_at: datetime
     other_user: MessagePersonResponse
     message_body: str
+
+class FriendListResponse(BaseModel):
+    id: int
+    username: str
+
+class NewMessageUpdate(BaseModel):
+    recipient_id: int
+    message_body: str
+
+class SendMessageRequest(BaseModel):
+    recipient_id: int
+    message_body: str

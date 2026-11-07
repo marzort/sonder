@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import { getMessages } from '../api'
 import type { Message } from '../api'
+import { sendMessage } from '../api'
+import NewMessage from './NewMessage'
 
 interface MessagesProps {
     token: string
@@ -9,33 +11,72 @@ interface MessagesProps {
 export default function Messages({
     token
 }: MessagesProps) {
-    const [message, setMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState('')
     const [inbox, setInbox] = useState<Message[]>([])
+    const [newMessageOpen, setNewMessageOpen] = useState(false)
 
     useEffect(() => {
-        async function loadInbox() {
-            setMessage('')
+        let isMounted = true
+
+        async function fetchMessages() {
+            setErrorMessage('')
             try {
                 const data = await getMessages(token)
-                setInbox(data)
+                if (isMounted) {
+                    setInbox(data)
+                }
             } catch (error) {
-                setMessage(
-                    error instanceof Error
-                    ? error.message
-                    : 'Could not get message.'
-                )
+                if (isMounted) {
+                    setErrorMessage(
+                        error instanceof Error
+                        ? error.message
+                        : 'Could not get messages.'
+                    )
+                }
             }
         }
 
-        loadInbox()
+        fetchMessages()
+
+        return () => {
+            isMounted = false
+        }
     }, [token])
+
+    const handleSendMessage = async (
+        recipientId: number,
+        body: string
+    ) => {
+        setErrorMessage('')
+
+        try {
+            await sendMessage(
+                token,
+                {
+                    recipient_id: recipientId,
+                    message_body: body
+                }
+            )
+
+            setNewMessageOpen(false)
+            
+            const updatedInbox = await getMessages(token)
+            setInbox(updatedInbox)
+        } catch (error) {
+            setErrorMessage(
+                error instanceof Error
+                ? error.message
+                : 'Failed to send message.'
+            )
+        }
+    }
 
     return (
         <section className="messages-screen">
 
-            {message && (
+            {errorMessage && (
                 <p className="error-message">
-                    {message}
+                    {errorMessage}
                 </p>
             )}
 
@@ -47,16 +88,30 @@ export default function Messages({
                 {inbox.length === 0 ? (
                     <p>Your inbox is empty.</p>
                 ) : (
-                    inbox.map((msg) => {
-                        
-                        return (
-                            <div key={msg.id} className="message-in-list">
-                                {msg.other_user.username}: {msg.message_body}
-                            </div>
-                        )
-                    })
+                    inbox.map((msg) => (
+                        <div key={msg.id} className="message-in-list">
+                            <strong>{msg.other_user.username}:</strong> {msg.message_body}
+                        </div>
+                    ))
                 )}
             </div>
+
+            <button
+                className="compose-message-button"
+                onClick={() => {
+                    setNewMessageOpen(true)
+                }}
+            >
+                Send New Message
+            </button>
+
+            {newMessageOpen && (
+                <NewMessage 
+                    token={token}
+                    onSend={handleSendMessage}
+                    onClose={() => setNewMessageOpen(false)}
+                />
+            )}
         </section>
     )
 }

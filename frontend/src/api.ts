@@ -67,6 +67,11 @@ export type Message = {
     message_body: string
 }
 
+export type Friend = {
+    id: number
+    username: string
+}
+
 export async function registerUser(
     username: string,
     password: string
@@ -362,6 +367,55 @@ export async function getMessages(
     if (!response.ok) {
         throw new Error(
             data.detail || 'Could not retrieve messages'
+        )
+    }
+
+    return data
+}
+
+export type SendMessagePayload = {
+    recipient_id: number
+    message_body: string
+}
+
+export async function sendMessage(
+    accessToken: string,
+    payload: SendMessagePayload
+) {
+    const response = await fetch(`${API_URL}/sendMessage`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(payload)
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not send message'
+        )
+    }
+
+    return data
+}
+
+export async function getFriendList(
+    accessToken: string
+) : Promise<Friend[]> {
+    const response = await fetch(`${API_URL}/friends`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not retrieve friends list'
         )
     }
 
