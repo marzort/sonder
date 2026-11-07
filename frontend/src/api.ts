@@ -57,6 +57,22 @@ export type Gift = {
     }
 }
 
+export type Message = {
+    id: number
+    sent_at: string
+    other_user: {
+        id: number
+        username: string
+    }
+    message_subject: string
+    message_body: string
+}
+
+export type Friend = {
+    id: number
+    username: string
+}
+
 export async function registerUser(
     username: string,
     password: string
@@ -332,6 +348,76 @@ export async function getGifts(
     if (!response.ok) {
         throw new Error(
             data.detail || 'Could not load gifts'
+        )
+    }
+
+    return data
+}
+
+export async function getMessages(
+    accessToken: string
+) : Promise<Message[]> {
+    const response = await fetch(`${API_URL}/messages`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not retrieve messages'
+        )
+    }
+
+    return data
+}
+
+export type SendMessagePayload = {
+    recipient_id: number
+    message_subject: string
+    message_body: string
+}
+
+export async function sendMessage(
+    accessToken: string,
+    payload: SendMessagePayload
+) {
+    const response = await fetch(`${API_URL}/sendMessage`, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${accessToken}`
+        },
+        body: JSON.stringify(payload)
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not send message'
+        )
+    }
+
+    return data
+}
+
+export async function getFriendList(
+    accessToken: string
+) : Promise<Friend[]> {
+    const response = await fetch(`${API_URL}/friends`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not retrieve friends list'
         )
     }
 

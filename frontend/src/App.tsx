@@ -8,6 +8,7 @@ import Explore from './components/Explore'
 import Meetings from './components/Meetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
+import Messages from './components/Messages'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -25,7 +26,7 @@ function App() {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [screen, setScreen] = useState<
-    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile'
+    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages'
   >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -235,6 +236,18 @@ function App() {
                   </button>
                 </li>
 
+                <li>
+                  <button
+                    className={screen === 'messages' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('messages')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Inbox
+                  </button>
+                </li>
+
                 <li className="logout-item">
                   <button
                     className="logout-button"
@@ -281,6 +294,12 @@ function App() {
         <Garden
           token={token}
           onFriendProfile={handleFriendProfile}
+        />
+      )}
+
+      {profile && token && screen === 'messages' && (
+        <Messages
+          token={token}
         />
       )}
 

@@ -84,6 +84,18 @@ class User(Base):
 
     gift_flower: Mapped["Flower"] = relationship()
 
+    sent_messages: Mapped[list["Message"]] = relationship(
+        "Message",
+        foreign_keys="Message.sender_id",
+        back_populates="sender"
+    )
+
+    received_messages: Mapped[list["Message"]] = relationship(
+        "Message",
+        foreign_keys="Message.receiver_id",
+        back_populates="receiver"
+    )
+
 class Avatar(Base):
     __tablename__ = "avatars"
 
@@ -240,4 +252,47 @@ class Gift(Base):
             name="uq_gift_meeting_giver"
         ),
     )
-    
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    sender_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    sent_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    message_subject: Mapped[str] = mapped_column(
+        String(25),
+        nullable=False,
+        default="No Subject"
+    )
+
+    message_body: Mapped[str] = mapped_column(
+        String(300),
+        default = ""
+    )
+
+    sender: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[sender_id],
+        back_populates="sent_messages"
+    )
+
+    receiver: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[receiver_id],
+        back_populates="received_messages"
+    )
