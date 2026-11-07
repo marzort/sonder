@@ -39,6 +39,7 @@ def message(
                     id=other_user.id,
                     username=other_user.username
                 ),
+                message_subject=msg.message_subject,
                 message_body=msg.message_body
             )
         )
@@ -96,6 +97,7 @@ def sendMessage(
     new_message = Message(
         sender_id=current_user.id,
         receiver_id=payload.recipient_id,
+        message_subject=payload.message_subject,
         message_body=payload.message_body
     )
 

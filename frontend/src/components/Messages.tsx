@@ -48,6 +48,7 @@ export default function Messages({
 
     const handleSendMessage = async (
         recipientId: number,
+        subject: string,
         body: string
     ) => {
         setErrorMessage('')
@@ -57,6 +58,7 @@ export default function Messages({
                 token,
                 {
                     recipient_id: recipientId,
+                    message_subject: subject,
                     message_body: body
                 }
             )
@@ -123,7 +125,7 @@ export default function Messages({
                                         <span className="username">{msg.other_user.username}</span>
                                         <span className="timestamp">{formattedDateInList}</span>
                                     </div>
-                                    <p className="message-body">{msg.message_body}</p>
+                                    <p className="message-subject">{msg.message_subject}</p>
                                 </div>
                             </div>
                         )
@@ -167,6 +169,10 @@ export default function Messages({
 
                         <div className="time-sent">
                             <h4><strong>Sent At: </strong>{formattedDate}</h4>
+                        </div>
+
+                        <div className="view-message-subject">
+                            <h4>Subject: {selectMessage.message_subject}</h4>
                         </div>
 
                         <div className="full-message">

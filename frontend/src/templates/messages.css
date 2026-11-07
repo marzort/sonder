@@ -77,7 +77,7 @@
     color: #9ca3af;
 }
 
-.message-body {
+.message-subject {
     color: #374151;
     font-size: 0.9rem;
     line-height: 1.4;
@@ -97,6 +97,13 @@
     transition: 0.2 ease;
     background: #bf36e5;
     color: white;
+}
+
+.send-message-button:disabled {
+    background: #9ca3af;
+    color:#111827;
+    cursor: default;
+    opacity: 0.6;
 }
 
 .new-message-window,
@@ -135,7 +142,7 @@
 }
 
 .recipient {
-
+    margin-bottom: 20px;
 }
 
 .recipient-options {
@@ -157,9 +164,9 @@
 }
 
 .friend-choice.selected {
-    background-color: #4f46e5;
+    background-color: #b346e5;
     color: #ffffff;
-    border-color: #4f46e5;
+    border-color: #7609b6;
 }
 
 .selected-recipient {
@@ -173,7 +180,18 @@
     padding: 10px;
     font-size: 0.9rem;
     margin-top: 6px;
+    margin-bottom: 15px;
     box-sizing: border-box;
     resize: vertical;
+}
+
+.message-subject textarea {
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    padding: 10px;
+    font-size: 0.9rem;
+    resize:none;
+    margin-top: 6px;
 }
 

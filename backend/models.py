@@ -274,6 +274,12 @@ class Message(Base):
         nullable=False
     )
 
+    message_subject: Mapped[str] = mapped_column(
+        String(25),
+        nullable=False,
+        default="No Subject"
+    )
+
     message_body: Mapped[str] = mapped_column(
         String(300),
         default = ""

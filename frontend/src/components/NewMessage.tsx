@@ -4,7 +4,7 @@ import type { Friend } from '../api'
 
 interface NewMessageProps {
     token: string
-    onSend: (recipientId: number, body: string) => void
+    onSend: (recipientId: number, subject: string, body: string) => void
     onClose: () => void
 }
 
@@ -16,6 +16,7 @@ export default function NewMessage({
     const [errorMessage, setErrorMessage] = useState('')
     const [friendList, setFriendList] = useState<Friend[]>([])
     const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null)
+    const [messageSubject, setMessageSubject] = useState('')
     const [messageBody, setMessageBody] = useState('')
 
     useEffect(() => {
@@ -47,7 +48,7 @@ export default function NewMessage({
             return
         }
 
-        onSend(selectedFriend.id, messageBody.trim())
+        onSend(selectedFriend.id, messageSubject.trim(), messageBody.trim())
     }
 
     return (
@@ -80,19 +81,28 @@ export default function NewMessage({
                                 To: <strong>{selectedFriend.username}</strong>
                             </p>
                         )}
+                </div>
 
-                        <div className="compose-message">
-                            <label htmlFor="message">Message:</label>
+                <div className="compose-message">
+                    <label htmlFor="message-subject">Subject:</label>
+                    <div className="message-subject">
+                        <textarea 
+                            id="message-subject"
+                            rows={1}
+                            value={messageSubject}
+                            onChange={(e) => setMessageSubject(e.target.value)}
+                        />
+                    </div>
+                    
 
-                            
-                                <textarea 
-                                    id="message"
-                                    rows={4}
-                                    value={messageBody}
-                                    onChange={(e) => setMessageBody(e.target.value)}
-                                />
-                            
-                        </div>
+                    <label htmlFor="message">Message:</label>
+                    <textarea 
+                        id="message"
+                        rows={4}
+                        value={messageBody}
+                        onChange={(e) => setMessageBody(e.target.value)}
+                    />
+                    
                 </div>
 
                 <button

@@ -64,6 +64,7 @@ export type Message = {
         id: number
         username: string
     }
+    message_subject: string
     message_body: string
 }
 
@@ -375,6 +376,7 @@ export async function getMessages(
 
 export type SendMessagePayload = {
     recipient_id: number
+    message_subject: string
     message_body: string
 }
 
