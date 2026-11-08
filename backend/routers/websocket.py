@@ -1,7 +1,7 @@
 import json
 from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect, Depends
 from auth import verify_access_token, active_sessions
-from models import MeetingUser
+from models import MeetingUser, Message
 from database import get_db
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session
@@ -98,6 +98,16 @@ async def websocket_endpoint(
         )
     )
 
+    # unviewed message count
+    unviewed_message_count = db.scalar(
+        select(func.count())
+        .select_from(Message)
+        .where(
+            Message.receiver_id == user_id,
+            Message.viewed.is_(False)
+        )
+    )
+
     connected = await manager.connect(user_id, websocket)
 
     if not connected:
@@ -108,7 +118,8 @@ async def websocket_endpoint(
             "type": "welcome",
             "user_id": user_id,
             "players": manager.get_active_players(),
-            "unviewed_meeting_count": unviewed_count
+            "unviewed_meeting_count": unviewed_count,
+            "unviewed_message_count": unviewed_message_count
         })
     )
 

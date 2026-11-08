@@ -82,6 +82,32 @@
     color: white;
 }
 
+.inbox-button {
+    background: none;
+    border: none;
+    color: #e5e3e3;
+    font: inherit;
+    cursor: pointer;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0;
+}
+
+.message-count {
+    background-color: rgb(235, 34, 205);
+    font-size: 0.75rem;
+
+    min-width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    padding: 5px 5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .logout-item {
     margin-left: 8px !important;
     padding-left: 16px !important;

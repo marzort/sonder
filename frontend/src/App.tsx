@@ -23,6 +23,8 @@ function App() {
 
   const [meetingCount, setMeetingCount] = useState(0)
 
+  const [messageCount, setMessageCount] = useState(0)
+
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [screen, setScreen] = useState<
@@ -75,10 +77,15 @@ function App() {
 
       if (data.type === 'welcome') {
         setMeetingCount(data.unviewed_meeting_count)
+        setMessageCount(data.unviewed_message_count)
       }
 
       if (data.type === 'meeting_count_updated') {
         setMeetingCount(data.count)
+      }
+
+      if (data.type === 'message_count_updated') {
+        setMessageCount(data.count)
       }
     }
 
@@ -237,15 +244,26 @@ function App() {
                 </li>
 
                 <li>
-                  <button
-                    className={screen === 'messages' ? 'nav-link active' : 'nav-link'}
-                    onClick={() => {
-                      setScreen('messages')
-                      setMenuOpen(false)
-                    }}
-                  >
-                    Inbox
-                  </button>
+                  <div className={screen === 'messages' ? 'nav-link active' : 'nav-link'}>
+                    <button
+                      className="inbox-button"
+                      onClick={() => {
+                        setScreen('messages')
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Inbox
+
+                      {messageCount > 0 && (
+                      <span className="message-count">
+                        {messageCount}
+                      </span>
+                    )}
+                    </button>
+
+                    
+                  </div>
+                  
                 </li>
 
                 <li className="logout-item">
@@ -300,6 +318,7 @@ function App() {
       {profile && token && screen === 'messages' && (
         <Messages
           token={token}
+          onMessageCountChange={setMessageCount}
         />
       )}
 
