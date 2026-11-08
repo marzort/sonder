@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from models import Message, User, MeetingUser, Meeting
-from sqlalchemy import select, or_
+from sqlalchemy import select, func
 from sqlalchemy.orm import Session, joinedload
 from auth import get_current_user, get_db
 from schemas import MessageResponse, MessagePersonResponse, FriendListResponse, SendMessageRequest
@@ -40,7 +40,8 @@ def message(
                     username=other_user.username
                 ),
                 message_subject=msg.message_subject,
-                message_body=msg.message_body
+                message_body=msg.message_body,
+                viewed=msg.viewed
             )
         )
 
@@ -98,7 +99,8 @@ def sendMessage(
         sender_id=current_user.id,
         receiver_id=payload.recipient_id,
         message_subject=payload.message_subject,
-        message_body=payload.message_body
+        message_body=payload.message_body,
+        viewed=False
     )
 
     db.add(new_message)
@@ -106,3 +108,38 @@ def sendMessage(
     db.refresh(new_message)
 
     return {"message": "Message sent successfully", "id": new_message.id}
+
+
+@router.post("/messages/{message_id}/viewed")
+def mark_message_viewed(
+    message_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    message = db.scalar(
+        select(Message).where(Message.id == message_id)
+    )
+
+    if message is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Message not found."
+        )
+
+    message.viewed = True
+
+    db.commit()
+
+    remaining_count = db.scalar(
+        select(func.count())
+        .select_from(Message)
+        .where(
+            Message.receiver_id == current_user.id,
+            Message.viewed.is_(False)
+        )
+    )
+
+    return {
+        "message": "Message marked as viewed.",
+        "unviewed_message_count": remaining_count
+    }

@@ -296,3 +296,9 @@ class Message(Base):
         foreign_keys=[receiver_id],
         back_populates="received_messages"
     )
+
+    viewed: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )

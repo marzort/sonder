@@ -126,6 +126,7 @@ class MessageResponse(BaseModel):
     other_user: MessagePersonResponse
     message_subject: str
     message_body: str
+    viewed: bool
 
 class FriendListResponse(BaseModel):
     id: int

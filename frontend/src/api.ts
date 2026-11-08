@@ -66,6 +66,7 @@ export type Message = {
     }
     message_subject: string
     message_body: string
+    viewed: boolean
 }
 
 export type Friend = {
@@ -398,6 +399,31 @@ export async function sendMessage(
     if (!response.ok) {
         throw new Error(
             data.detail || 'Could not send message'
+        )
+    }
+
+    return data
+}
+
+export async function markMessageViewed(
+    accessToken: string,
+    messageId: number
+) {
+    const response = await fetch(
+        `${API_URL}/messages/${messageId}/viewed`,
+        {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${accessToken}`
+            }
+        }
+    )
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not mark message as viewed'
         )
     }
 

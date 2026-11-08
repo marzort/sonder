@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { getMessages } from '../api'
+import { getMessages, markMessageViewed } from '../api'
 import type { Message } from '../api'
 import { sendMessage } from '../api'
 import NewMessage from './NewMessage'
@@ -7,10 +7,12 @@ import '../templates/messages.css'
 
 interface MessagesProps {
     token: string
+    onMessageCountChange: (count: number) => void
 }
 
 export default function Messages({
-    token
+    token,
+    onMessageCountChange
 }: MessagesProps) {
     const [errorMessage, setErrorMessage] = useState('')
     const [inbox, setInbox] = useState<Message[]>([])
@@ -45,6 +47,37 @@ export default function Messages({
             isMounted = false
         }
     }, [token])
+
+    async function handleViewedMessage(msgId: number) {
+        const msg = inbox.find(
+            (msg) => msg.id === msgId
+        )
+
+        if (!msg || msg.viewed) return
+
+        try {
+            const result = await markMessageViewed(
+                token,
+                msgId
+            )
+
+            setInbox((current) =>
+                current.map((msg) =>
+                    msg.id === msgId
+                        ? { ...msg, viewed: true}
+                        : msg
+                )
+            )
+
+            onMessageCountChange(result.unviewed_message_count)
+        } catch (error) {
+            setErrorMessage(
+                error instanceof Error
+                ? error.message
+                : 'Could not mark message as viewed.'
+            )
+        }
+    }
 
     const handleSendMessage = async (
         recipientId: number,
@@ -114,6 +147,7 @@ export default function Messages({
                                 onClick={() => {
                                     setSelectMessage(msg)
                                     setSelectMessageOpen(true)
+                                    handleViewedMessage(msg.id)
                                 }}
                             >
                                 <div className="avatar-circle">
@@ -127,6 +161,12 @@ export default function Messages({
                                     </div>
                                     <p className="message-subject">{msg.message_subject}</p>
                                 </div>
+
+                                {msg.viewed == false && (
+                                    <div className="unviewed-indicator">
+
+                                    </div>
+                                )}
                             </div>
                         )
                     })

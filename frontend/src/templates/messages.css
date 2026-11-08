@@ -86,6 +86,13 @@
     word-break: break-word;
 }
 
+.unviewed-indicator {
+    background:#bf36e5;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+}
+
 .compose-message-button,
 .send-message-button {
     border: none;
@@ -167,10 +174,6 @@
     background-color: #b346e5;
     color: #ffffff;
     border-color: #7609b6;
-}
-
-.selected-recipient {
-
 }
 
 .compose-message textarea {
