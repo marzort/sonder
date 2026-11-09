@@ -4,9 +4,29 @@ from sqlalchemy import select, func
 from sqlalchemy.orm import Session, joinedload
 from auth import get_current_user, get_db
 from schemas import MessageResponse, MessagePersonResponse, FriendListResponse, SendMessageRequest
-
+from .websocket import manager
 
 router = APIRouter()
+
+def get_unviewed_message_count(db: Session, user_id: int):
+    return db.scalar(
+        select(func.count())
+        .where(
+            Message.receiver_id == user_id,
+            Message.viewed.is_(False)
+        )
+    ) or 0
+
+async def update_message_count(db: Session, user_id: int):
+    count = get_unviewed_message_count(db, user_id)
+
+    await manager.send_to_user(
+        user_id,
+        {
+            "type": "message_count_updated",
+            "count": count
+        }
+    )
 
 @router.get("/messages")
 def message(
@@ -84,7 +104,7 @@ def friends(
     return friend_list
 
 @router.post("/sendMessage")
-def sendMessage(
+async def sendMessage(
     payload: SendMessageRequest,
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
@@ -106,6 +126,8 @@ def sendMessage(
     db.add(new_message)
     db.commit()
     db.refresh(new_message)
+
+    await update_message_count(db, payload.recipient_id)
 
     return {"message": "Message sent successfully", "id": new_message.id}
 
@@ -130,14 +152,7 @@ def mark_message_viewed(
 
     db.commit()
 
-    remaining_count = db.scalar(
-        select(func.count())
-        .select_from(Message)
-        .where(
-            Message.receiver_id == current_user.id,
-            Message.viewed.is_(False)
-        )
-    )
+    remaining_count = get_unviewed_message_count(db, current_user.id)
 
     return {
         "message": "Message marked as viewed.",

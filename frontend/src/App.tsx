@@ -318,6 +318,7 @@ function App() {
       {profile && token && screen === 'messages' && (
         <Messages
           token={token}
+          messageCount={messageCount}
           onMessageCountChange={setMessageCount}
         />
       )}

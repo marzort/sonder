@@ -7,11 +7,13 @@ import '../templates/messages.css'
 
 interface MessagesProps {
     token: string
+    messageCount: number
     onMessageCountChange: (count: number) => void
 }
 
 export default function Messages({
     token,
+    messageCount,
     onMessageCountChange
 }: MessagesProps) {
     const [errorMessage, setErrorMessage] = useState('')
@@ -46,7 +48,7 @@ export default function Messages({
         return () => {
             isMounted = false
         }
-    }, [token])
+    }, [token, messageCount])
 
     async function handleViewedMessage(msgId: number) {
         const msg = inbox.find(
