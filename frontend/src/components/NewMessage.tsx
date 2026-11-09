@@ -19,6 +19,11 @@ export default function NewMessage({
     const [messageSubject, setMessageSubject] = useState('')
     const [messageBody, setMessageBody] = useState('')
 
+    const MAX_LENGTH_SUBJECT = 25
+    const isSubjectLimitReached = messageSubject.length >= MAX_LENGTH_SUBJECT
+    const MAX_LENGTH_BODY = 700
+    const isBodyLimitReached = messageBody.length >= MAX_LENGTH_BODY
+
     useEffect(() => {
         async function loadFriendList() {
             setErrorMessage('')
@@ -89,9 +94,20 @@ export default function NewMessage({
                         <textarea 
                             id="message-subject"
                             rows={1}
+                            maxLength={MAX_LENGTH_SUBJECT}
                             value={messageSubject}
                             onChange={(e) => setMessageSubject(e.target.value)}
+                            className={isSubjectLimitReached ? 'subjectarea-limit' : ''}
                         />
+
+                        <div className="character-counter-container">
+                            {isSubjectLimitReached && (
+                                <span className="limit-warning">Character limit reached!</span>
+                            )}
+                            <span className={`character-counter ${isSubjectLimitReached ? 'counter-danger' : ''}`}>
+                                {messageSubject.length}/{MAX_LENGTH_SUBJECT}
+                            </span>
+                        </div>
                     </div>
                     
 
@@ -99,9 +115,20 @@ export default function NewMessage({
                     <textarea 
                         id="message"
                         rows={4}
+                        maxLength={MAX_LENGTH_BODY}
                         value={messageBody}
                         onChange={(e) => setMessageBody(e.target.value)}
+                        className={isBodyLimitReached ? 'textarea-limit' : ''}
                     />
+
+                    <div className="character-counter-container">
+                        {isBodyLimitReached && (
+                            <span className="limit-warning">Character limit reached!</span>
+                        )}
+                        <span className={`character-counter ${isBodyLimitReached ? 'counter-danger' : ''}`}>
+                            {messageBody.length}/{MAX_LENGTH_BODY}
+                        </span>
+                    </div>
                     
                 </div>
 
