@@ -19,6 +19,9 @@ export default function NewMessage({
     const [messageSubject, setMessageSubject] = useState('')
     const [messageBody, setMessageBody] = useState('')
 
+    const MAX_LENGTH = 700
+    const isLimitReached = messageBody.length >= MAX_LENGTH
+
     useEffect(() => {
         async function loadFriendList() {
             setErrorMessage('')
@@ -99,9 +102,20 @@ export default function NewMessage({
                     <textarea 
                         id="message"
                         rows={4}
+                        maxLength={MAX_LENGTH}
                         value={messageBody}
                         onChange={(e) => setMessageBody(e.target.value)}
+                        className={isLimitReached ? 'textarea-limit' : ''}
                     />
+
+                    <div className="character-counter-container">
+                        {isLimitReached && (
+                            <span className="limit-warning">Character limit reached!</span>
+                        )}
+                        <span className={`character-counter ${isLimitReached ? 'counter-danger' : ''}`}>
+                            {messageBody.length}/{MAX_LENGTH}
+                        </span>
+                    </div>
                     
                 </div>
 

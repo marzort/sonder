@@ -281,7 +281,7 @@ class Message(Base):
     )
 
     message_body: Mapped[str] = mapped_column(
-        String(300),
+        String(700),
         default = ""
     )
 
