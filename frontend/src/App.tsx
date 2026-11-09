@@ -260,10 +260,7 @@ function App() {
                       </span>
                     )}
                     </button>
-
-                    
                   </div>
-                  
                 </li>
 
                 <li className="logout-item">

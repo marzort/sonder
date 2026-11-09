@@ -218,6 +218,10 @@
         padding: 13px 16px;
     }
 
+    .inbox-button {
+        width: 100%;
+    }
+
     .logout-item {
         margin-left: 0 !important;
         margin-top: 8px;
