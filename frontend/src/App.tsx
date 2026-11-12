@@ -32,6 +32,8 @@ function App() {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const [prevScreen, setPrevScreen] = useState<'garden' | 'friends'>('garden')
+
   const [screen, setScreen] = useState<
     'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages' | 'friends'
   >('profile')
@@ -162,6 +164,13 @@ function App() {
     try {
       const data = await getFriendProfile(friendId, token)
       setFriendProfile(data)
+      
+      if (screen == 'garden') {
+        setPrevScreen('garden')
+      } else {
+        setPrevScreen('friends')
+      }
+
       setScreen('view_profile')
     } catch (error) {
       console.error(error)
@@ -259,15 +268,24 @@ function App() {
                 </li>
 
                 <li>
-                  <button
-                    className={screen === 'friends' ? 'nav-link active' : 'nav-link'}
-                    onClick={() => {
-                      setScreen('friends')
-                      setMenuOpen(false)
-                    }}
-                  >
-                    Friends
-                    </button>
+                  <div className={screen === 'friends' ? 'nav-link active' : 'nav-link'}>
+                    <button
+                      className="friends-page-button"
+                      onClick={() => {
+                        setScreen('friends')
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Friends
+
+                      {friendRequestCount > 0 && (
+                        <span className="friend-request-count">
+                          {friendRequestCount}
+                        </span>
+                      )}
+                      </button>
+                  </div>
+                  
                 </li>
 
                 <li>
@@ -354,6 +372,7 @@ function App() {
           requestCount={friendRequestCount}
           onFriendCountChange={setFriendCount}
           onRequestCountChange={setFriendRequestCount}
+          onFriendProfile={handleFriendProfile}
         />
       )}
 
@@ -362,11 +381,11 @@ function App() {
           <button
             className="back-button"
             onClick={() => {
-              setScreen('garden')
+              setScreen(prevScreen)
               setFriendProfile(null)
             }}
           >
-            Back to Garden
+            Back
           </button>
           
           <Profile 

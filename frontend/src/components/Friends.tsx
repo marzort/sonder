@@ -8,12 +8,14 @@ interface FriendsProps {
     requestCount: number
     onFriendCountChange: (frCount: number) => void
     onRequestCountChange: (reqCount: number) => void
+    onFriendProfile: (friendId: number) => void
 }
 
 export default function Friends({
     token,
     onFriendCountChange,
-    onRequestCountChange
+    onRequestCountChange,
+    onFriendProfile
 }: FriendsProps) {
     const [message, setMessage] = useState('')
     const [friendsList, setFriendsList] = useState<Friend[]>([])
@@ -97,7 +99,7 @@ export default function Friends({
                             <div
                                 key={friend.id}
                                 className="friend-card"
-                                onClick={() => {}}
+                                onClick={() => {onFriendProfile(friend.id)}}
                             >
                                 <div className="avatar-circle">
                                     {friend.username.charAt(0).toUpperCase()}
