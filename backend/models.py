@@ -1,4 +1,4 @@
-import uuid
+import enum
 
 from sqlalchemy import (
     String, 
@@ -8,6 +8,7 @@ from sqlalchemy import (
     CheckConstraint,
     UniqueConstraint,
     Float,
+    Enum,
     func
 )
 
@@ -94,6 +95,13 @@ class User(Base):
         "Message",
         foreign_keys="Message.receiver_id",
         back_populates="receiver"
+    )
+
+    friends: Mapped[list["User"]] = relationship(
+        "User",
+        secondary="friendships",
+        primaryjoin="User.id == Friendship.sender_id",
+        secondaryjoin="User.id == Friendship.receiver_id"
     )
 
 class Avatar(Base):
@@ -301,4 +309,43 @@ class Message(Base):
         Boolean,
         default=False,
         nullable=False
+    )
+
+class FriendshipStatus(str, enum.Enum):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+
+class Friendship(Base):
+    __tablename__ = "friendships"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    sender_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    status: Mapped[FriendshipStatus] = mapped_column(
+        Enum(FriendshipStatus),
+        default=FriendshipStatus.PENDING,
+        nullable=False
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "sender_id", 
+            "receiver_id", 
+            name="uq_friend_request"),
     )

@@ -9,6 +9,7 @@ import Meetings from './components/Meetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
 import Messages from './components/Messages'
+import Friends from './components/Friends'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -25,10 +26,14 @@ function App() {
 
   const [messageCount, setMessageCount] = useState(0)
 
+  const [friendCount, setFriendCount] = useState(0)
+
+  const [friendRequestCount, setFriendRequestCount] = useState(0)
+
   const [menuOpen, setMenuOpen] = useState(false)
 
   const [screen, setScreen] = useState<
-    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages'
+    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages' | 'friends'
   >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -78,6 +83,8 @@ function App() {
       if (data.type === 'welcome') {
         setMeetingCount(data.unviewed_meeting_count)
         setMessageCount(data.unviewed_message_count)
+        setFriendCount(data.friend_count)
+        setFriendRequestCount(data.friend_request_count)
       }
 
       if (data.type === 'meeting_count_updated') {
@@ -86,6 +93,14 @@ function App() {
 
       if (data.type === 'message_count_updated') {
         setMessageCount(data.count)
+      }
+
+      if (data.type === 'friend_count_updated') {
+        setFriendCount(data.count)
+      }
+
+      if (data.type === 'friend_request_count_updated') {
+        setFriendRequestCount(data.count)
       }
     }
 
@@ -244,6 +259,18 @@ function App() {
                 </li>
 
                 <li>
+                  <button
+                    className={screen === 'friends' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('friends')
+                      setMenuOpen(false)
+                    }}
+                  >
+                    Friends
+                    </button>
+                </li>
+
+                <li>
                   <div className={screen === 'messages' ? 'nav-link active' : 'nav-link'}>
                     <button
                       className="inbox-button"
@@ -317,6 +344,16 @@ function App() {
           token={token}
           messageCount={messageCount}
           onMessageCountChange={setMessageCount}
+        />
+      )}
+
+      {profile && token && screen === 'friends' && (
+        <Friends 
+          token={token}
+          friendCount={friendCount}
+          requestCount={friendRequestCount}
+          onFriendCountChange={setFriendCount}
+          onRequestCountChange={setFriendRequestCount}
         />
       )}
 

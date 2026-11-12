@@ -20,6 +20,20 @@ export type Avatar = {
     clothes_color: ClothesColor
 }
 
+export type Friend = {
+    id: number
+    username: string
+}
+
+export type FriendRequest = {
+    id: number
+    sender: {
+        id: number
+        username: string
+    }
+    sent_at: string
+}
+
 export type UserProfile = {
     id: number
     username: string
@@ -27,6 +41,7 @@ export type UserProfile = {
     avatar: Avatar
     greeting: string
     gift_flower_id: number
+    friendship_status: 'none' | 'pending' | 'accepted' | 'incoming'
 }
 
 export type Meeting = {
@@ -67,11 +82,6 @@ export type Message = {
     message_subject: string
     message_body: string
     viewed: boolean
-}
-
-export type Friend = {
-    id: number
-    username: string
 }
 
 export async function registerUser(
@@ -433,7 +443,7 @@ export async function markMessageViewed(
 export async function getFriendList(
     accessToken: string
 ) : Promise<Friend[]> {
-    const response = await fetch(`${API_URL}/friends`, {
+    const response = await fetch(`${API_URL}/friend/list`, {
         headers: {
             Authorization: `Bearer ${accessToken}`
         }
@@ -444,6 +454,118 @@ export async function getFriendList(
     if (!response.ok) {
         throw new Error(
             data.detail || 'Could not retrieve friends list'
+        )
+    }
+
+    return data
+}
+
+export async function friendRequest(
+    accessToken: string,
+    user_id: number
+) {
+    const response = await fetch(`${API_URL}/friend/request/${user_id}`, {
+        method: 'POST',
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not send friend request.'
+        )
+    }
+
+    return data
+}
+
+export async function acceptFriendRequest(
+    accessToken: string,
+    requestId: number
+) {
+    const response = await fetch(`${API_URL}/friend/request/${requestId}/decision`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ status: 'accepted' })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not accept friend request.'
+        )
+    }
+
+    return data
+}
+
+export async function rejectFriendRequest(
+    accessToken: string,
+    requestId: number
+) {
+    const response = await fetch(`${API_URL}/friend/request/${requestId}/decision`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`
+        },
+        body: JSON.stringify({ status: 'rejected' })
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not reject friend request.'
+        )
+    }
+
+    return data
+}
+
+export async function removeFriend(
+    accessToken: string,
+    friendId: number
+) {
+    const response = await fetch(`${API_URL}/friend/remove/${friendId}`, {
+        method: 'DELETE',
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not remove friend.'
+        )
+    }
+
+    return data
+}
+
+export async function getFriendRequests(
+    accessToken: string
+): Promise<FriendRequest[]> {
+    const response = await fetch(`${API_URL}/friend/getRequests`, {
+        headers: {
+            Authorization: `Bearer ${accessToken}`
+        }
+    })
+
+    const data = await response.json()
+
+    if (!response.ok) {
+        throw new Error(
+            data.detail || 'Could not get friend requests.'
         )
     }
 
