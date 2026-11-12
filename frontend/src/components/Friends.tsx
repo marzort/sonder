@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { getFriendList, getFriendRequests, acceptFriendRequest, rejectFriendRequest } from '../api'
 import type { Friend, FriendRequest } from '../api'
+import '../templates/friend.css'
 
 interface FriendsProps {
     token: string,
@@ -106,7 +107,7 @@ export default function Friends({
                                 </div>
 
                                 <div className="friend-name">
-                                    <span className="username">{friend.username}</span>
+                                    <span className="friend-username">{friend.username}</span>
                                 </div>
                             </div>
                         )
@@ -129,14 +130,14 @@ export default function Friends({
                                 className="request-card"
                             >
                                 <div 
-                                    className="avatar-circle"
+                                    className="request-avatar-circle"
                                     onClick={() => {}}
                                 >
                                     {sender.username.charAt(0).toUpperCase()}
                                 </div>
 
                                 <div className="friend-name">
-                                    <span className="username">{sender.username}</span>
+                                    <span className="friend-username">{sender.username}</span>
                                 </div>
 
                                 <div className="request-decision">
