@@ -1,5 +1,6 @@
 from pydantic import BaseModel, field_validator, Field
 from datetime import datetime
+from typing import Optional
 
 class RegisterRequest(BaseModel):
     username: str
@@ -131,6 +132,14 @@ class MessageResponse(BaseModel):
 class FriendListResponse(BaseModel):
     id: int
     username: str
+
+class FriendRequestResponse(BaseModel):
+    id: int
+    sender: FriendListResponse
+    sent_at: datetime
+
+class FriendshipStatusUpdate(BaseModel):
+    status: Optional[str] = None
 
 class NewMessageUpdate(BaseModel):
     recipient_id: int

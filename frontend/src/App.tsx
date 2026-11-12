@@ -9,6 +9,7 @@ import Meetings from './components/Meetings'
 import './templates/menu.css'
 import Garden from './components/Garden'
 import Messages from './components/Messages'
+import Friends from './components/Friends'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -25,10 +26,16 @@ function App() {
 
   const [messageCount, setMessageCount] = useState(0)
 
+  const [friendCount, setFriendCount] = useState(0)
+
+  const [friendRequestCount, setFriendRequestCount] = useState(0)
+
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const [prevScreen, setPrevScreen] = useState<'garden' | 'friends'>('garden')
+
   const [screen, setScreen] = useState<
-    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages'
+    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages' | 'friends'
   >('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
@@ -78,6 +85,8 @@ function App() {
       if (data.type === 'welcome') {
         setMeetingCount(data.unviewed_meeting_count)
         setMessageCount(data.unviewed_message_count)
+        setFriendCount(data.friend_count)
+        setFriendRequestCount(data.friend_request_count)
       }
 
       if (data.type === 'meeting_count_updated') {
@@ -86,6 +95,14 @@ function App() {
 
       if (data.type === 'message_count_updated') {
         setMessageCount(data.count)
+      }
+
+      if (data.type === 'friend_count_updated') {
+        setFriendCount(data.count)
+      }
+
+      if (data.type === 'friend_request_count_updated') {
+        setFriendRequestCount(data.count)
       }
     }
 
@@ -147,6 +164,13 @@ function App() {
     try {
       const data = await getFriendProfile(friendId, token)
       setFriendProfile(data)
+      
+      if (screen == 'garden') {
+        setPrevScreen('garden')
+      } else {
+        setPrevScreen('friends')
+      }
+
       setScreen('view_profile')
     } catch (error) {
       console.error(error)
@@ -244,6 +268,27 @@ function App() {
                 </li>
 
                 <li>
+                  <div className={screen === 'friends' ? 'nav-link active' : 'nav-link'}>
+                    <button
+                      className="friends-page-button"
+                      onClick={() => {
+                        setScreen('friends')
+                        setMenuOpen(false)
+                      }}
+                    >
+                      Friends
+
+                      {friendRequestCount > 0 && (
+                        <span className="friend-request-count">
+                          {friendRequestCount}
+                        </span>
+                      )}
+                      </button>
+                  </div>
+                  
+                </li>
+
+                <li>
                   <div className={screen === 'messages' ? 'nav-link active' : 'nav-link'}>
                     <button
                       className="inbox-button"
@@ -260,10 +305,7 @@ function App() {
                       </span>
                     )}
                     </button>
-
-                    
                   </div>
-                  
                 </li>
 
                 <li className="logout-item">
@@ -323,16 +365,27 @@ function App() {
         />
       )}
 
+      {profile && token && screen === 'friends' && (
+        <Friends 
+          token={token}
+          friendCount={friendCount}
+          requestCount={friendRequestCount}
+          onFriendCountChange={setFriendCount}
+          onRequestCountChange={setFriendRequestCount}
+          onFriendProfile={handleFriendProfile}
+        />
+      )}
+
       {profile && token && screen == 'view_profile' && friendProfile && (
         <div className="friend-profile-view">
           <button
             className="back-button"
             onClick={() => {
-              setScreen('garden')
+              setScreen(prevScreen)
               setFriendProfile(null)
             }}
           >
-            Back to Garden
+            Back
           </button>
           
           <Profile 

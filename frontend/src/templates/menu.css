@@ -82,7 +82,8 @@
     color: white;
 }
 
-.inbox-button {
+.inbox-button,
+.friends-page-button {
     background: none;
     border: none;
     color: #e5e3e3;
@@ -95,7 +96,8 @@
     padding: 0;
 }
 
-.message-count {
+.message-count,
+.friend-request-count {
     background-color: rgb(235, 34, 205);
     font-size: 0.75rem;
 
@@ -216,6 +218,11 @@
         text-align: left;
 
         padding: 13px 16px;
+    }
+
+    .inbox-button,
+    .friends-page-button {
+        width: 100%;
     }
 
     .logout-item {

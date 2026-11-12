@@ -1,9 +1,9 @@
 import json
 from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect, Depends
 from auth import verify_access_token, active_sessions
-from models import MeetingUser, Message
+from models import MeetingUser, Message, Friendship, FriendshipStatus
 from database import get_db
-from sqlalchemy import select, func
+from sqlalchemy import select, func, or_
 from sqlalchemy.orm import Session
 
 router = APIRouter()
@@ -108,6 +108,27 @@ async def websocket_endpoint(
         )
     )
 
+    friend_count = db.scalar(
+        select(func.count())
+        .select_from(Friendship)
+        .where(
+            or_(
+                Friendship.sender_id == user_id,
+                Friendship.receiver_id == user_id
+            ),
+            Friendship.status == FriendshipStatus.ACCEPTED
+        )
+    )
+
+    friend_request_count = db.scalar(
+        select(func.count())
+        .select_from(Friendship)
+        .where(
+            Friendship.receiver_id == user_id,
+            Friendship.status == FriendshipStatus.PENDING
+        )
+    )
+
     connected = await manager.connect(user_id, websocket)
 
     if not connected:
@@ -119,7 +140,9 @@ async def websocket_endpoint(
             "user_id": user_id,
             "players": manager.get_active_players(),
             "unviewed_meeting_count": unviewed_count,
-            "unviewed_message_count": unviewed_message_count
+            "unviewed_message_count": unviewed_message_count,
+            "friend_count": friend_count,
+            "friend_request_count": friend_request_count
         })
     )
 

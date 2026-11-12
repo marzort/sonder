@@ -67,42 +67,6 @@ def message(
 
     return response
 
-@router.get("/friends")
-def friends(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    friends = db.scalars(
-        select(MeetingUser)
-        .where(MeetingUser.user_id == current_user.id)
-        .options(
-            joinedload(MeetingUser.meeting)
-            .joinedload(Meeting.user_a),
-
-            joinedload(MeetingUser.meeting)
-            .joinedload(Meeting.user_b)
-        )
-    ).unique().all()
-
-    friend_list = []
-
-    for friend in friends:
-        meeting = friend.meeting
-
-        if meeting.user_a_id == current_user.id:
-            friend_user = meeting.user_b
-        else:
-            friend_user = meeting.user_a
-
-        friend_list.append(
-            FriendListResponse(
-                id=friend_user.id,
-                username=friend_user.username
-            )
-        )
-
-    return friend_list
-
 @router.post("/sendMessage")
 async def sendMessage(
     payload: SendMessageRequest,

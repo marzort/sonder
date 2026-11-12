@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { friendRequest, removeFriend } from '../api'
 import type { UserProfile } from '../api'
 import Avatar from './Avatar'
 import EditProfile from './EditProfile'
@@ -24,6 +25,26 @@ function Profile({
 
     const isOwner = currentUserId === profile.id
 
+    type FriendButtonLabel = 'Add Friend' | 'Unfriend' | 'Pending'
+
+    function mapStatusToButton(
+        status?: UserProfile['friendship_status']
+    ): FriendButtonLabel {
+        if (status === 'accepted') return 'Unfriend'
+        if (status === 'pending') return 'Pending'
+        return 'Add Friend'
+    }
+
+    const [override, setOverride] = useState<{
+        profileId: number
+        status: FriendButtonLabel
+    } | null>(null)
+
+    const friendStatus: FriendButtonLabel = 
+        override && override.profileId === profile.id
+        ? override.status
+        : mapStatusToButton(profile.friendship_status)
+
     const chosenGift = GIFT_CHOICES.find(flower => flower.id === profile.gift_flower_id)
 
     useEffect(() => {
@@ -35,6 +56,26 @@ function Profile({
 
         return () => clearTimeout(timer)
     }, [message])
+
+    async function handleFriendChange() {
+        setMessage('')
+
+        try {
+            if (friendStatus === 'Add Friend') {
+                await friendRequest(token, profile.id)
+                setOverride({ profileId: profile.id, status: 'Pending' })
+            } else if (friendStatus === 'Unfriend') {
+                await removeFriend(token, profile.id)
+                setOverride({ profileId: profile.id, status: 'Add Friend' })
+            }
+        } catch (error) {
+            setMessage(
+                error instanceof Error
+                ? error.message
+                : 'Could not change friend status.'
+            )
+        }
+    }
 
     const isError = message.toLowerCase().includes('could not') || message.toLowerCase().includes('error')
 
@@ -51,7 +92,7 @@ function Profile({
 
             <div className="profile-header">
                 <h2>{profile.username}</h2>
-                {isOwner && (
+                {isOwner ? (
                     <button
                         className="edit-button"
                         onClick={() => {
@@ -60,6 +101,16 @@ function Profile({
                         }}
                     >
                         {isEditing ? 'View Profile' : 'Edit Profile'}
+                    </button>
+                ) : (
+                    <button
+                        className="friend-button"
+                        onClick={() => {
+                            handleFriendChange()
+                        }}
+                        disabled={friendStatus == 'Pending'}
+                    >
+                        {friendStatus}
                     </button>
                 )}
             </div>
@@ -103,14 +154,14 @@ function Profile({
             </div>
             )}
 
-                {isEditing && isOwner && (
-                    <EditProfile 
-                        profile={profile}
-                        token={token}
-                        onProfileUpdate={onProfileUpdate}
-                        setMessage={setMessage}
-                    />
-                )}
+            {isEditing && isOwner && (
+                <EditProfile 
+                    profile={profile}
+                    token={token}
+                    onProfileUpdate={onProfileUpdate}
+                    setMessage={setMessage}
+                />
+            )}
             
         </section>
     )
