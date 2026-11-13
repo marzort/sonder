@@ -117,9 +117,19 @@ class GiftResponse(BaseModel):
     given_by: GiftPersonResponse
     gift_choice: GiftChoiceResponse
 
+class MessageAvatarResponse(BaseModel):
+    eyes: str
+    mouth: str
+    hair: str
+    clothes: str
+    skin_color: str
+    hair_color: str
+    clothes_color: str
+
 class MessagePersonResponse(BaseModel):
     id: int
     username: str
+    avatar: MessageAvatarResponse
 
 class MessageResponse(BaseModel):
     id: int
