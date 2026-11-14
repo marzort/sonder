@@ -78,6 +78,7 @@ export type Message = {
     other_user: {
         id: number
         username: string
+        avatar: Avatar
     }
     message_subject: string
     message_body: string

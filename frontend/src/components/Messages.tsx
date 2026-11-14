@@ -3,6 +3,7 @@ import { getMessages, markMessageViewed } from '../api'
 import type { Message } from '../api'
 import { sendMessage } from '../api'
 import NewMessage from './NewMessage'
+import Avatar from './Avatar'
 import '../templates/messages.css'
 
 interface MessagesProps {
@@ -152,8 +153,17 @@ export default function Messages({
                                     handleViewedMessage(msg.id)
                                 }}
                             >
-                                <div className="avatar-circle">
-                                    {msg.other_user.username.charAt(0).toUpperCase()}
+                                <div className="message-avatar-preview">
+                                    <Avatar 
+                                        size="min(10vw, 20vh)"
+                                        eyes={msg.other_user.avatar.eyes}
+                                        mouth={msg.other_user.avatar.mouth}
+                                        top={msg.other_user.avatar.hair}
+                                        clothes={msg.other_user.avatar.clothes}
+                                        skinColor={msg.other_user.avatar.skin_color}
+                                        hairColor={msg.other_user.avatar.hair_color}
+                                        clothesColor={msg.other_user.avatar.clothes_color}
+                                    />
                                 </div>
 
                                 <div className="message-content">

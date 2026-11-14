@@ -3,7 +3,12 @@ from models import Message, User, MeetingUser, Meeting
 from sqlalchemy import select, func
 from sqlalchemy.orm import Session, joinedload
 from auth import get_current_user, get_db
-from schemas import MessageResponse, MessagePersonResponse, FriendListResponse, SendMessageRequest
+from schemas import (
+    MessageResponse, 
+    MessagePersonResponse,
+    MessageAvatarResponse,
+    FriendListResponse, 
+    SendMessageRequest)
 from .websocket import manager
 
 router = APIRouter()
@@ -57,7 +62,16 @@ def message(
                 sent_at=msg.sent_at,
                 other_user=MessagePersonResponse(
                     id=other_user.id,
-                    username=other_user.username
+                    username=other_user.username,
+                    avatar=MessageAvatarResponse(
+                        eyes=other_user.avatar.eyes,
+                        mouth=other_user.avatar.mouth,
+                        hair=other_user.avatar.hair,
+                        clothes=other_user.avatar.clothes,
+                        skin_color=other_user.avatar.skin_color,
+                        hair_color=other_user.avatar.hair_color,
+                        clothes_color=other_user.avatar.clothes_color
+                    )
                 ),
                 message_subject=msg.message_subject,
                 message_body=msg.message_body,
