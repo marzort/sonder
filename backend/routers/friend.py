@@ -3,7 +3,7 @@ from models import User, Friendship, FriendshipStatus
 from sqlalchemy import select, or_, func
 from sqlalchemy.orm import Session, joinedload
 from auth import get_current_user, get_db
-from schemas import FriendshipStatusUpdate, FriendListResponse, FriendRequestResponse
+from schemas import FriendshipStatusUpdate, FriendListResponse, FriendRequestResponse, AvatarResponse
 from .websocket import manager
 
 router = APIRouter()
@@ -71,10 +71,21 @@ async def get_friend_list(
     friend_list = []
 
     for friend in friends:
+        av = friend.avatar
+
         friend_list.append(
             FriendListResponse(
                 id=friend.id,
-                username=friend.username
+                username=friend.username,
+                avatar=AvatarResponse(
+                    eyes=av.eyes,
+                    mouth=av.mouth,
+                    hair=av.hair,
+                    clothes=av.clothes,
+                    skin_color=av.skin_color,
+                    hair_color=av.hair_color,
+                    clothes_color=av.clothes_color
+                )
             )
         )
 
@@ -132,12 +143,23 @@ def get_friend_requests(
     sender: User
 
     for friendship, sender in rows:
+        av = sender.avatar
+
         request_list.append(
             FriendRequestResponse(
                 id=friendship.id,
                 sender=FriendListResponse(
                     id=sender.id,
-                    username=sender.username
+                    username=sender.username,
+                    avatar=AvatarResponse(
+                        eyes=av.eyes,
+                        mouth=av.mouth,
+                        hair=av.hair,
+                        clothes=av.clothes,
+                        skin_color=av.skin_color,
+                        hair_color=av.hair_color,
+                        clothes_color=av.clothes_color
+                    )
                 ),
                 sent_at=friendship.created_at
             )

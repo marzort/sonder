@@ -70,7 +70,7 @@ class LocationUpdate(BaseModel):
 class LocationSharingUpdate(BaseModel):
     enabled: bool
 
-class MeetingAvatarResponse(BaseModel):
+class AvatarResponse(BaseModel):
     eyes: str
     mouth: str
     hair: str
@@ -83,7 +83,7 @@ class MeetingPersonResponse(BaseModel):
     id: int
     username: str
     greeting: str
-    avatar: MeetingAvatarResponse
+    avatar: AvatarResponse
 
 class MeetingResponse(BaseModel):
     id: int
@@ -92,20 +92,11 @@ class MeetingResponse(BaseModel):
     other_user: MeetingPersonResponse
     gift_received: int | None
 
-class GiftAvatarResponse(BaseModel):
-    eyes: str
-    mouth: str
-    hair: str
-    clothes: str
-    skin_color: str
-    hair_color: str
-    clothes_color: str
-
 class GiftPersonResponse(BaseModel):
     id: int
     username: str
     greeting: str
-    avatar: GiftAvatarResponse
+    avatar: AvatarResponse
 
 class GiftChoiceResponse(BaseModel):
     id: int
@@ -117,19 +108,10 @@ class GiftResponse(BaseModel):
     given_by: GiftPersonResponse
     gift_choice: GiftChoiceResponse
 
-class MessageAvatarResponse(BaseModel):
-    eyes: str
-    mouth: str
-    hair: str
-    clothes: str
-    skin_color: str
-    hair_color: str
-    clothes_color: str
-
 class MessagePersonResponse(BaseModel):
     id: int
     username: str
-    avatar: MessageAvatarResponse
+    avatar: AvatarResponse
 
 class MessageResponse(BaseModel):
     id: int
@@ -142,6 +124,7 @@ class MessageResponse(BaseModel):
 class FriendListResponse(BaseModel):
     id: int
     username: str
+    avatar: AvatarResponse
 
 class FriendRequestResponse(BaseModel):
     id: int

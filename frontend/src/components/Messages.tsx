@@ -155,7 +155,7 @@ export default function Messages({
                             >
                                 <div className="message-avatar-preview">
                                     <Avatar 
-                                        size="min(10vw, 20vh)"
+                                        size="min(17vw, 20vh, 80px)"
                                         eyes={msg.other_user.avatar.eyes}
                                         mouth={msg.other_user.avatar.mouth}
                                         top={msg.other_user.avatar.hair}

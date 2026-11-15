@@ -34,19 +34,6 @@
     border-color: #f3cbf4;
 }
 
-.avatar-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e9a5eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
-
 .message-content {
     flex: 1;
 }
@@ -62,6 +49,7 @@
     font-weight: 600;
     color: #111827;
     font-size: 0.95rem;
+    margin-bottom: 1px;
 }
 
 .timestamp {
@@ -218,3 +206,8 @@ textarea.textarea-limit {
     margin-top: 6px;
 }
 
+.message-avatar-preview {
+    width: min(17vw, 20vh, 80px);
+    height: min(17vw, 20vh, 80px);
+
+}
