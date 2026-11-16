@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { getFriendList, getFriendRequests, acceptFriendRequest, rejectFriendRequest } from '../api'
+import { getFriendList, getFriendRequests, acceptFriendRequest, rejectFriendRequest} from '../api'
 import type { Friend, FriendRequest } from '../api'
+import Avatar from './Avatar'
 import '../templates/friend.css'
 
 interface FriendsProps {
@@ -102,8 +103,17 @@ export default function Friends({
                                 className="friend-card"
                                 onClick={() => {onFriendProfile(friend.id)}}
                             >
-                                <div className="avatar-circle">
-                                    {friend.username.charAt(0).toUpperCase()}
+                                <div className="friend-avatar-preview">
+                                    <Avatar 
+                                        size="min(12vw, 20vh, 80px)"
+                                        eyes={friend.avatar.eyes}
+                                        mouth={friend.avatar.mouth}
+                                        top={friend.avatar.hair}
+                                        clothes={friend.avatar.clothes}
+                                        skinColor={friend.avatar.skin_color}
+                                        hairColor={friend.avatar.hair_color}
+                                        clothesColor={friend.avatar.clothes_color}
+                                    />
                                 </div>
 
                                 <div className="friend-name">
@@ -130,10 +140,19 @@ export default function Friends({
                                 className="request-card"
                             >
                                 <div 
-                                    className="request-avatar-circle"
+                                    className="request-avatar-preview"
                                     onClick={() => {}}
                                 >
-                                    {sender.username.charAt(0).toUpperCase()}
+                                    <Avatar
+                                        size="min(12vw, 20vh, 80px)"
+                                        eyes={sender.avatar.eyes}
+                                        mouth={sender.avatar.mouth}
+                                        top={sender.avatar.hair}
+                                        clothes={sender.avatar.clothes}
+                                        skinColor={sender.avatar.skin_color}
+                                        hairColor={sender.avatar.hair_color}
+                                        clothesColor={sender.avatar.clothes_color}
+                                    />
                                 </div>
 
                                 <div className="friend-name">

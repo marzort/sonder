@@ -23,6 +23,7 @@ export type Avatar = {
 export type Friend = {
     id: number
     username: string
+    avatar: Avatar
 }
 
 export type FriendRequest = {
@@ -30,6 +31,7 @@ export type FriendRequest = {
     sender: {
         id: number
         username: string
+        avatar: Avatar
     }
     sent_at: string
 }

@@ -6,7 +6,7 @@ from auth import get_current_user, get_db
 from schemas import (
     MessageResponse, 
     MessagePersonResponse,
-    MessageAvatarResponse,
+    AvatarResponse,
     FriendListResponse, 
     SendMessageRequest)
 from .websocket import manager
@@ -63,7 +63,7 @@ def message(
                 other_user=MessagePersonResponse(
                     id=other_user.id,
                     username=other_user.username,
-                    avatar=MessageAvatarResponse(
+                    avatar=AvatarResponse(
                         eyes=other_user.avatar.eyes,
                         mouth=other_user.avatar.mouth,
                         hair=other_user.avatar.hair,

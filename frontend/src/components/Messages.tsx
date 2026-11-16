@@ -155,7 +155,7 @@ export default function Messages({
                             >
                                 <div className="message-avatar-preview">
                                     <Avatar 
-                                        size="min(10vw, 20vh)"
+                                        size="min(17vw, 20vh, 80px)"
                                         eyes={msg.other_user.avatar.eyes}
                                         mouth={msg.other_user.avatar.mouth}
                                         top={msg.other_user.avatar.hair}
@@ -215,18 +215,35 @@ export default function Messages({
                             &times;
                         </button>
 
-                        <div className="sender">
-                            <h4><strong>From: </strong>{selectMessage.other_user.username}</h4>
-                        </div>
+                        <span className="view-message-subject">
+                                <h2>{selectMessage.message_subject}</h2>
+                        </span>
 
-                        <div className="time-sent">
-                            <h4><strong>Sent At: </strong>{formattedDate}</h4>
-                        </div>
+                        <div className="open-message-info">
+                            <span className="sender-info">
+                                <div className="open-message-avatar">
+                                    <Avatar
+                                        size="min(20vw, 20vh, 80px)" 
+                                        eyes={selectMessage.other_user.avatar.eyes}
+                                        mouth={selectMessage.other_user.avatar.mouth}
+                                        top={selectMessage.other_user.avatar.hair}
+                                        clothes={selectMessage.other_user.avatar.clothes}
+                                        skinColor={selectMessage.other_user.avatar.skin_color}
+                                        hairColor={selectMessage.other_user.avatar.hair_color}
+                                        clothesColor={selectMessage.other_user.avatar.clothes_color}
+                                    />
+                                </div>
 
-                        <div className="view-message-subject">
-                            <h4>Subject: {selectMessage.message_subject}</h4>
-                        </div>
+                                <div className="sender">
+                                    <h4>{selectMessage.other_user.username}</h4>
+                                </div>
+                            </span>
 
+                            <span className="time-sent">
+                                <h4>{formattedDate}</h4>
+                            </span>
+                        </div>
+                            
                         <div className="full-message">
                             {selectMessage.message_body}
                         </div>

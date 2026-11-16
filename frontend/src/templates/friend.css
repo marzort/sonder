@@ -40,11 +40,23 @@
 
 .friend-card {
     cursor: pointer;
+    
 }
 
 .friend-card:hover {
     transform: scale(1.01);
     border-color: #f3cbf4;
+}
+
+.request-card {
+    justify-content: space-between;
+}
+
+.friend-name {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .friend-username {
@@ -70,7 +82,7 @@
 .request-decision {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 10px;
 }
 
 .request-decision-button {
@@ -83,11 +95,23 @@
     transition: 0.2 ease;
     background: #bf36e5;
     color: white;
+
+    max-width: 70px;
+}
+
+.friend-avatar-preview,
+.request-avatar-preview {
+    width: min(12vw, 20vh, 80px);
+    height: min(12vw, 20vh, 80px);
 }
 
 @media (max-width: 700px) {
     .friend-list,
     .request-list {
-        max-width: 300px;
+        width: min(90vw, 375px);
+    }
+
+    .request-decision-button {
+        width: min(90vw, 70px);
     }
 }

@@ -34,19 +34,6 @@
     border-color: #f3cbf4;
 }
 
-.avatar-circle {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: #e9a5eb;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 1rem;
-    flex-shrink: 0;
-}
-
 .message-content {
     flex: 1;
 }
@@ -62,6 +49,7 @@
     font-weight: 600;
     color: #111827;
     font-size: 0.95rem;
+    margin-bottom: 1px;
 }
 
 .timestamp {
@@ -126,8 +114,10 @@
     width: 90%;
     max-width: 480px;
     border-radius: 12px;
-    padding: 1.5rem;
+    padding: 2rem;
     position: relative;
+
+    border: 6px double;
 }
 
 .close-button {
@@ -218,3 +208,44 @@ textarea.textarea-limit {
     margin-top: 6px;
 }
 
+.view-message-subject h2 {
+
+}
+
+.message-avatar-preview {
+    width: min(17vw, 20vh, 80px);
+    height: min(17vw, 20vh, 80px);
+
+}
+
+.open-message-info {
+    display: flex;
+    justify-content: space-between;
+    
+    margin-bottom: 10px;
+}
+
+.sender-info {
+    display: flex;
+    gap: 10px;
+}
+
+.full-message {
+    border: 2px solid;
+    border-radius: 8px;
+    padding: 12px;
+    margin-top: 25px;
+    line-height: 1.8;
+    font-size: 15px;
+}
+
+.open-message-avatar {
+    width: min(20vw, 20vh, 80px);
+    height: min(20vw, 20vh, 80px);
+}
+
+@media(max-width: 700px) {
+    .full-message {
+        font-size: 13px;
+    }
+}
