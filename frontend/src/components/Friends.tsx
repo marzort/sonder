@@ -105,7 +105,7 @@ export default function Friends({
                             >
                                 <div className="friend-avatar-preview">
                                     <Avatar 
-                                        size="min(10vw, 20vh, 80px)"
+                                        size="min(12vw, 20vh, 80px)"
                                         eyes={friend.avatar.eyes}
                                         mouth={friend.avatar.mouth}
                                         top={friend.avatar.hair}
@@ -144,7 +144,7 @@ export default function Friends({
                                     onClick={() => {}}
                                 >
                                     <Avatar
-                                        size="min(10vw, 20vh, 80px)"
+                                        size="min(12vw, 20vh, 80px)"
                                         eyes={sender.avatar.eyes}
                                         mouth={sender.avatar.mouth}
                                         top={sender.avatar.hair}
