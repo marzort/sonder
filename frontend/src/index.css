@@ -142,7 +142,8 @@ button {
   background: #e0e7ff;
 }
 
-.back-button {
+.back-button,
+.friend-button {
   margin-top: 8px;
   margin-bottom: 12px;
   border: none;

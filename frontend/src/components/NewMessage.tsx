@@ -1,0 +1,148 @@
+import { useState, useEffect } from 'react'
+import { getFriendList } from '../api'
+import type { Friend } from '../api'
+
+interface NewMessageProps {
+    token: string
+    onSend: (recipientId: number, subject: string, body: string) => void
+    onClose: () => void
+}
+
+export default function NewMessage({
+    token,
+    onSend,
+    onClose
+}: NewMessageProps) {
+    const [errorMessage, setErrorMessage] = useState('')
+    const [friendList, setFriendList] = useState<Friend[]>([])
+    const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null)
+    const [messageSubject, setMessageSubject] = useState('')
+    const [messageBody, setMessageBody] = useState('')
+
+    const MAX_LENGTH_SUBJECT = 25
+    const isSubjectLimitReached = messageSubject.length >= MAX_LENGTH_SUBJECT
+    const MAX_LENGTH_BODY = 700
+    const isBodyLimitReached = messageBody.length >= MAX_LENGTH_BODY
+
+    useEffect(() => {
+        async function loadFriendList() {
+            setErrorMessage('')
+            try {
+                const data = await getFriendList(token)
+                setFriendList(data)
+            } catch (error) {
+                setErrorMessage(
+                    error instanceof Error
+                    ? error.message
+                    : 'Could not load friends list.'
+                )
+            }
+        }
+
+        loadFriendList()
+    }, [token])
+
+    const handleSend = () => {
+        if (!selectedFriend) {
+            setErrorMessage('Please select a recipient.')
+            return
+        }
+
+        if (!messageBody.trim()) {
+            setErrorMessage('Message cannot be empty.')
+            return
+        }
+
+        onSend(selectedFriend.id, messageSubject.trim(), messageBody.trim())
+    }
+
+    return (
+        <div className="new-message-window">
+            <div className="new-message-window-content">
+                <button className="close-button" onClick={onClose}>
+                    &times;
+                </button>
+
+                {errorMessage && <p className="error-message">{errorMessage}</p>}
+
+                <div className="recipient">
+                    <h4>Select Recipient:</h4>
+                        <div className="recipient-options">
+                            {friendList.map((friend) => (
+                                <button
+                                    key={friend.id}
+                                    onClick={() => setSelectedFriend(friend)}
+                                    className={`friend-choice ${
+                                        selectedFriend?.id === friend.id ? 'selected' : ''
+                                    }`}
+                                >
+                                    {friend.username}
+                                </button>
+                            ))}
+                        </div>
+
+                        {selectedFriend && (
+                            <p className="selected-recipient">
+                                To: <strong>{selectedFriend.username}</strong>
+                            </p>
+                        )}
+                </div>
+
+                <div className="compose-message">
+                    <label htmlFor="message-subject">Subject:</label>
+                    <div className="message-subject">
+                        <textarea 
+                            id="message-subject"
+                            rows={1}
+                            maxLength={MAX_LENGTH_SUBJECT}
+                            value={messageSubject}
+                            onChange={(e) => setMessageSubject(e.target.value)}
+                            className={isSubjectLimitReached ? 'subjectarea-limit' : ''}
+                        />
+
+                        <div className="character-counter-container">
+                            {isSubjectLimitReached && (
+                                <span className="limit-warning">Character limit reached!</span>
+                            )}
+                            <span className={`character-counter ${isSubjectLimitReached ? 'counter-danger' : ''}`}>
+                                {messageSubject.length}/{MAX_LENGTH_SUBJECT}
+                            </span>
+                        </div>
+                    </div>
+                    
+
+                    <label htmlFor="message">Message:</label>
+                    <textarea 
+                        id="message"
+                        rows={4}
+                        maxLength={MAX_LENGTH_BODY}
+                        value={messageBody}
+                        onChange={(e) => setMessageBody(e.target.value)}
+                        className={isBodyLimitReached ? 'textarea-limit' : ''}
+                    />
+
+                    <div className="character-counter-container">
+                        {isBodyLimitReached && (
+                            <span className="limit-warning">Character limit reached!</span>
+                        )}
+                        <span className={`character-counter ${isBodyLimitReached ? 'counter-danger' : ''}`}>
+                            {messageBody.length}/{MAX_LENGTH_BODY}
+                        </span>
+                    </div>
+                    
+                </div>
+
+                <button
+                    className="send-message-button"
+                    onClick={handleSend}
+                    disabled={!selectedFriend || !messageBody.trim()}
+                >
+                    Send
+                </button>
+            </div>
+            
+
+            
+        </div>
+    )
+}

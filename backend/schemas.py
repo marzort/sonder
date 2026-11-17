@@ -1,5 +1,6 @@
 from pydantic import BaseModel, field_validator, Field
 from datetime import datetime
+from typing import Optional
 
 class RegisterRequest(BaseModel):
     username: str
@@ -69,7 +70,7 @@ class LocationUpdate(BaseModel):
 class LocationSharingUpdate(BaseModel):
     enabled: bool
 
-class MeetingAvatarResponse(BaseModel):
+class AvatarResponse(BaseModel):
     eyes: str
     mouth: str
     hair: str
@@ -82,7 +83,7 @@ class MeetingPersonResponse(BaseModel):
     id: int
     username: str
     greeting: str
-    avatar: MeetingAvatarResponse
+    avatar: AvatarResponse
 
 class MeetingResponse(BaseModel):
     id: int
@@ -91,20 +92,11 @@ class MeetingResponse(BaseModel):
     other_user: MeetingPersonResponse
     gift_received: int | None
 
-class GiftAvatarResponse(BaseModel):
-    eyes: str
-    mouth: str
-    hair: str
-    clothes: str
-    skin_color: str
-    hair_color: str
-    clothes_color: str
-
 class GiftPersonResponse(BaseModel):
     id: int
     username: str
     greeting: str
-    avatar: GiftAvatarResponse
+    avatar: AvatarResponse
 
 class GiftChoiceResponse(BaseModel):
     id: int
@@ -115,3 +107,39 @@ class GiftResponse(BaseModel):
     id: int
     given_by: GiftPersonResponse
     gift_choice: GiftChoiceResponse
+
+class MessagePersonResponse(BaseModel):
+    id: int
+    username: str
+    avatar: AvatarResponse
+
+class MessageResponse(BaseModel):
+    id: int
+    sent_at: datetime
+    other_user: MessagePersonResponse
+    message_subject: str
+    message_body: str
+    viewed: bool
+
+class FriendListResponse(BaseModel):
+    id: int
+    username: str
+    avatar: AvatarResponse
+
+class FriendRequestResponse(BaseModel):
+    id: int
+    sender: FriendListResponse
+    sent_at: datetime
+
+class FriendshipStatusUpdate(BaseModel):
+    status: Optional[str] = None
+
+class NewMessageUpdate(BaseModel):
+    recipient_id: int
+    message_subject: str
+    message_body: str
+
+class SendMessageRequest(BaseModel):
+    recipient_id: int
+    message_subject: str
+    message_body: str

@@ -1,4 +1,4 @@
-import uuid
+import enum
 
 from sqlalchemy import (
     String, 
@@ -8,6 +8,7 @@ from sqlalchemy import (
     CheckConstraint,
     UniqueConstraint,
     Float,
+    Enum,
     func
 )
 
@@ -83,6 +84,25 @@ class User(Base):
     )
 
     gift_flower: Mapped["Flower"] = relationship()
+
+    sent_messages: Mapped[list["Message"]] = relationship(
+        "Message",
+        foreign_keys="Message.sender_id",
+        back_populates="sender"
+    )
+
+    received_messages: Mapped[list["Message"]] = relationship(
+        "Message",
+        foreign_keys="Message.receiver_id",
+        back_populates="receiver"
+    )
+
+    friends: Mapped[list["User"]] = relationship(
+        "User",
+        secondary="friendships",
+        primaryjoin="User.id == Friendship.sender_id",
+        secondaryjoin="User.id == Friendship.receiver_id"
+    )
 
 class Avatar(Base):
     __tablename__ = "avatars"
@@ -240,4 +260,92 @@ class Gift(Base):
             name="uq_gift_meeting_giver"
         ),
     )
-    
+
+class Message(Base):
+    __tablename__ = "messages"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    sender_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id"),
+        nullable=False
+    )
+
+    sent_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    message_subject: Mapped[str] = mapped_column(
+        String(25),
+        nullable=False,
+        default="No Subject"
+    )
+
+    message_body: Mapped[str] = mapped_column(
+        String(700),
+        default = ""
+    )
+
+    sender: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[sender_id],
+        back_populates="sent_messages"
+    )
+
+    receiver: Mapped["User"] = relationship(
+        "User",
+        foreign_keys=[receiver_id],
+        back_populates="received_messages"
+    )
+
+    viewed: Mapped[bool] = mapped_column(
+        Boolean,
+        default=False,
+        nullable=False
+    )
+
+class FriendshipStatus(str, enum.Enum):
+    PENDING = "pending"
+    ACCEPTED = "accepted"
+    REJECTED = "rejected"
+
+class Friendship(Base):
+    __tablename__ = "friendships"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    sender_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    receiver_id: Mapped[int] = mapped_column(
+        ForeignKey("users.id", ondelete="CASCADE"),
+        nullable=False
+    )
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True),
+        server_default=func.now(),
+        nullable=False
+    )
+
+    status: Mapped[FriendshipStatus] = mapped_column(
+        Enum(FriendshipStatus),
+        default=FriendshipStatus.PENDING,
+        nullable=False
+    )
+
+    __table_args__ = (
+        UniqueConstraint(
+            "sender_id", 
+            "receiver_id", 
+            name="uq_friend_request"),
+    )
