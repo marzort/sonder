@@ -9,7 +9,7 @@ from auth import get_current_user
 from datetime import datetime, timezone
 from .websocket import manager
 
-NEARBY_DISTANCE_METERS = 20
+NEARBY_DISTANCE_METERS = 100
 
 router = APIRouter()
 
@@ -154,6 +154,8 @@ async def update_location(
 
     current_user.location_accuracy = location.accuracy
     current_user.location_updated_at = datetime.now(timezone.utc)
+
+    db.flush()
 
     new_meeting_user_ids = check_for_meetings(current_user, db)
 
