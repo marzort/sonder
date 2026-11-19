@@ -1,7 +1,7 @@
 import json
-from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect, Depends
-from auth import verify_access_token, active_sessions
-from models import MeetingUser, Message, Friendship, FriendshipStatus
+from fastapi import APIRouter, WebSocket, Query, status, WebSocketDisconnect, Depends, HTTPException
+from auth import verify_access_token
+from models import User, MeetingUser, Message, Friendship, FriendshipStatus
 from database import get_db
 from sqlalchemy import select, func, or_
 from sqlalchemy.orm import Session
@@ -11,56 +11,68 @@ router = APIRouter()
 class ConnectionManager:
 
     def __init__(self):
-        self.active_connections = {}
+        self.active_connections: dict[int, WebSocket] = {}
 
     def get_active_players(self):
         return list(self.active_connections.keys())
 
-    async def connect(self, user_id, websocket):
-        if user_id in self.active_connections:
-            await websocket.close(
-                code=status.WS_1008_POLICY_VIOLATION,
-                reason="User already connected"
-            )
-            return False
+    async def connect(self, user_id: int, websocket: WebSocket):
+        old_websocket = self.active_connections.get(user_id)
+
+        if old_websocket is not None:
+            try:
+                await old_websocket.close(
+                    code=1000,
+                    reason="Replaced by new connection"
+                )
+            except Exception:
+                pass
 
         await websocket.accept()
-
         self.active_connections[user_id] = websocket
-
         return True
 
     # for location/meeting
-    async def send_to_user(self, user_id, message):
+    async def send_to_user(self, user_id: int, message: dict):
         websocket = self.active_connections.get(user_id)
 
         if websocket is not None:
-            await websocket.send_text(
-                json.dumps(message)
-            )
+            try:
+                await websocket.send_text(json.dumps(message))
+            except Exception:
+                self.active_connections.pop(user_id, None)
 
-    async def disconnect(self, user_id, session_id=None, close_socket=False):
+    async def disconnect(self, user_id: int, close_socket: bool = False):
         websocket = self.active_connections.pop(user_id, None)
 
-        if session_id is None or active_sessions.get(user_id) == session_id:
-            active_sessions.pop(user_id, None)
-
         if close_socket and websocket is not None:
-            await websocket.close(
-                code=1000,
-                reason="Logged out"
+            try:
+                await websocket.close(
+                    code=1000,
+                    reason="Logged out"
+                )
+            except Exception:
+                pass
+
+        if websocket is not None:
+            await self.broadcast(
+                json.dumps({
+                    "type": "player_left",
+                    "user_id": user_id
+                })
             )
 
-        await self.broadcast(
-            json.dumps({
-                "type": "player_left",
-                "user_id": user_id
-            })
-        )
+    async def broadcast(self, message: str):
+        dead_user_ids = []
 
-    async def broadcast(self, message):
-        for connection in self.active_connections.values():
-            await connection.send_text(message)
+        for uid, connection in list(self.active_connections.items()):
+            try:
+                await connection.send_text(message)
+            except Exception:
+                dead_user_ids.append(uid)
+
+        for uid in dead_user_ids:
+            self.active_connections.pop(uid, None)
 
 manager = ConnectionManager()
 
@@ -75,14 +87,18 @@ async def websocket_endpoint(
         payload = verify_access_token(token)
         user_id = int(payload["sub"])
         session_id = payload["session_id"]
-    except (KeyError, ValueError):
+    except (HTTPException, KeyError, ValueError):
         await websocket.close(
             code=status.WS_1008_POLICY_VIOLATION,
             reason="Invalid token"
         )
         return
 
-    if active_sessions.get(user_id) != session_id:
+    user = db.execute(
+        select(User).where(User.id == user_id)
+    ).scalar_one_or_none()
+
+    if user is None or user.active_session_id != session_id:
         await websocket.close(
             code=status.WS_1008_POLICY_VIOLATION,
             reason="Session is no longer active"
@@ -98,7 +114,6 @@ async def websocket_endpoint(
         )
     )
 
-    # unviewed message count
     unviewed_message_count = db.scalar(
         select(func.count())
         .select_from(Message)
@@ -129,10 +144,7 @@ async def websocket_endpoint(
         )
     )
 
-    connected = await manager.connect(user_id, websocket)
-
-    if not connected:
-        return
+    await manager.connect(user_id, websocket)
 
     await websocket.send_text(
         json.dumps({
@@ -166,15 +178,7 @@ async def websocket_endpoint(
 
     except WebSocketDisconnect:
         await manager.disconnect(
-            user_id,
-            session_id=session_id
-        )
-
-        await manager.broadcast(
-            json.dumps({
-                "type": "player_left",
-                "user_id": user_id
-            })
+            user_id
         )
 
                 
