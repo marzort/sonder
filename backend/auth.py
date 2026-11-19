@@ -13,11 +13,12 @@ import uuid
 load_dotenv()
 JWT_SECRET = os.getenv("JWT_SECRET")
 
+if not JWT_SECRET:
+    raise RuntimeError("JWT_SECRET environment variable is not set")
+
 security = HTTPBearer()
 
 password_hash = PasswordHash.recommended()
-
-active_sessions = {}
 
 def hash_password(user_password):
     return password_hash.hash(user_password)
@@ -25,15 +26,16 @@ def hash_password(user_password):
 def verify_password(user_password, hashed_password):
     return password_hash.verify(user_password, hashed_password)
 
-def create_access_token(user_id):
+def create_access_token(user: User, db: Session):
     session_id = str(uuid.uuid4())
 
     payload = {
-        "sub": str(user_id),
+        "sub": str(user.id),
         "session_id": session_id
     }
 
-    active_sessions[user_id] = session_id
+    user.active_session_id = session_id
+    db.commit()
 
     return jwt.encode(
         payload,
@@ -71,12 +73,6 @@ def get_current_user(
             detail="Invalid token"
         )
 
-    if active_sessions.get(user_id) != session_id:
-        raise HTTPException(
-            status_code=401,
-            detail="Session is no longer active"
-        )
-
     user = db.execute(
         select(User).where(User.id == user_id)
     ).scalar_one_or_none()
@@ -85,6 +81,12 @@ def get_current_user(
         raise HTTPException(
             status_code=404,
             detail="User not found"
+        )
+
+    if user.active_session_id != session_id:
+        raise HTTPException(
+            status_code=401,
+            detail="Session is no longer active"
         )
 
     return user
