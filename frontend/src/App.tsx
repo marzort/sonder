@@ -67,64 +67,89 @@ function App() {
       return
     }
 
-    const socket = new WebSocket(
-      `${import.meta.env.VITE_WS_URL}/ws?token=${token}`
-    )
+    let isActive = true
+    let reconnectTimeout: number | null = null
 
-    socketRef.current = socket
+    function connect() {
+      if (!isActive) return
 
-    socket.onopen = () => {
-      console.log('WebSocket connected')
-    }
-
-    socket.onmessage = (event) => {
-      console.log('WebSocket message:', event.data)
-
-      const data = JSON.parse(event.data)
-
-      if (data.type === 'welcome') {
-        setMeetingCount(data.unviewed_meeting_count)
-        setMessageCount(data.unviewed_message_count)
-        setFriendCount(data.friend_count)
-        setFriendRequestCount(data.friend_request_count)
-      }
-
-      if (data.type === 'meeting_count_updated') {
-        setMeetingCount(data.count)
-      }
-
-      if (data.type === 'message_count_updated') {
-        setMessageCount(data.count)
-      }
-
-      if (data.type === 'friend_count_updated') {
-        setFriendCount(data.count)
-      }
-
-      if (data.type === 'friend_request_count_updated') {
-        setFriendRequestCount(data.count)
-      }
-    }
-
-    socket.onerror = (error) => {
-      console.error('WebSocket error:', error)
-    }
-
-    socket.onclose = (event) => {
-      console.log(
-        'WebSocket closed:',
-        event.code,
-        event.reason
+      const socket = new WebSocket(
+        `${import.meta.env.VITE_WS_URL}/ws?token=${token}`
       )
+
+      socketRef.current = socket
+
+      socket.onopen = () => {
+        console.log('WebSocket connected')
+      }
+
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data)
+
+        if (data.type === 'welcome') {
+          setMeetingCount(data.unviewed_meeting_count)
+          setMessageCount(data.unviewed_message_count)
+          setFriendCount(data.friend_count)
+          setFriendRequestCount(data.friend_request_count)
+        }
+
+        if (data.type === 'meeting_count_updated') {
+          setMeetingCount(data.count)
+        }
+
+        if (data.type === 'message_count_updated') {
+          setMessageCount(data.count)
+        }
+
+        if (data.type === 'friend_count_updated') {
+          setFriendCount(data.count)
+        }
+
+        if (data.type === 'friend_request_count_updated') {
+          setFriendRequestCount(data.count)
+        }
+      }
+
+      socket.onerror = (error) => {
+        console.error('WebSocket error:', error)
+      }
+
+      socket.onclose = (event) => {
+        console.log('WebSocket closed:', event.code, event.reason)
+        socketRef.current = null
+
+        if (!isActive) return
+
+        if (event.code === 1008) {
+          localStorage.removeItem('access_token')
+          setToken(null)
+          setProfile(null)
+          return
+        }
+
+        reconnectTimeout = window.setTimeout(connect, 2000)
+      }
     }
+
+    connect()
 
     return () => {
-      socket.close()
-      socketRef.current = null
+      isActive = false
+      
+      if (reconnectTimeout !== null) {
+        clearTimeout(reconnectTimeout)
+      }
+
+      if (socketRef.current) {
+        socketRef.current.onclose = null
+        socketRef.current.close()
+        socketRef.current = null
+      }
     }
   }, [token])
 
   function handleLogin(accessToken: string) {
+    localStorage.setItem('access_token', accessToken)
     setToken(accessToken)
   }
 
@@ -141,6 +166,10 @@ function App() {
     localStorage.removeItem('access_token')
     setToken(null)
     setProfile(null)
+    setMeetingCount(0)
+    setMessageCount(0)
+    setFriendCount(0)
+    setFriendRequestCount(0)
     setScreen('profile')
 
     if (activeToken) {

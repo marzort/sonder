@@ -40,6 +40,9 @@ class User(Base):
     )
 
     password_hash: Mapped[str] = mapped_column(String(255), nullable=False)
+
+    active_session_id: Mapped[str | None] = mapped_column(String, nullable=True)
+
     avatar = relationship("Avatar", uselist=False)
 
     meeting_users: Mapped[list["MeetingUser"]] = relationship(
