@@ -156,6 +156,13 @@ button {
   color: white;
 }
 
+.friend-button:disabled {
+  background: #9ca3af;
+  color: #111827;
+  cursor: default;
+  opacity: 0.6;
+}
+
 .logout-button:hover {
   background: #e5e7eb;
 }
