@@ -116,12 +116,11 @@ async def send_friend_request(
 
     db.add(new_request)
     db.commit()
+    db.refresh(new_request)
 
-    req_count = await update_request_count(db, friend_id)
+    await update_request_count(db, friend_id)
 
-    return {
-        "message": "Friend request sent",
-        "updated_request_count": req_count}
+    return {"message": "Friend request sent successfully", "id": new_request.id}
 
 @router.get("/friend/getRequests")
 def get_friend_requests(
@@ -190,17 +189,27 @@ async def friend_request_decision(
         db.refresh(friendship)
 
         await update_friend_count(db, friendship.receiver_id)
-        await update_friend_count(db, friendship.sender_id)
-        await update_request_count(db, friendship.receiver_id)
+        updated_friend_count = await update_friend_count(db, friendship.sender_id)
+        updated_request_count = await update_request_count(db, friendship.receiver_id)
 
-        return {"message": "Friend request accepted", "status": "accepted"}
+        return {
+            "message": "Friend request accepted", 
+            "status": "accepted",
+            "updated_friend_count": updated_friend_count,
+            "updated_request_count": updated_request_count
+        }
     
     elif payload.status == FriendshipStatus.REJECTED:
         db.delete(friendship)
         db.commit()
 
-        await update_request_count(db, friendship.receiver_id)
-        return {"message": "Friend request rejected", "status": "rejected"}
+        remaining_count = await update_request_count(db, friendship.receiver_id)
+        
+        return {
+            "message": "Friend request rejected", 
+            "status": "rejected",
+            "updated_request_count": remaining_count
+        }
 
 @router.delete("/friend/remove/{friend_id}")
 async def remove_friend(
