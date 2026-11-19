@@ -105,7 +105,7 @@ function App() {
           setFriendCount(data.count)
         }
 
-        if (data.type === 'friend_request_count_updated') {
+        if (data.type === 'request_count_updated') {
           setFriendRequestCount(data.count)
         }
       }
