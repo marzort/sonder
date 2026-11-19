@@ -208,9 +208,7 @@ textarea.textarea-limit {
     margin-top: 6px;
 }
 
-.view-message-subject h2 {
 
-}
 
 .message-avatar-preview {
     width: min(17vw, 20vh, 80px);
@@ -231,12 +229,19 @@ textarea.textarea-limit {
 }
 
 .full-message {
-    border: 2px solid;
+    border: 2px solid #e6bbe76f;
+    background-color: #e6bbe785;
     border-radius: 8px;
     padding: 12px;
     margin-top: 25px;
     line-height: 1.8;
     font-size: 15px;
+}
+
+.sender {
+    font-size:large;
+    display: flex;
+    margin-left: 10px;
 }
 
 .open-message-avatar {
