@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Eye, EyeOff } from 'lucide-react'
 import { loginUser, registerUser } from '../api'
 import '../templates/auth.css'
 
@@ -9,7 +10,12 @@ interface AuthFormProps {
 function AuthForm({ onLogin }: AuthFormProps) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [showPassword, setShowPassword] = useState(false)
     const [message, setMessage] = useState('')
+
+    const togglePasswordVisibility = () => {
+        setShowPassword((prev) => !prev)
+    }
 
     function validateForm() {
         if (!username.trim()) {
@@ -83,7 +89,7 @@ function AuthForm({ onLogin }: AuthFormProps) {
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
                     
-                    <input 
+                    <input
                         type="text"
                         value={username}
                         onChange={(event) =>
@@ -95,14 +101,31 @@ function AuthForm({ onLogin }: AuthFormProps) {
 
                 <div className="form-group">
                     <label htmlFor="password">Password</label>
-                    <input 
-                        type="text"
-                        value={password}
-                        onChange={(event) =>
-                            setPassword(event.target.value)
-                        }
-                        placeholder="Enter your password"
-                    />
+                    <div className="input-container">
+                        <input
+                            type={showPassword ? "text" : "password"}
+                            value={password}
+                            onChange={(event) =>
+                                setPassword(event.target.value)
+                            }
+                            placeholder="Enter your password"
+                        />
+
+                        <button
+                            className="show-password-button"
+                            type="button"
+                            onClick={togglePasswordVisibility}
+                            aria-label={showPassword ? 'Hide password' : 'Show password'}
+                        >
+                            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                        </button>
+                    </div>
+                    
+
+                    <div className="password-toggle">
+                        
+                    </div>
+                    
                 </div>
 
                 <div className="auth-buttons">
