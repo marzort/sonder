@@ -31,6 +31,7 @@
 
 .form-group input {
     width: 100%;
+    box-sizing: border-box;
     padding: 11px 12px;
     border: 1px solid #d1d5db;
     border-radius: 8px;
@@ -56,6 +57,29 @@
         font-weight: 600;
         transition: 02.s ease;
     }
+}
+
+.input-container {
+    position: relative;
+    width: 100%;
+}
+
+.input-container input {
+    padding-right: 75px;
+}
+
+.show-password-button {
+    display: flex;
+    justify-content: center;
+    border: none;
+    position: absolute;
+    background: transparent;
+    color: #6b7280;
+    padding: 4px;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    
 }
 
 @media (max-width: 700px) {
