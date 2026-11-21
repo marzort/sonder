@@ -22,6 +22,7 @@ function EditProfile({
 }: EditProfileProps) {
     const [greeting, setGreeting] = useState(profile.greeting)
     const [gift, setGift] = useState(profile.gift_flower_id)
+    const [avatarPrev, setAvatarPrev] = useState(profile.avatar)
 
 
     async function handleAvatarUpdate() {
@@ -30,7 +31,7 @@ function EditProfile({
         try {
             const updatedAvatar = await updateAvatar(
                 token,
-                profile.avatar
+                avatarPrev
             )
 
             onProfileUpdate({
@@ -100,13 +101,13 @@ function EditProfile({
         <section className="edit-profile-section">
             <div className="avatar-preview">
                 <Avatar 
-                    eyes={profile.avatar.eyes}
-                    mouth={profile.avatar.mouth}
-                    top={profile.avatar.hair}
-                    clothes={profile.avatar.clothes}
-                    skinColor={profile.avatar.skin_color}
-                    hairColor={profile.avatar.hair_color}
-                    clothesColor={profile.avatar.clothes_color}
+                    eyes={avatarPrev.eyes}
+                    mouth={avatarPrev.mouth}
+                    top={avatarPrev.hair}
+                    clothes={avatarPrev.clothes}
+                    skinColor={avatarPrev.skin_color}
+                    hairColor={avatarPrev.hair_color}
+                    clothesColor={avatarPrev.clothes_color}
                 />
             </div>
 
@@ -172,82 +173,40 @@ function EditProfile({
 
             <div className="profile-controls">
                 <AvatarCustomizer 
-                    eyes={profile.avatar.eyes}
-                    mouth={profile.avatar.mouth}
-                    top={profile.avatar.hair}
-                    clothes={profile.avatar.clothes}
-                    skinColor={profile.avatar.skin_color}
-                    hairColor={profile.avatar.hair_color}
-                    clothesColor={profile.avatar.clothes_color}
+                    eyes={avatarPrev.eyes}
+                    mouth={avatarPrev.mouth}
+                    top={avatarPrev.hair}
+                    clothes={avatarPrev.clothes}
+                    skinColor={avatarPrev.skin_color}
+                    hairColor={avatarPrev.hair_color}
+                    clothesColor={avatarPrev.clothes_color}
 
                     onEyesChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                eyes: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, eyes: value }))
                     }
 
                     onMouthChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                mouth: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, mouth: value }))
                     }
 
                     onTopChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                hair: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, hair: value }))
                     }
 
                     onClothesChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                clothes: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, clothes: value}))
                     }
 
                     onSkinColorChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                skin_color: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, skin_color: value}))
                     }
 
                     onHairColorChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                hair_color: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, hair_color: value}))
                     }
 
                     onClothesColorChange={(value) =>
-                        onProfileUpdate({
-                            ...profile,
-                            avatar: {
-                                ...profile.avatar,
-                                clothes_color: value
-                            }
-                        })
+                        setAvatarPrev(prev => ({ ...prev, clothes_color: value }))
                     }
                 />
 
