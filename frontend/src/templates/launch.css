@@ -1,0 +1,49 @@
+.app-container:has(.launch-screen) {
+    padding-top: 0;
+}
+
+.launch-screen {
+    display: flex;
+    flex-direction: column;
+    min-height: 100dvh;
+    align-self: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.launch-screen > div,
+.launch-screen > section {
+    margin: auto;
+    width: 100%;
+    max-width: 480px;
+}
+
+.title-screen .app-header {
+    margin: 0;
+}
+
+.to-about-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+
+    margin-top: 40px;
+    color:rgb(80, 22, 135);
+
+    animation: float 5s ease-in-out infinite;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
