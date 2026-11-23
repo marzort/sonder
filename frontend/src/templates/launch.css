@@ -34,6 +34,57 @@
     animation: float 5s ease-in-out infinite;
 }
 
+.launch-screen > .launch-step {
+    margin: auto;
+    width: 100%;
+    max-width: 480px;
+}
+
+.launch-fade-enter {
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.launch-fade-enter-active {
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity 300ms ease-out, transform 300ms ease-out;
+}
+
+.launch-fade-exit {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.launch-fade-exit-active {
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 250ms ease-in, transform 250ms ease-in;
+}
+
+.about-header h1 {
+    margin: 0;
+    color: #b346e5;
+    padding-bottom: 5px;
+    border-radius: 75%;
+    text-shadow: 3px 2.7px 1px rgb(243, 167, 249);
+    font-weight: 400;
+    font-size: 3rem;
+    letter-spacing: 0.05rem;
+    font-family: 'Cherry Bomb One';
+}
+
+.about-blurb {
+    background-color:#e49bdb9a;
+    padding: 5px 12px;
+    display: flex;
+    flex-direction: column;
+    text-align:justify;
+
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
 @keyframes float {
     0% {
         transform: translateY(0);
