@@ -1,5 +1,4 @@
 import { useEffect, useState, useRef } from 'react'
-import AuthForm from './components/AuthForm'
 import Profile from './components/Profile'
 import { getProfile, getFriendProfile } from './api'
 import type { UserProfile } from './api'
@@ -10,6 +9,7 @@ import './templates/menu.css'
 import Garden from './components/Garden'
 import Messages from './components/Messages'
 import Friends from './components/Friends'
+import Launch from './components/Launch'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -148,6 +148,10 @@ function App() {
     }
   }, [token])
 
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [token, screen])
+
   function handleLogin(accessToken: string) {
     localStorage.setItem('access_token', accessToken)
     setToken(accessToken)
@@ -230,7 +234,9 @@ function App() {
       <div className="app-container">
 
       {!profile && (
-        <AuthForm onLogin={handleLogin} />
+        <Launch 
+          onLogin={handleLogin}
+        /> 
       )}
 
       {profile && (
