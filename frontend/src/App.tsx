@@ -10,6 +10,18 @@ import Garden from './components/Garden'
 import Messages from './components/Messages'
 import Friends from './components/Friends'
 import Launch from './components/Launch'
+import About from './components/About'
+
+type Screen = 
+  |'profile' 
+  | 'explore' 
+  | 'meetings' 
+  | 'garden' 
+  | 'view_profile' 
+  | 'messages' 
+  | 'friends' 
+  | 'login' 
+  | 'about'
 
 function App() {
   const [token, setToken] = useState<string | null>(
@@ -32,11 +44,9 @@ function App() {
 
   const [menuOpen, setMenuOpen] = useState(false)
 
-  const [prevScreen, setPrevScreen] = useState<'garden' | 'friends'>('garden')
+  const [prevScreen, setPrevScreen] = useState<'garden' | 'friends' | 'login'>('garden')
 
-  const [screen, setScreen] = useState<
-    'profile' | 'explore' | 'meetings' | 'garden' | 'view_profile' | 'messages' | 'friends'
-  >('profile')
+  const [screen, setScreen] = useState<Screen>('profile')
 
   const socketRef = useRef<WebSocket | null>(null)
 
@@ -343,6 +353,18 @@ function App() {
                   </div>
                 </li>
 
+                <li>
+                    <button 
+                      className={screen === 'about' ? 'nav-link active' : 'nav-link' }
+                      onClick={() => {
+                        setScreen('about')
+                        setMenuOpen(false)
+                      }}
+                    >
+                      About
+                    </button>
+                </li>
+
                 <li className="logout-item">
                   <button
                     className="logout-button"
@@ -430,6 +452,15 @@ function App() {
             onProfileUpdate={() => {}}
           />
         </div>
+      )}
+
+      {screen === 'about' && (
+        <div>
+          <About 
+
+          />
+        </div>
+        
       )}
       </div>
     </main>

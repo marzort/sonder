@@ -10,7 +10,9 @@ interface LaunchProps {
 
 type LaunchPage = 'title' | 'about' | 'login'
 
-function Launch({ onLogin } : LaunchProps) {
+function Launch({ 
+    onLogin
+} : LaunchProps) {
 
     const [page, setPage] = useState<LaunchPage>('title')
 
