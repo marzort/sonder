@@ -313,13 +313,15 @@ function App() {
                 </li>
 
                 <li>
-                  <div className={screen === 'friends' ? 'nav-link active' : 'nav-link'}>
+                  <div 
+                    className={screen === 'friends' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('friends')
+                      setMenuOpen(false)
+                    }}
+                  >
                     <button
                       className="friends-page-button"
-                      onClick={() => {
-                        setScreen('friends')
-                        setMenuOpen(false)
-                      }}
                     >
                       Friends
 
@@ -334,13 +336,15 @@ function App() {
                 </li>
 
                 <li>
-                  <div className={screen === 'messages' ? 'nav-link active' : 'nav-link'}>
+                  <div 
+                    className={screen === 'messages' ? 'nav-link active' : 'nav-link'}
+                    onClick={() => {
+                      setScreen('messages')
+                      setMenuOpen(false)
+                    }}
+                  >
                     <button
                       className="inbox-button"
-                      onClick={() => {
-                        setScreen('messages')
-                        setMenuOpen(false)
-                      }}
                     >
                       Inbox
 
