@@ -141,7 +141,7 @@ export default function Friends({
                             >
                                 <div 
                                     className="request-avatar-preview"
-                                    onClick={() => {}}
+                                    onClick={() => {onFriendProfile(sender.id)}}
                                 >
                                     <Avatar
                                         size="min(12vw, 20vh, 80px)"

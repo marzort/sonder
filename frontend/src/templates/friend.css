@@ -40,7 +40,6 @@
 
 .friend-card {
     cursor: pointer;
-    
 }
 
 .friend-card:hover {
@@ -103,6 +102,10 @@
 .request-avatar-preview {
     width: min(12vw, 20vh, 80px);
     height: min(12vw, 20vh, 80px);
+}
+
+.request-avatar-preview {
+    cursor: pointer;
 }
 
 @media (max-width: 700px) {
