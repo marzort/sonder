@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Cloud } from 'lucide-react'
 import { loginUser, registerUser } from '../api'
 import '../templates/auth.css'
 import About from '../components/About'
@@ -21,6 +21,8 @@ function AuthForm({
     const togglePasswordVisibility = () => {
         setShowPassword((prev) => !prev)
     }
+
+    const [signup, setSignup] = useState(false)
 
     function validateForm() {
         if (!username.trim()) {
@@ -45,6 +47,7 @@ function AuthForm({
 
         try {
             await registerUser(username.trim(), password)
+            setSignup(false)
             setMessage('Registration successful! You can now log in.')
         } catch (error) {
             setMessage(
@@ -97,7 +100,7 @@ function AuthForm({
                         <h2>Welcome to Sonder!</h2>
 
                         <p className="card-description">
-                            Sign in to enter, or create a new account.
+                            {signup === true ? 'Create a new account' : 'Sign in to enter'}
                         </p>
 
                         <div className="form-group">
@@ -133,30 +136,39 @@ function AuthForm({
                                 >
                                     {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                                 </button>
-                            </div>
-                            
-
-                            <div className="password-toggle">
-                                
-                            </div>
-                            
+                            </div>             
                         </div>
 
                         <div className="auth-buttons">
                             <button 
                                 className="primary-button"
-                                onClick={handleLogin}
+                                onClick={
+                                    signup === true 
+                                    ? handleRegister
+                                    : handleLogin
+                                }
                             >
-                                Log In
+                                {signup === true ? 'Create Account' : 'Log In'}
                             </button>
 
-                            <button 
-                                className="secondary-button"
-                                onClick={handleRegister}
-                            >
-                                Create Account
-                            </button>
+                             <div className="sign-up-section">
+                                <p
+                                    className="sign-up-text"
+                                    onClick={() => 
+                                        setSignup(!signup)
+                                    }
+                                >
+                                    <Cloud size={18}/>
+                                    {signup === false 
+                                        ? 'New to Sonder? Create an account!'
+                                        : 'Have an account? Return to login!'
+                                    }
+                                </p>
+                            </div>
                         </div>
+
+                       
+                        
 
                         {message && (
                             <p className="message">
