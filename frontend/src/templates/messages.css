@@ -116,8 +116,15 @@
     border-radius: 12px;
     padding: 2rem;
     position: relative;
-
     border: 6px double;
+}
+
+.view-message-window-content {
+    height: 70dvh;
+    max-height: 90dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .close-button {
@@ -221,6 +228,7 @@ textarea.textarea-limit {
     justify-content: space-between;
     
     margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .sender-info {
@@ -236,6 +244,11 @@ textarea.textarea-limit {
     margin-top: 25px;
     line-height: 1.8;
     font-size: 15px;
+
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    white-space: pre-wrap;
 }
 
 .sender {
