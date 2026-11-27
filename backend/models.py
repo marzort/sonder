@@ -76,7 +76,7 @@ class User(Base):
     )
 
     greeting: Mapped[str] = mapped_column(
-        String(250),
+        String(80),
         default = "Hello"
     )
 
