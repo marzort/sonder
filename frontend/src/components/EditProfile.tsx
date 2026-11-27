@@ -24,6 +24,8 @@ function EditProfile({
     const [gift, setGift] = useState(profile.gift_flower_id)
     const [avatarPrev, setAvatarPrev] = useState(profile.avatar)
 
+    const MAX_LENGTH_GREETING = 80
+    const isGreetingLimitReached = greeting.length >= MAX_LENGTH_GREETING
 
     async function handleAvatarUpdate() {
         setMessage('')
@@ -121,9 +123,19 @@ function EditProfile({
                         id="greeting"
                         name="greeting"
                         rows={4}
+                        maxLength={MAX_LENGTH_GREETING}
                         value={greeting}
                         onChange={(event) => setGreeting(event.target.value)}
                     />
+
+                    <div className="character-counter-container">
+                        {isGreetingLimitReached && (
+                            <span className="limit-warning">Character limit reached!</span>
+                        )}
+                        <span className={`character-counter ${isGreetingLimitReached ? 'counter-danger' : ''}`}>
+                            {greeting.length}/{MAX_LENGTH_GREETING}
+                        </span>
+                    </div>
                 </div>
 
                 <div>
