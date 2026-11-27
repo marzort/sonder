@@ -130,7 +130,9 @@ export default function Meetings({
         <section className="meeting-screen">
             <div className="meeting-header">
                 <div>
-                    <h2>Let's see who you've met!</h2>
+                    {meetingBeingViewed && viewMeeting ? (
+                        <h2>Meet {meetingBeingViewed.other_user.username}!</h2>
+                    ) : <h2>Let's see who you've met!</h2>}
                 </div>
             </div>
 
