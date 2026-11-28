@@ -64,7 +64,11 @@ function Launch({
                                 </header>
 
                                 <div className="about-blurb">
-                                    <p>Sonder is an ambient, low-friction social web app designed for low-commitment, meaningful human connection.</p>
+                                    <p>Have you ever taken a look at the world around you and realized that every 
+                                        single person is living a life as vivid and complex as your own?
+                                    </p>
+                                    <p>That sensation is known as sonder, which is an experience that this app is designed to evoke.</p>
+                                    <p>Sonder is an app that seeks to connect people in a way that requires little to no commitment.</p>
                                     <p>While traditional social apps demand sustained conversation, which can feel draining, high-pressure, or awkward,
                                         Sonder reimagines social interaction as an idle, continuous experience.
                                     </p>
